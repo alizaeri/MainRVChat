@@ -3,18 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rvchat/colors.dart';
+import 'package:rvchat/common/utils/utils.dart';
 import 'package:rvchat/common/widgets/custom_button.dart';
+import 'package:rvchat/features/auth/controller/auth_controller.dart';
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
   static const routeName = '/login-screen';
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends ConsumerState<LoginScreen> {
   final phoneController = TextEditingController();
   Country? country;
   @override
@@ -34,6 +37,17 @@ class _LoginScreenState extends State<LoginScreen> {
         });
       },
     );
+  }
+
+  void sendPhoneNumber() {
+    String phoneNumber = phoneController.text.trim();
+    if (phoneNumber.isNotEmpty && country != null) {
+      ref
+          .read(authControllerProvider)
+          .singInWithPhone(context, '+${country!.phoneCode}$phoneNumber');
+    } else {
+      showSnackBar(context: context, content: "Fill out all the feilds");
+    }
   }
 
   @override
@@ -80,7 +94,9 @@ class _LoginScreenState extends State<LoginScreen> {
           SizedBox(
             width: 90,
             child: CustomButton(
-              onPressed: () {},
+              onPressed: () {
+                sendPhoneNumber();
+              },
               text: 'Next',
             ),
           )

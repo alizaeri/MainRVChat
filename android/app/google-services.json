@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "486734565059-e669gd8v0g0savf0up1tbk2540v14mm0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.alphadron.rvchat",
+            "certificate_hash": "58185f606354e4776e1c93137f1f81400687b6f7"
+          }
+        },
+        {
           "client_id": "486734565059-gtvnu9si79htsfrm2hk9v0ns0oude3mq.apps.googleusercontent.com",
           "client_type": 3
         }
