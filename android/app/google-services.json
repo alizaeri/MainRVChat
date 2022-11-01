@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "486734565059",
+    "project_id": "mainrvchat",
+    "storage_bucket": "mainrvchat.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:486734565059:android:39054ef44ae1421c261c76",
+        "android_client_info": {
+          "package_name": "com.alphadron.rvchat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "486734565059-gtvnu9si79htsfrm2hk9v0ns0oude3mq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTEReTP56Dh5auN2ev7c-vWBVSa084XPE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "486734565059-gtvnu9si79htsfrm2hk9v0ns0oude3mq.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "486734565059-rlg1cpdqde741e1nnlp4u9mbu3u63sqn.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.alphadron.rvchat"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
