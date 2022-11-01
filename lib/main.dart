@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rvchat/colors.dart';
+import 'package:rvchat/features/landing/screens/landing_screen.dart';
+import 'package:rvchat/router.dart';
 import 'package:rvchat/screens/mobile_layout_screen.dart';
 import 'package:rvchat/screens/web_layout_screen.dart';
 import 'package:rvchat/utils/responsive_layout.dart';
@@ -24,11 +26,10 @@ class MyApp extends StatelessWidget {
       title: 'Whatsapp UI',
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: backgroundColor,
+        appBarTheme: const AppBarTheme(color: appBarColor),
       ),
-      home: const ResponsiveLayout(
-        mobileScreenLayout: MobileLayoutScreen(),
-        webScreenLayout: WebLayoutScreen(),
-      ),
+      onGenerateRoute: (settings) => generateRoute(settings),
+      home: const LandingScreen(),
     );
   }
 }
