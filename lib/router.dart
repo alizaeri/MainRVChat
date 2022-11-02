@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rvchat/features/auth/screens/login_screen.dart';
 import 'package:rvchat/features/auth/screens/otp_screen.dart';
+import 'package:rvchat/features/auth/screens/user_information_screen.dart';
 import 'package:rvchat/widgets/error.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
@@ -13,6 +14,10 @@ Route<dynamic> generateRoute(RouteSettings settings) {
           builder: (context) => OTPScreen(
                 verificationId: verificationId,
               ));
+    case UserInformationScreen.routeName:
+      return MaterialPageRoute(
+          builder: (context) => const UserInformationScreen());
+
     default:
       return MaterialPageRoute(
         builder: (context) => const Scaffold(
