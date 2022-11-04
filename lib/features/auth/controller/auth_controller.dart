@@ -1,13 +1,19 @@
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rvchat/models/user_model.dart';
 
 import '../repository/auth_repository.dart';
 
 final authControllerProvider = Provider((ref) {
   final authRepository = ref.watch(AuthRepositoryProvider);
   return AuthController(authRepository: authRepository, ref: ref);
+});
+final userDataAuthProvider = FutureProvider((ref) {
+  final AuthController = ref.watch(authControllerProvider);
+  return AuthController.getUserData();
 });
 
 class AuthController {
@@ -28,5 +34,10 @@ class AuthController {
       BuildContext context, String name, File? profilePic) {
     authRepository.saveUserDataToFirebase(
         name: name, profilePic: profilePic, ref: ref, context: context);
+  }
+
+  Future<UserModel?> getUserData() async {
+    UserModel? user = await authRepository.getCurrentUserData();
+    return user;
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rvchat/colors.dart';
+import 'package:rvchat/features/select_contacts/screens/select_contact_screen.dart';
 import 'package:rvchat/widgets/contacts_list.dart';
 
 class MobileLayoutScreen extends StatelessWidget {
@@ -56,7 +57,9 @@ class MobileLayoutScreen extends StatelessWidget {
         ),
         body: const ContactsList(),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pushNamed(context, SelectContactsScreen.routeName);
+          },
           backgroundColor: tabColor,
           child: const Icon(
             Icons.comment,
