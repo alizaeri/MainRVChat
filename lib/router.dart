@@ -3,6 +3,7 @@ import 'package:rvchat/features/auth/screens/login_screen.dart';
 import 'package:rvchat/features/auth/screens/otp_screen.dart';
 import 'package:rvchat/features/auth/screens/user_information_screen.dart';
 import 'package:rvchat/features/select_contacts/screens/select_contact_screen.dart';
+import 'package:rvchat/features/chat/screen/mobile_chat_screen.dart';
 import 'package:rvchat/widgets/error.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
@@ -21,6 +22,15 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case SelectContactsScreen.routeName:
       return MaterialPageRoute(
           builder: (context) => const SelectContactsScreen());
+    case MobileChatScreen.routeName:
+      final argument = settings.arguments as Map<String, dynamic>;
+      final name = argument['name'];
+      final uid = argument['uid'];
+      return MaterialPageRoute(
+          builder: (context) => MobileChatScreen(
+                name: name,
+                uid: uid,
+              ));
 
     default:
       return MaterialPageRoute(

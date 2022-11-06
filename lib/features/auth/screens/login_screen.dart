@@ -60,47 +60,49 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         elevation: 0,
         backgroundColor: backgroundColor,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: Column(children: [
-          const Text("vared konid lamasabo"),
-          const SizedBox(
-            height: 10,
-          ),
-          TextButton(onPressed: pickCountry, child: Text("Pick Contry")),
-          const SizedBox(
-            height: 10,
-          ),
-          Row(
-            children: [
-              if (country != null) Text('+${country!.phoneCode}'),
-              const SizedBox(
-                width: 10,
-              ),
-              SizedBox(
-                width: size.width * 0.7,
-                child: TextField(
-                  controller: phoneController,
-                  decoration: const InputDecoration(
-                    hintText: 'Phone number',
-                  ),
-                ),
-              )
-            ],
-          ),
-          SizedBox(
-            height: size.height * 0.6,
-          ),
-          SizedBox(
-            width: 90,
-            child: CustomButton(
-              onPressed: () {
-                sendPhoneNumber();
-              },
-              text: 'Next',
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Column(children: [
+            const Text("vared konid lamasabo"),
+            const SizedBox(
+              height: 10,
             ),
-          )
-        ]),
+            TextButton(onPressed: pickCountry, child: Text("Pick Contry")),
+            const SizedBox(
+              height: 10,
+            ),
+            Row(
+              children: [
+                if (country != null) Text('+${country!.phoneCode}'),
+                const SizedBox(
+                  width: 10,
+                ),
+                SizedBox(
+                  width: size.width * 0.7,
+                  child: TextField(
+                    controller: phoneController,
+                    decoration: const InputDecoration(
+                      hintText: 'Phone number',
+                    ),
+                  ),
+                )
+              ],
+            ),
+            SizedBox(
+              height: size.height * 0.6,
+            ),
+            SizedBox(
+              width: 90,
+              child: CustomButton(
+                onPressed: () {
+                  sendPhoneNumber();
+                },
+                text: 'Next',
+              ),
+            )
+          ]),
+        ),
       ),
     );
   }
