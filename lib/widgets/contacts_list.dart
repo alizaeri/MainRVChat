@@ -18,6 +18,9 @@ class ContactsList extends ConsumerWidget {
       child: StreamBuilder<List<ChatContact>>(
           stream: ref.watch(chatControllerProvider).chatContacts(),
           builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Loader();
+            }
             /*
             print("${snapshot.data} ------------------------- ");
 
