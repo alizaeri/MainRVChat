@@ -23,15 +23,7 @@ class ChatRepository {
         .collection('chats')
         .snapshots()
         .asyncMap((event) async {
-      List<ChatContact> contacts = [
-        ChatContact(
-            name: "ali",
-            profilePic:
-                "https://www.socialketchup.in/wp-content/uploads/2020/05/fi-vill-JOHN-DOE.jpg",
-            contactId: "weKZfqxTq1ZK2jPp7mJZkhAj96b2",
-            timeSent: DateTime.now(),
-            lastMessage: "harchi")
-      ];
+      List<ChatContact> contacts = [];
       for (var document in event.docs) {
         var chatContact = ChatContact.fromMap(document.data());
         var userData = await firestore
@@ -54,9 +46,28 @@ class ChatRepository {
     });
   }
 
+  Stream<List<Message>> getChatStream(String recieverUserId) {
+    return firestore
+        .collection('users')
+        .doc(auth.currentUser!.uid)
+        .collection('chats')
+        .doc(recieverUserId)
+        .collection('messages')
+        .orderBy('timeSent')
+        .snapshots()
+        .map((event) {
+      List<Message> messages = [];
+      print(" tedade ${event.docs.length}");
+      for (var document in event.docs) {
+        messages.add(Message.fromMap(document.data()));
+      }
+      return messages;
+    });
+  }
+
   void _saveDataToContactSubcollection(
     UserModel senderUserData,
-    UserModel recieverUserData,
+    UserModel? recieverUserData,
     String text,
     DateTime timeSent,
     String recieverUserId,
@@ -77,7 +88,7 @@ class ChatRepository {
         );
 
     var senderChatContact = ChatContact(
-        name: recieverUserData.name,
+        name: recieverUserData!.name,
         profilePic: recieverUserData.profilePic,
         contactId: recieverUserData.uid,
         timeSent: timeSent,
@@ -139,7 +150,7 @@ class ChatRepository {
   }) async {
     try {
       var timeSent = DateTime.now();
-      UserModel recieverUserData;
+      UserModel? recieverUserData;
       var userDataMap =
           await firestore.collection('users').doc(recieverUserId).get();
       recieverUserData = UserModel.fromMap(userDataMap.data()!);

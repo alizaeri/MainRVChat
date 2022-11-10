@@ -21,27 +21,6 @@ class ContactsList extends ConsumerWidget {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Loader();
             }
-            /*
-            print("${snapshot.data} ------------------------- ");
-
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Text("waiting");
-            } else if (snapshot.connectionState == ConnectionState.active) {
-              if (snapshot.hasData) {
-                return Text(snapshot.data![0].name);
-              } else {
-                return Text("khili");
-              }
-            } else if (snapshot.connectionState == ConnectionState.done) {
-              return Text("done");
-            }
-            return Center(child: CircularProgressIndicator());
-            
-            if (snapshot.data == null) {
-              return Center(child: CircularProgressIndicator());
-            }
-            */
-
             return ListView.builder(
               shrinkWrap: true,
               itemCount: snapshot.data!.length,

@@ -6,9 +6,9 @@ import 'package:rvchat/colors.dart';
 import 'package:rvchat/common/widgets/loader.dart';
 import 'package:rvchat/features/auth/controller/auth_controller.dart';
 import 'package:rvchat/features/chat/widget/bottom-chat-field.dart';
+import 'package:rvchat/features/chat/widget/chat_list.dart';
 import 'package:rvchat/info.dart';
 import 'package:rvchat/models/user_model.dart';
-import 'package:rvchat/widgets/chat_list.dart';
 
 class MobileChatScreen extends ConsumerWidget {
   static const String routeName = '/mobile-chat-screen';
@@ -57,7 +57,7 @@ class MobileChatScreen extends ConsumerWidget {
       ),
       body: Column(
         children: [
-          const Expanded(
+          Expanded(
             child: ChatList(),
           ),
           BottomChatField(recieverUserId: uid),

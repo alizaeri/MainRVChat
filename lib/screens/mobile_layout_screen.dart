@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rvchat/colors.dart';
 import 'package:rvchat/features/select_contacts/screens/select_contact_screen.dart';
-import 'package:rvchat/widgets/contacts_list.dart';
+import 'package:rvchat/features/chat/widget/contacts_list.dart';
 
 class MobileLayoutScreen extends StatelessWidget {
   const MobileLayoutScreen({Key? key}) : super(key: key);
