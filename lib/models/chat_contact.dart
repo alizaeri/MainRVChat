@@ -26,7 +26,7 @@ class ChatContact {
       name: map['name'] ?? '',
       profilePic: map['profilePic'] ?? '',
       contactId: map['contactId'] ?? '',
-      timeSent: DateTime.fromMillisecondsSinceEpoch(map['timeCent']),
+      timeSent: DateTime.fromMillisecondsSinceEpoch(map['timeSent']),
       lastMessage: map['lastMessage'] ?? '',
     );
   }

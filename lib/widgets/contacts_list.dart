@@ -18,6 +18,7 @@ class ContactsList extends ConsumerWidget {
       child: StreamBuilder<List<ChatContact>>(
           stream: ref.watch(chatControllerProvider).chatContacts(),
           builder: (context, snapshot) {
+            /*
             print("${snapshot.data} ------------------------- ");
 
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -32,11 +33,12 @@ class ContactsList extends ConsumerWidget {
               return Text("done");
             }
             return Center(child: CircularProgressIndicator());
-            /*
+            
             if (snapshot.data == null) {
               return Center(child: CircularProgressIndicator());
             }
-            
+            */
+
             return ListView.builder(
               shrinkWrap: true,
               itemCount: snapshot.data!.length,
@@ -93,7 +95,6 @@ class ContactsList extends ConsumerWidget {
                 );
               },
             );
-            */
           }),
     );
   }
