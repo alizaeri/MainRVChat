@@ -1,17 +1,57 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rvchat/colors.dart';
+import 'package:rvchat/features/chat/controller/chat_controller.dart';
 
-class bottomChatField extends StatelessWidget {
-  const bottomChatField({
-    Key? key,
-  }) : super(key: key);
+class BottomChatField extends ConsumerStatefulWidget {
+  final String recieverUserId;
+  const BottomChatField({Key? key, required this.recieverUserId})
+      : super(key: key);
+
+  @override
+  ConsumerState<BottomChatField> createState() => _bottomChatFieldState();
+}
+
+class _bottomChatFieldState extends ConsumerState<BottomChatField> {
+  bool isShowSendButton = false;
+  final TextEditingController _messageContoller = TextEditingController();
+  @override
+  void dispose() {
+    super.dispose();
+    _messageContoller.dispose();
+  }
+
+  void sendTextMesseage() async {
+    if (isShowSendButton) {
+      ref.read(chatControllerProvider).sendTextMessage(
+            context,
+            _messageContoller.text.trim(),
+            widget.recieverUserId,
+          );
+      setState(() {
+        _messageContoller.text = '';
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
         Expanded(
-          child: TextField(
+          child: TextFormField(
+            controller: _messageContoller,
+            onChanged: (val) {
+              if (val.isNotEmpty) {
+                setState(() {
+                  isShowSendButton = true;
+                });
+              } else {
+                setState(() {
+                  isShowSendButton = false;
+                });
+              }
+            },
             decoration: InputDecoration(
               filled: true,
               fillColor: mobileChatBoxColor,
@@ -53,7 +93,7 @@ class bottomChatField extends StatelessWidget {
                     ),
                     IconButton(
                       onPressed: () {},
-                      icon: Icon(Icons.attach_file),
+                      icon: const Icon(Icons.attach_file),
                       color: Colors.grey,
                     ),
                   ],
@@ -71,18 +111,21 @@ class bottomChatField extends StatelessWidget {
             ),
           ),
         ),
-        const Padding(
-          padding: EdgeInsets.only(
+        Padding(
+          padding: const EdgeInsets.only(
             bottom: 8,
             right: 2,
             left: 2,
           ),
           child: CircleAvatar(
-            backgroundColor: Color(0xff128c7e),
+            backgroundColor: const Color(0xff128c7e),
             radius: 25,
-            child: Icon(
-              Icons.send,
-              color: Colors.white,
+            child: GestureDetector(
+              onTap: sendTextMesseage,
+              child: Icon(
+                isShowSendButton ? Icons.send : Icons.mic,
+                color: Colors.white,
+              ),
             ),
           ),
         )
@@ -90,3 +133,4 @@ class bottomChatField extends StatelessWidget {
     );
   }
 }
+//3:45 daghighe
