@@ -22,7 +22,7 @@ class Message {
       'recieverId': recieverId,
       'text': text,
       'type': type.type,
-      'timeSent': timeSent,
+      'timeSent': timeSent.millisecondsSinceEpoch,
       'messageId': messageId,
       'isSeen': isSeen,
     };
@@ -30,12 +30,13 @@ class Message {
 
   factory Message.fromMap(Map<String, dynamic> map) {
     return Message(
-        senderId: map['senderID'] ?? '',
-        recieverId: map['recieverId'] ?? '',
-        text: map['text'] ?? '',
-        type: (map['type'] as String).toEnum(),
-        timeSent: DateTime.fromMillisecondsSinceEpoch(map['timeSent']),
-        messageId: map['messageId'] ?? '',
-        isSeen: map['isSeen'] ?? false);
+      senderId: map['senderId'] ?? '',
+      recieverId: map['recieverId'] ?? '',
+      text: map['text'] ?? '',
+      type: (map['type'] as String).toEnum(),
+      timeSent: DateTime.fromMillisecondsSinceEpoch(map['timeSent']),
+      messageId: map['messageId'] ?? '',
+      isSeen: map['isSeen'] ?? false,
+    );
   }
 }

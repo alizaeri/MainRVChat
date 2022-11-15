@@ -11,6 +11,7 @@ class ChatContact {
       required this.contactId,
       required this.timeSent,
       required this.lastMessage});
+
   Map<String, dynamic> toMap() {
     return {
       'name': name,

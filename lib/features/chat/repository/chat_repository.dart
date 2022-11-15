@@ -9,12 +9,20 @@ import 'package:rvchat/models/message.dart';
 import 'package:rvchat/models/user_model.dart';
 import 'package:uuid/uuid.dart';
 
-final chatRepositoryProvider = Provider((ref) => ChatRepository(
-    auth: FirebaseAuth.instance, firestore: FirebaseFirestore.instance));
+final chatRepositoryProvider = Provider(
+  (ref) => ChatRepository(
+    firestore: FirebaseFirestore.instance,
+    auth: FirebaseAuth.instance,
+  ),
+);
 
 class ChatRepository {
   final FirebaseFirestore firestore;
   final FirebaseAuth auth;
+  ChatRepository({
+    required this.firestore,
+    required this.auth,
+  });
 
   Stream<List<ChatContact>> getChatContacts() {
     return firestore
@@ -57,7 +65,6 @@ class ChatRepository {
         .snapshots()
         .map((event) {
       List<Message> messages = [];
-      print(" tedade ${event.docs.length}");
       for (var document in event.docs) {
         messages.add(Message.fromMap(document.data()));
       }
@@ -65,34 +72,37 @@ class ChatRepository {
     });
   }
 
-  void _saveDataToContactSubcollection(
+  void _saveDataToContactsSubcollection(
     UserModel senderUserData,
     UserModel? recieverUserData,
     String text,
     DateTime timeSent,
     String recieverUserId,
   ) async {
-    var reciverChatContact = ChatContact(
-        name: senderUserData.name,
-        profilePic: senderUserData.profilePic,
-        contactId: senderUserData.uid,
-        timeSent: timeSent,
-        lastMessage: text);
+// users -> reciever user id => chats -> current user id -> set data
+    var recieverChatContact = ChatContact(
+      name: senderUserData.name,
+      profilePic: senderUserData.profilePic,
+      contactId: senderUserData.uid,
+      timeSent: timeSent,
+      lastMessage: text,
+    );
     await firestore
         .collection('users')
         .doc(recieverUserId)
         .collection('chats')
         .doc(auth.currentUser!.uid)
         .set(
-          reciverChatContact.toMap(),
+          recieverChatContact.toMap(),
         );
-
+    // users -> current user id  => chats -> reciever user id -> set data
     var senderChatContact = ChatContact(
-        name: recieverUserData!.name,
-        profilePic: recieverUserData.profilePic,
-        contactId: recieverUserData.uid,
-        timeSent: timeSent,
-        lastMessage: text);
+      name: recieverUserData!.name,
+      profilePic: recieverUserData.profilePic,
+      contactId: recieverUserData.uid,
+      timeSent: timeSent,
+      lastMessage: text,
+    );
     await firestore
         .collection('users')
         .doc(auth.currentUser!.uid)
@@ -103,15 +113,13 @@ class ChatRepository {
         );
   }
 
-  ChatRepository({required this.auth, required this.firestore});
-
   void _saveMessageToMessageSubcollection({
     required String recieverUserId,
     required String text,
     required DateTime timeSent,
     required String messageId,
     required String username,
-    required revicerUsername,
+    required reciverUsername,
     required MessageEnum messageType,
   }) async {
     final message = Message(
@@ -154,7 +162,7 @@ class ChatRepository {
       var userDataMap =
           await firestore.collection('users').doc(recieverUserId).get();
       recieverUserData = UserModel.fromMap(userDataMap.data()!);
-      _saveDataToContactSubcollection(
+      _saveDataToContactsSubcollection(
           senderUser, recieverUserData, text, timeSent, recieverUserId);
       var messageId = const Uuid().v1();
 
@@ -164,7 +172,7 @@ class ChatRepository {
         timeSent: timeSent,
         messageType: MessageEnum.text,
         messageId: messageId,
-        revicerUsername: recieverUserData.name,
+        reciverUsername: recieverUserData.name,
         username: senderUser.name,
       );
     } catch (e) {
