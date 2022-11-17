@@ -36,100 +36,73 @@ class _bottomChatFieldState extends ConsumerState<BottomChatField> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: TextFormField(
-            controller: _messageContoller,
-            onChanged: (val) {
-              if (val.isNotEmpty) {
-                setState(() {
-                  isShowSendButton = true;
-                });
-              } else {
-                setState(() {
-                  isShowSendButton = false;
-                });
-              }
-            },
-            decoration: InputDecoration(
-              filled: true,
-              fillColor: mobileChatBoxColor,
-              prefixIcon: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: SizedBox(
-                  width: 100,
-                  child: Row(
-                    children: [
-                      IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.emoji_emotions,
-                          color: Colors.grey,
-                        ),
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: Container(
+        decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(
+              color: bgmmColor,
+            ),
+            borderRadius: BorderRadius.all(Radius.circular(40))),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(5, 5, 6, 5),
+          child: Row(
+            children: [
+              Expanded(
+                child: TextFormField(
+                  style: TextStyle(color: textMyMessage),
+                  controller: _messageContoller,
+                  onChanged: (val) {
+                    if (val.isNotEmpty) {
+                      setState(() {
+                        isShowSendButton = true;
+                      });
+                    } else {
+                      setState(() {
+                        isShowSendButton = false;
+                      });
+                    }
+                  },
+                  decoration: InputDecoration(
+                    filled: true,
+
+                    //fillColor: mobileChatBoxColor,
+                    prefixIcon: SizedBox(
+                      width: 50,
+                      child: Row(
+                        children: [
+                          IconButton(
+                            onPressed: () {},
+                            icon: const ImageIcon(
+                                AssetImage("assets/icons/att_iconng.png"),
+                                color: Color.fromARGB(255, 159, 146, 225)),
+                          ),
+                        ],
                       ),
-                      IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.gif,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ],
+                    ),
+                    hintText: 'Type a message!',
+                    contentPadding: const EdgeInsets.all(10),
                   ),
                 ),
               ),
-              suffixIcon: SizedBox(
-                width: 100,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    IconButton(
-                      onPressed: () {},
-                      icon: const Icon(
-                        Icons.camera_alt,
-                        color: Colors.grey,
-                      ),
-                    ),
-                    IconButton(
-                      onPressed: () {},
-                      icon: const Icon(Icons.attach_file),
-                      color: Colors.grey,
-                    ),
-                  ],
+              CircleAvatar(
+                backgroundColor: const Color(0xff6c5dd2),
+                radius: 25,
+                child: GestureDetector(
+                  onTap: sendTextMesseage,
+                  child: ImageIcon(
+                    isShowSendButton
+                        ? const AssetImage("assets/icons/sent_icon.png")
+                        : const AssetImage("assets/icons/mic_icon.png"),
+                    color: Colors.white,
+                  ),
                 ),
               ),
-              hintText: 'Type a message!',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20.0),
-                borderSide: const BorderSide(
-                  width: 0,
-                  style: BorderStyle.none,
-                ),
-              ),
-              contentPadding: const EdgeInsets.all(10),
-            ),
+            ],
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.only(
-            bottom: 8,
-            right: 2,
-            left: 2,
-          ),
-          child: CircleAvatar(
-            backgroundColor: const Color(0xff128c7e),
-            radius: 25,
-            child: GestureDetector(
-              onTap: sendTextMesseage,
-              child: Icon(
-                isShowSendButton ? Icons.send : Icons.mic,
-                color: Colors.white,
-              ),
-            ),
-          ),
-        )
-      ],
+      ),
     );
   }
 }
