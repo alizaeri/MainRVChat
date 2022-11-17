@@ -21,7 +21,7 @@ class MobileChatScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: appBarColor,
+        backgroundColor: bgmmColor,
         title: StreamBuilder<UserModel>(
             stream: ref.read(authControllerProvider).userDataById(uid),
             builder: (context, snapshot) {
@@ -55,15 +55,25 @@ class MobileChatScreen extends ConsumerWidget {
           ),
         ],
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ChatList(
-              recieverUserId: uid,
-            ),
+      body: Container(
+        decoration: const BoxDecoration(
+          //=> Gradiant Background
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [bgG1, bgG2],
           ),
-          BottomChatField(recieverUserId: uid),
-        ],
+        ),
+        child: Column(
+          children: [
+            Expanded(
+              child: ChatList(
+                recieverUserId: uid,
+              ),
+            ),
+            BottomChatField(recieverUserId: uid),
+          ],
+        ),
       ),
     );
   }

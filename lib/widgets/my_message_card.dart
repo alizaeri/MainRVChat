@@ -18,11 +18,19 @@ class MyMessageCard extends StatelessWidget {
         ),
         child: Card(
           elevation: 1,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-          color: messageColor,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20),
+              bottomLeft: Radius.circular(20),
+              topRight: Radius.circular(0),
+              bottomRight: Radius.circular(20),
+            ),
+          ),
+          color: bgmmColor,
           margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
           child: Stack(
             children: [
+              SizedBox(width: 80),
               Padding(
                 padding: const EdgeInsets.only(
                   left: 10,
@@ -31,6 +39,7 @@ class MyMessageCard extends StatelessWidget {
                   bottom: 20,
                 ),
                 child: Text(
+                  textAlign: TextAlign.right,
                   message,
                   style: const TextStyle(
                     fontSize: 16,
