@@ -4,8 +4,7 @@ import 'package:rvchat/info.dart';
 import 'package:rvchat/features/chat/widget/chat_list.dart';
 import 'package:rvchat/widgets/web_chat_appbar.dart';
 import 'package:rvchat/features/chat/widget/contacts_list.dart';
-import 'package:rvchat/widgets/my_message_card.dart';
-import 'package:rvchat/widgets/sender_message_card.dart';
+
 import 'package:rvchat/widgets/web_profile_bar.dart';
 import 'package:rvchat/widgets/web_search_bar.dart';
 

@@ -3,16 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:rvchat/common/enums/message_enum.dart';
 import 'package:rvchat/common/widgets/loader.dart';
 import 'package:rvchat/features/chat/controller/chat_controller.dart';
-import 'package:rvchat/info.dart';
+import 'package:rvchat/features/chat/widget/my_message_card.dart';
+import 'package:rvchat/features/chat/widget/sender_message_card.dart';
 import 'package:rvchat/models/message.dart';
-import 'package:rvchat/widgets/my_message_card.dart';
-import 'package:rvchat/widgets/sender_message_card.dart';
 
 /*
 class ChatList extends StatelessWidget {
-  final String recieverUserId;
+  final String recieverUserId; 
   const ChatList({Key? key, required this.recieverUserId}) : super(key: key);
 
   @override
@@ -75,11 +75,13 @@ class _ChatListState extends ConsumerState<ChatList> {
                 return MyMessageCard(
                   message: messageData.text,
                   date: timeSent,
+                  type: messageData.type,
                 );
               }
               return SenderMessageCard(
                 message: messageData.text,
                 date: timeSent,
+                type: messageData.type,
               );
             },
           );

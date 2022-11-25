@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rvchat/common/enums/message_enum.dart';
 import 'package:rvchat/features/auth/controller/auth_controller.dart';
 import 'package:rvchat/features/chat/repository/chat_repository.dart';
 import 'package:rvchat/models/chat_contact.dart';
@@ -38,6 +41,23 @@ class ChatController {
               text: text,
               recieverUserId: reciverUserId,
               senderUser: value!),
+        );
+  }
+
+  void sendFileMessage(
+    BuildContext context,
+    File file,
+    String recieverUserId,
+    MessageEnum messageEnum,
+  ) {
+    ref.read(userDataAuthProvider).whenData(
+          (value) => chatRepository.sendFileMessage(
+              context: context,
+              file: file,
+              recieverUserId: recieverUserId,
+              senderUserData: value!,
+              messageEnum: messageEnum,
+              ref: ref),
         );
   }
 }
