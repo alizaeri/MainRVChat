@@ -33,7 +33,9 @@ class ContactsList extends ConsumerWidget {
                         Navigator.pushNamed(context, MobileChatScreen.routeName,
                             arguments: {
                               'name': chatContactData.name,
-                              'uid': chatContactData.contactId
+                              'uid': chatContactData.contactId,
+                              'isGroupChat': true,
+                              'profilePic': chatContactData.profilePic,
                             });
                       },
                       child: Padding(

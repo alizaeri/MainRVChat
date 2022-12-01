@@ -60,4 +60,16 @@ class ChatController {
               ref: ref),
         );
   }
+
+  void setChatMessageSeen(
+    BuildContext context,
+    String recieverUserId,
+    String messageId,
+  ) {
+    chatRepository.setChatMessageSeen(
+      context,
+      recieverUserId,
+      messageId,
+    );
+  }
 }

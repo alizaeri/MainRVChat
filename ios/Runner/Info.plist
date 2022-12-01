@@ -56,6 +56,8 @@
 	<false/>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Photo Library Use</string>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>Needs to hear recording</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Camera Library Use</string>
 	<key>NSMicrophoneUsageDescription</key>
