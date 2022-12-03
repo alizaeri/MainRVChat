@@ -83,6 +83,7 @@ flutter:
   assets:
     - assets/
     - assets/icons/
+    - assets/images/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
@@ -109,3 +110,16 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+  fonts:
+    - family: yknir
+      fonts:
+        - asset: assets/fonts/yknirBlack.ttf
+          weight: 800
+        - asset: assets/fonts/yknirBold.ttf
+          weight: 600
+        - asset: assets/fonts/yknirRegular.ttf
+          weight: 300
+        - asset: assets/fonts/yknirLight.ttf
+          weight: 200
+        - asset: assets/fonts/yknirThin.ttf
+          weight: 100
