@@ -41,7 +41,7 @@ class LandingScreen extends StatelessWidget {
                             fontWeight: FontWeight.w800,
                             fontSize: 40,
                             color: white),
-                        "Welcom!"),
+                        "Welcome!"),
                     Expanded(
                       child: Center(
                         child: Padding(
@@ -90,7 +90,7 @@ class LandingScreen extends StatelessWidget {
                     "If you agree to our \n polices touch continue to start RVChat"),
                 const SizedBox(height: 40),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(40, 0, 40, 0),
+                  padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
                   child: SizedBox(
                     child: ElevatedButton(
                       child: const Text(
@@ -106,7 +106,7 @@ class LandingScreen extends StatelessWidget {
                           elevation: 0,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(40.0)),
-                          minimumSize: Size.fromHeight(60)
+                          minimumSize: const Size.fromHeight(60)
                           //////// HERE
                           ),
                       onPressed: () => navigationToLoginScreen(context),
