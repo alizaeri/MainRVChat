@@ -32,36 +32,38 @@ class SenderMessageCard extends StatelessWidget {
               bottomRight: Radius.circular(20),
             ),
           ),
-          color: bgmsColor,
+          color: white.withOpacity(0.9),
           margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
           child: Stack(
             children: [
+              const SizedBox(width: 80),
               Padding(
-                  padding: type == MessageEnum.text
-                      ? EdgeInsets.only(
-                          left: 10,
-                          right: 30,
-                          top: 5,
-                          bottom: 20,
-                        )
-                      : const EdgeInsets.only(
-                          left: 5,
-                          top: 5,
-                          right: 5,
-                          bottom: 25,
-                        ),
-                  child: DisplayTextImageGIF(
-                    message: message,
-                    type: type,
-                  )),
+                padding: type == MessageEnum.text
+                    ? const EdgeInsets.only(
+                        left: 10,
+                        right: 30,
+                        top: 5,
+                        bottom: 20,
+                      )
+                    : const EdgeInsets.only(
+                        left: 5,
+                        top: 5,
+                        right: 5,
+                        bottom: 25,
+                      ),
+                child: DisplayTextImageGIF(
+                  message: message,
+                  type: type,
+                ),
+              ),
               Positioned(
-                bottom: 2,
+                bottom: 4,
                 right: 10,
                 child: Text(
                   date,
                   style: TextStyle(
                     fontSize: 13,
-                    color: Colors.grey[600],
+                    color: grayL1.withOpacity(0.4),
                   ),
                 ),
               ),

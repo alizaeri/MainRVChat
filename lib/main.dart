@@ -11,6 +11,7 @@ import 'package:rvchat/utils/responsive_layout.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:rvchat/widgets/error.dart';
 import 'firebase_options.dart';
+import 'screens/mobile_layout_screen_main.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,7 +39,7 @@ class MyApp extends ConsumerWidget {
               if (user == null) {
                 return const LandingScreen();
               }
-              return const MobileLayoutScreen();
+              return const MobileLayoutScreenMain();
             },
             error: (err, trace) {
               return ErrorScreen(

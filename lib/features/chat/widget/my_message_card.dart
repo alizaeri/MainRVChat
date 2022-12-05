@@ -35,14 +35,14 @@ class MyMessageCard extends StatelessWidget {
               bottomRight: Radius.circular(20),
             ),
           ),
-          color: bgmmColor,
+          color: pinkL1,
           margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
           child: Stack(
             children: [
-              SizedBox(width: 80),
+              const SizedBox(width: 80),
               Padding(
                 padding: type == MessageEnum.text
-                    ? EdgeInsets.only(
+                    ? const EdgeInsets.only(
                         left: 10,
                         right: 30,
                         top: 5,

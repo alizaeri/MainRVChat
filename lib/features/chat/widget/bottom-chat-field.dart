@@ -142,7 +142,7 @@ class _bottomChatFieldState extends ConsumerState<BottomChatField> {
         decoration: BoxDecoration(
             color: Colors.white,
             border: Border.all(
-              color: bgmmColor,
+              color: pinkL1,
             ),
             borderRadius: BorderRadius.all(Radius.circular(40))),
         child: Padding(
@@ -178,7 +178,7 @@ class _bottomChatFieldState extends ConsumerState<BottomChatField> {
                               GestureDetector(
                                 child: PopupMenuButton<int>(
                                   elevation: 2,
-                                  color: Color.fromARGB(255, 52, 102, 220),
+                                  color: pinkL1,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(25),
                                   ),
@@ -246,10 +246,13 @@ class _bottomChatFieldState extends ConsumerState<BottomChatField> {
                                     }
                                   },
                                   offset: const Offset(0, -90),
-                                  child: const ImageIcon(
-                                      AssetImage("assets/icons/att_iconng.png"),
-                                      color:
-                                          Color.fromARGB(255, 159, 146, 225)),
+                                  child: const Padding(
+                                    padding: EdgeInsets.only(left: 10),
+                                    child: ImageIcon(
+                                        AssetImage(
+                                            "assets/icons/att_iconng.png"),
+                                        color: pinkL1),
+                                  ),
                                 ),
                               )
                               /*
@@ -265,13 +268,15 @@ class _bottomChatFieldState extends ConsumerState<BottomChatField> {
                             ],
                           ),
                         ),
+                        fillColor: white.withOpacity(0),
+                        border: InputBorder.none,
                         hintText: 'Type a message!',
                         contentPadding: const EdgeInsets.all(10),
                       ),
                     ),
                   ),
                   CircleAvatar(
-                    backgroundColor: const Color(0xff6c5dd2),
+                    backgroundColor: pinkL1,
                     radius: 25,
                     child: GestureDetector(
                       onTap: sendTextMesseage,
