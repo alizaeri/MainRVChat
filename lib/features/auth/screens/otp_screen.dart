@@ -128,8 +128,7 @@ class OTPScreen extends ConsumerWidget {
                           color: pinkL1,
                           width: 2,
                         )),
-                    child: Expanded(
-                        child: Padding(
+                    child: Padding(
                       padding: const EdgeInsets.only(top: 25),
                       child: TextField(
                         textAlign: TextAlign.center,
@@ -160,7 +159,7 @@ class OTPScreen extends ConsumerWidget {
                           print("this function was run");
                         },
                       ),
-                    )),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 20),

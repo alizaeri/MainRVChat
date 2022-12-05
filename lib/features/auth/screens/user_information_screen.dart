@@ -155,8 +155,7 @@ class _UserInformationScreenState extends ConsumerState<UserInformationScreen> {
                                 color: white,
                                 width: 2,
                               )),
-                          child: Expanded(
-                              child: Padding(
+                          child: Padding(
                             padding: const EdgeInsets.only(top: 25),
                             child: TextField(
                               textAlign: TextAlign.center,
@@ -174,7 +173,7 @@ class _UserInformationScreenState extends ConsumerState<UserInformationScreen> {
                                 hintText: 'Enter Your Name',
                               ),
                             ),
-                          )),
+                          ),
                         ),
                       ),
                       const SizedBox(height: 20),
