@@ -116,7 +116,9 @@ class _UserInformationScreenState extends ConsumerState<UserInformationScreen> {
                                     child: CircleAvatar(
                                       backgroundColor: white.withOpacity(0.6),
                                       child: IconButton(
-                                        onPressed: selectImage,
+                                        onPressed: () {
+                                          selectImage();
+                                        },
                                         icon: const ImageIcon(
                                           AssetImage(
                                             "assets/icons/camera.png",
@@ -166,6 +168,7 @@ class _UserInformationScreenState extends ConsumerState<UserInformationScreen> {
                                   fontWeight: FontWeight.w400,
                                   fontSize: 25,
                                   color: white),
+                              keyboardType: TextInputType.number,
                               decoration: const InputDecoration(
                                 border: InputBorder.none,
                                 hintStyle: TextStyle(color: white),
