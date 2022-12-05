@@ -166,7 +166,6 @@ class _UserInformationScreenState extends ConsumerState<UserInformationScreen> {
                                   fontWeight: FontWeight.w400,
                                   fontSize: 25,
                                   color: white),
-                              keyboardType: TextInputType.number,
                               decoration: const InputDecoration(
                                 border: InputBorder.none,
                                 hintStyle: TextStyle(color: white),
@@ -204,6 +203,17 @@ class _UserInformationScreenState extends ConsumerState<UserInformationScreen> {
                   padding: const EdgeInsets.fromLTRB(35, 0, 35, 0),
                   child: SizedBox(
                     child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: pinkL1,
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(40.0)),
+                          minimumSize: const Size.fromHeight(60)
+                          //////// HERE
+                          ),
+                      onPressed: () {
+                        storeUserData();
+                      },
                       child: const Padding(
                         padding: EdgeInsets.only(top: 6),
                         child: Text(
@@ -215,23 +225,10 @@ class _UserInformationScreenState extends ConsumerState<UserInformationScreen> {
                             ),
                             "APPLY"),
                       ),
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: pinkL1,
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(40.0)),
-                          minimumSize: const Size.fromHeight(60)
-                          //////// HERE
-                          ),
-                      onPressed: () {
-                        storeUserData;
-                      },
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: 20,
-                ),
+                const SizedBox(height: 20),
                 //==> Enter phone number
                 const Text(
                     textAlign: TextAlign.center,
