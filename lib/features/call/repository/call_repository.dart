@@ -39,17 +39,16 @@ class CallRepository {
           .doc(senderCallData.receiverId)
           .set(receiverCallData.toMap());
 
-      // Navigator.push(
-      //   context,
-      //   MaterialPageRoute(
-      //     builder: (context) =>
-      //      CallScreen(
-      //       channelId: senderCallData.callId,
-      //       call: senderCallData,
-      //       isGroupChat: false,
-      //     ),
-      //   ),
-      // );
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => CallScreen(
+            channelId: senderCallData.callId,
+            call: senderCallData,
+            isGroupChat: false,
+          ),
+        ),
+      );
     } catch (e) {
       showSnackBar(context: context, content: e.toString());
     }
