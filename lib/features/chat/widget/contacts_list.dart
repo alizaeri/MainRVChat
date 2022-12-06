@@ -5,7 +5,7 @@ import 'package:rvchat/colors.dart';
 import 'package:rvchat/common/widgets/loader.dart';
 import 'package:rvchat/features/chat/controller/chat_controller.dart';
 import 'package:rvchat/features/chat/screen/mobile_chat_screen.dart';
-import 'package:rvchat/info.dart';
+
 import 'package:rvchat/models/chat_contact.dart';
 
 class ContactsList extends ConsumerWidget {
