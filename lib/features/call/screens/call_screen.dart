@@ -23,7 +23,7 @@ class CallScreen extends ConsumerStatefulWidget {
 
 class _CallScreenState extends ConsumerState<CallScreen> {
   AgoraClient? client;
-  String baseUrl = 'https://tokenserverrvchat-production.up.railway.app/';
+  String baseUrl = 'https://agora-token-service-production-54ee.up.railway.app';
 
   @override
   void initState() {
@@ -50,7 +50,11 @@ class _CallScreenState extends ConsumerState<CallScreen> {
           : SafeArea(
               child: Stack(
                 children: [
-                  AgoraVideoViewer(client: client!),
+                  AgoraVideoViewer(
+                    client: client!,
+                    layoutType: Layout.floating,
+                    enableHostControls: true,
+                  ),
                   AgoraVideoButtons(
                     client: client!,
                     disconnectButtonChild: IconButton(

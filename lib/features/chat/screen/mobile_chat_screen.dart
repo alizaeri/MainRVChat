@@ -1,5 +1,3 @@
-import 'dart:isolate';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rvchat/colors.dart';
@@ -18,13 +16,13 @@ class MobileChatScreen extends ConsumerWidget {
   final String uid;
   final bool isGroupChat;
   final String profilePic;
-  const MobileChatScreen(
-      {Key? key,
-      required this.name,
-      required this.uid,
-      required this.isGroupChat,
-      required this.profilePic})
-      : super(key: key);
+  const MobileChatScreen({
+    Key? key,
+    required this.name,
+    required this.uid,
+    required this.isGroupChat,
+    required this.profilePic,
+  }) : super(key: key);
 
   void makeCall(WidgetRef ref, BuildContext context) {
     ref.read(callControllerProvider).makeCall(
@@ -39,64 +37,59 @@ class MobileChatScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return CallPickupScreen(
-        scaffold: Scaffold(
-      appBar: AppBar(
-        backgroundColor: bgmmColor,
-        title: StreamBuilder<UserModel>(
-            stream: ref.read(authControllerProvider).userDataById(uid),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Loader();
-              }
-              return Column(
-                children: [
-                  Text(name),
-                  Text(
-                    snapshot.data!.isOnline ? 'online' : 'ofline',
-                    style: const TextStyle(
-                        fontSize: 13, fontWeight: FontWeight.normal),
-                  )
-                ],
-              );
-            }),
-        centerTitle: false,
-        actions: [
-          IconButton(
-            onPressed: () {
-              makeCall(ref, context);
-            },
-            icon: const Icon(Icons.video_call),
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.call),
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.more_vert),
-          ),
-        ],
-      ),
-      body: Container(
-        decoration: const BoxDecoration(
-          //=> Gradiant Background
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [bgG1, bgG2],
-          ),
+      scaffold: Scaffold(
+        appBar: AppBar(
+          backgroundColor: appBarColor,
+          title: isGroupChat
+              ? Text(name)
+              : StreamBuilder<UserModel>(
+                  stream: ref.read(authControllerProvider).userDataById(uid),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Loader();
+                    }
+                    return Column(
+                      children: [
+                        Text(name),
+                        Text(
+                          snapshot.data!.isOnline ? 'online' : 'offline',
+                          style: const TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.normal,
+                          ),
+                        ),
+                      ],
+                    );
+                  }),
+          centerTitle: false,
+          actions: [
+            IconButton(
+              onPressed: () => makeCall(ref, context),
+              icon: const Icon(Icons.video_call),
+            ),
+            IconButton(
+              onPressed: () {},
+              icon: const Icon(Icons.call),
+            ),
+            IconButton(
+              onPressed: () {},
+              icon: const Icon(Icons.more_vert),
+            ),
+          ],
         ),
-        child: Column(
+        body: Column(
           children: [
             Expanded(
               child: ChatList(
                 recieverUserId: uid,
               ),
             ),
-            BottomChatField(recieverUserId: uid),
+            BottomChatField(
+              recieverUserId: uid,
+            ),
           ],
         ),
       ),
-    ));
+    );
   }
 }
