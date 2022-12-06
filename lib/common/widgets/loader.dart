@@ -9,24 +9,26 @@ class Loader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: grayL1.withOpacity(0.8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Center(
-            child: Container(
-              height: 50,
-              width: 50,
-              margin: const EdgeInsets.all(5),
-              child: const CircularProgressIndicator(
-                strokeWidth: 4.0,
-                valueColor: AlwaysStoppedAnimation(pinkL2),
+    return IgnorePointer(
+      child: Container(
+        color: grayL1.withOpacity(0.8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Center(
+              child: Container(
+                height: 50,
+                width: 50,
+                margin: const EdgeInsets.all(5),
+                child: const CircularProgressIndicator(
+                  strokeWidth: 4.0,
+                  valueColor: AlwaysStoppedAnimation(pinkL2),
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
