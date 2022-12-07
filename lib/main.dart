@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rvchat/colors.dart';
 import 'package:rvchat/common/widgets/loader.dart';
+import 'package:rvchat/common/widgets/loaderW.dart';
 import 'package:rvchat/features/auth/controller/auth_controller.dart';
 import 'package:rvchat/features/landing/screens/landing_screen.dart';
 import 'package:rvchat/router.dart';
@@ -34,6 +35,7 @@ class MyApp extends ConsumerWidget {
         debugShowCheckedModeBanner: false,
         title: 'Whatsapp UI',
         onGenerateRoute: (settings) => generateRoute(settings),
+        theme: ThemeData(scaffoldBackgroundColor: whiteW1),
         home: ref.watch(userDataAuthProvider).when(
             data: (user) {
               if (user == null) {
@@ -46,6 +48,6 @@ class MyApp extends ConsumerWidget {
                 error: err.toString(),
               );
             },
-            loading: () => const Loader()));
+            loading: () => const LoaderW()));
   }
 }

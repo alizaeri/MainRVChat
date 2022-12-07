@@ -4,6 +4,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rvchat/colors.dart';
 import 'package:rvchat/common/widgets/loader.dart';
 import 'package:rvchat/features/select_contacts/controller/select_contact_controller.dart';
 import 'package:rvchat/widgets/error.dart';
@@ -48,8 +49,17 @@ class SelectContactsScreen extends ConsumerWidget {
                         leading: contact.photo == null
                             ? null
                             : CircleAvatar(
-                                backgroundImage: MemoryImage(contact.photo!),
-                                radius: 30,
+                                radius: 32,
+                                backgroundColor: grayL1,
+                                child: CircleAvatar(
+                                  radius: 31,
+                                  backgroundColor: white,
+                                  child: CircleAvatar(
+                                    backgroundImage:
+                                        MemoryImage(contact.photo!),
+                                    radius: 30,
+                                  ),
+                                ),
                               ),
                       ),
                     ),

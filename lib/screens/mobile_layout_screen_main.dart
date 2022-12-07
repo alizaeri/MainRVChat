@@ -8,6 +8,8 @@ import 'package:rvchat/features/chat/widget/contacts_list.dart';
 import 'package:rvchat/screens/mobile_layout_screen.dart';
 import 'package:rvchat/screens/test1.dart';
 
+import '../features/chat/screen/contacts_screen.dart';
+
 class MobileLayoutScreenMain extends ConsumerStatefulWidget {
   const MobileLayoutScreenMain({Key? key}) : super(key: key);
 
@@ -51,36 +53,12 @@ class _MobileLayoutScreenStateMain extends ConsumerState<MobileLayoutScreenMain>
     const Favorite(),
     const Favorite(),
     const Favorite(),
-    const ContactsList(),
+    const ContactsScreen(),
     const Favorite()
   ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: pinkL1,
-        centerTitle: false,
-        title: const Text(
-          'RV Chat',
-          style: TextStyle(
-            fontSize: 20,
-            color: white,
-            fontFamily: "yknir",
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search, color: white),
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: const Icon(Icons.more_vert, color: white),
-            onPressed: () {},
-          ),
-        ],
-      ),
       body: _pageNo[selectedPage],
       floatingActionButton: FloatingActionButton(
         onPressed: () {
