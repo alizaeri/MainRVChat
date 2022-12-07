@@ -24,15 +24,14 @@ Route<dynamic> generateRoute(RouteSettings settings) {
           builder: (context) => const SelectContactsScreen());
     case MobileChatScreen.routeName:
       final argument = settings.arguments as Map<String, dynamic>;
-      final name = argument['name'];
-      final uid = argument['uid'];
+      final String name = argument['name'];
+      final String uid = argument['uid'];
 
       final profilePic = argument['profilePic'];
       return MaterialPageRoute(
           builder: (context) => MobileChatScreen(
                 name: name,
                 uid: uid,
-                isGroupChat: false,
                 profilePic: profilePic,
               ));
 
