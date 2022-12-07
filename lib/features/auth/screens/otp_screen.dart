@@ -17,13 +17,13 @@ class OTPScreen extends ConsumerWidget {
   void verifyOTP(WidgetRef ref, BuildContext context, String userOTP) {
     ref
         .read(authControllerProvider)
-        .verfiyOTP(context, verificationId, userOTP);
+        .verifyOTP(context, verificationId, userOTP);
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final size = MediaQuery.of(context).size;
-    bool fisClick = false;
+    //bool fisClick = false;
     return Scaffold(
       body: Stack(
         children: [
@@ -183,7 +183,6 @@ class OTPScreen extends ConsumerWidget {
               ),
             ),
           ),
-          fisClick ? const Loader() : const Center(),
         ],
       ),
     );

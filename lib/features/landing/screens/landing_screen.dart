@@ -16,7 +16,6 @@ class LandingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: white,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [

@@ -173,11 +173,18 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                 minimumSize: const Size(0, 0),
                               ),
                               onPressed: pickCountry,
-                              child: Image.asset(
-                                "assets/icons/flag.png",
-                                fit: BoxFit.cover,
-                                scale: 8,
-                              ),
+                              child: country != null
+                                  ? Text(
+                                      style: const TextStyle(
+                                        fontSize: 25,
+                                      ),
+                                      country!.flagEmoji,
+                                    )
+                                  : Image.asset(
+                                      "assets/icons/flag.png",
+                                      fit: BoxFit.cover,
+                                      scale: 8,
+                                    ),
                             ),
                             Image.asset(
                               "assets/icons/dropDownIcon.png",
