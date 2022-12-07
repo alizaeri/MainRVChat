@@ -4,8 +4,7 @@ import 'package:rvchat/colors.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:rvchat/features/auth/controller/auth_controller.dart';
 import 'package:rvchat/features/select_contacts/screens/select_contact_screen.dart';
-import 'package:rvchat/features/chat/widget/contacts_list.dart';
-import 'package:rvchat/screens/mobile_layout_screen.dart';
+
 import 'package:rvchat/screens/test1.dart';
 
 import '../features/chat/screen/contacts_screen.dart';

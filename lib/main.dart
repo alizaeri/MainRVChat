@@ -21,7 +21,7 @@ Future<void> main() async {
   );
   runApp(
     const ProviderScope(
-      child: const MyApp(),
+      child: MyApp(),
     ),
   );
 }
@@ -33,7 +33,7 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Whatsapp UI',
+        title: 'Rvchat UI',
         onGenerateRoute: (settings) => generateRoute(settings),
         theme: ThemeData(scaffoldBackgroundColor: whiteW1),
         home: ref.watch(userDataAuthProvider).when(

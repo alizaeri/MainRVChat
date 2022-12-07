@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -37,15 +38,24 @@ class SelectContactRepository {
 
       for (var document in userCollection.docs) {
         var userData = UserModel.fromMap(document.data());
-        print(selectContact.phones[0].number);
+        // print(selectContact.phones[0].number);
         String selectedPhoneNum = selectContact.phones[0].number.replaceAll(
           ' ',
           '',
         );
+        print(selectedPhoneNum);
         if (selectedPhoneNum == userData.phoneNumber) {
           isFound = true;
-          Navigator.pushNamed(context, MobileChatScreen.routeName,
-              arguments: {'name': userData.name, 'uid': userData.uid});
+          print(userData.name);
+          print(userData.uid);
+          print(FirebaseAuth.instance.currentUser!.uid);
+
+          await Navigator.pushNamed(context, MobileChatScreen.routeName,
+              arguments: {
+                'name': userData.name,
+                'uid': userData.uid,
+                'profilePic': userData.profilePic
+              });
         }
       }
       if (!isFound) {
