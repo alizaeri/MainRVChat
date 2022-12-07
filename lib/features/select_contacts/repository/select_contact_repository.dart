@@ -43,12 +43,9 @@ class SelectContactRepository {
           ' ',
           '',
         );
-        print(selectedPhoneNum);
+
         if (selectedPhoneNum == userData.phoneNumber) {
           isFound = true;
-          print(userData.name);
-          print(userData.uid);
-          print(FirebaseAuth.instance.currentUser!.uid);
 
           await Navigator.pushNamed(context, MobileChatScreen.routeName,
               arguments: {
