@@ -43,6 +43,14 @@ class SelectContactRepository {
           ' ',
           '',
         );
+        selectedPhoneNum = selectContact.phones[0].number.replaceAll(
+          '(',
+          '',
+        );
+        selectedPhoneNum = selectContact.phones[0].number.replaceAll(
+          ')',
+          '',
+        );
 
         if (selectedPhoneNum == userData.phoneNumber) {
           isFound = true;

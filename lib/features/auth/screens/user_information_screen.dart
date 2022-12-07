@@ -167,7 +167,6 @@ class _UserInformationScreenState extends ConsumerState<UserInformationScreen> {
                                       fontWeight: FontWeight.w400,
                                       fontSize: 25,
                                       color: white),
-                                  keyboardType: TextInputType.number,
                                   decoration: const InputDecoration(
                                     border: InputBorder.none,
                                     hintStyle: TextStyle(color: white),
