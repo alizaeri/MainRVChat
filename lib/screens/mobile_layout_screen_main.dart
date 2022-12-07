@@ -59,18 +59,6 @@ class _MobileLayoutScreenStateMain extends ConsumerState<MobileLayoutScreenMain>
   Widget build(BuildContext context) {
     return Scaffold(
       body: _pageNo[selectedPage],
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushNamed(context, SelectContactsScreen.routeName);
-        },
-        backgroundColor: pinkL1,
-        child: const ImageIcon(
-          AssetImage(
-            "assets/icons/contatMassage.png",
-          ),
-          color: white,
-        ),
-      ),
       bottomNavigationBar: ConvexAppBar.badge(
         const {3: '99+'},
         items: [

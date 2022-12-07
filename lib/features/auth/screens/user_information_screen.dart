@@ -45,7 +45,6 @@ class _UserInformationScreenState extends ConsumerState<UserInformationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     bool fisClick = false;
     return Scaffold(
       body: Stack(

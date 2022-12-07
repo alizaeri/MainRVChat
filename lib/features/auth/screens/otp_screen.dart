@@ -23,7 +23,7 @@ class OTPScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final size = MediaQuery.of(context).size;
-    bool fisClick = false;
+    //bool fisClick = false;
     return Scaffold(
       body: Stack(
         children: [
@@ -183,7 +183,6 @@ class OTPScreen extends ConsumerWidget {
               ),
             ),
           ),
-          fisClick ? const Loader() : const Center(),
         ],
       ),
     );
