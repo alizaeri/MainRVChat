@@ -55,6 +55,7 @@ class _bottomChatFieldState extends ConsumerState<BottomChatField> {
 
   void sendTextMesseage() async {
     if (isShowSendButton) {
+      print("click sho");
       ref.read(chatControllerProvider).sendTextMessage(
             context,
             _messageContoller.text.trim(),
@@ -279,7 +280,9 @@ class _bottomChatFieldState extends ConsumerState<BottomChatField> {
                     backgroundColor: pinkL1,
                     radius: 25,
                     child: GestureDetector(
-                      onTap: sendTextMesseage,
+                      onTap: () {
+                        sendTextMesseage();
+                      },
                       child: ImageIcon(
                         isShowSendButton
                             ? const AssetImage("assets/icons/sent_icon.png")

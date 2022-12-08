@@ -150,6 +150,7 @@ class ChatRepository {
         .collection('messages')
         .doc(messageId)
         .set(message.toMap());
+    print("ersale do tarage sorat gereft");
   }
 
   void sendTextMessage({
@@ -167,6 +168,7 @@ class ChatRepository {
       _saveDataToContactsSubcollection(
           senderUser, recieverUserData, text, timeSent, recieverUserId);
       var messageId = const Uuid().v1();
+      print("tabe send message ejra shod ");
 
       _saveMessageToMessageSubcollection(
         recieverUserId: recieverUserId,
