@@ -11,8 +11,9 @@ import 'package:rvchat/screens/web_layout_screen.dart';
 import 'package:rvchat/utils/responsive_layout.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:rvchat/widgets/error.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'firebase_options.dart';
-import 'screens/mobile_layout_screen_main.dart';
+import 'screens/mobile_layout_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,6 +25,7 @@ Future<void> main() async {
       child: MyApp(),
     ),
   );
+  FlutterNativeSplash.remove();
 }
 
 class MyApp extends ConsumerWidget {
@@ -41,7 +43,7 @@ class MyApp extends ConsumerWidget {
               if (user == null) {
                 return const LandingScreen();
               }
-              return const MobileLayoutScreenMain();
+              return const MobileLayoutScreen();
             },
             error: (err, trace) {
               return ErrorScreen(

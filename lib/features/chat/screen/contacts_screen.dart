@@ -38,7 +38,7 @@ class ContactsScreen extends StatelessWidget {
                         tapTargetSize: MaterialTapTargetSize.shrinkWrap),
                     onPressed: () {},
                     child: Image.asset(
-                      "assets/icons/camera_icon.png",
+                      "assets/icons/rv.png",
                       fit: BoxFit.cover,
                       color: white,
                       scale: 7.5,
