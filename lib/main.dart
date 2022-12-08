@@ -6,7 +6,6 @@ import 'package:rvchat/common/widgets/loaderW.dart';
 import 'package:rvchat/features/auth/controller/auth_controller.dart';
 import 'package:rvchat/features/landing/screens/landing_screen.dart';
 import 'package:rvchat/router.dart';
-import 'package:rvchat/screens/mobile_layout_screen.dart';
 import 'package:rvchat/screens/web_layout_screen.dart';
 import 'package:rvchat/utils/responsive_layout.dart';
 import 'package:firebase_core/firebase_core.dart';

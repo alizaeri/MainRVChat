@@ -24,15 +24,15 @@ class MobileChatScreen extends ConsumerWidget {
   }) : super(key: key);
 
   void makeCall(WidgetRef ref, BuildContext context) {
+    bool isGroup = false;
     ref.read(callControllerProvider).makeCall(
           context,
           name,
           uid,
           profilePic,
-          false,
+          isGroup,
         );
   }
-  //b950e7d0-7628-11ed-b432-f3ef55cb879c
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

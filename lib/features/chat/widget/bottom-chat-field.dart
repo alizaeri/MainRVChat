@@ -55,7 +55,6 @@ class _bottomChatFieldState extends ConsumerState<BottomChatField> {
 
   void sendTextMesseage() async {
     if (isShowSendButton) {
-      print("click sho");
       ref.read(chatControllerProvider).sendTextMessage(
             context,
             _messageContoller.text.trim(),

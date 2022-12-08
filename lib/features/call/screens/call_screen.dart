@@ -5,6 +5,7 @@ import 'package:rvchat/common/widgets/loader.dart';
 import 'package:rvchat/config/agora_config.dart';
 import 'package:rvchat/features/call/controller/call_controller.dart';
 import 'package:rvchat/models/call.dart';
+//String baseUrl = 'https://agora-token-service-production-54ee.up.railway.app';
 
 class CallScreen extends ConsumerStatefulWidget {
   final String channelId;
@@ -23,7 +24,7 @@ class CallScreen extends ConsumerStatefulWidget {
 
 class _CallScreenState extends ConsumerState<CallScreen> {
   AgoraClient? client;
-  String baseUrl = 'https://agora-token-service-production-54ee.up.railway.app';
+  String baseUrl = 'https://agora-token-service-production-fc02.up.railway.app';
 
   @override
   void initState() {
@@ -50,11 +51,7 @@ class _CallScreenState extends ConsumerState<CallScreen> {
           : SafeArea(
               child: Stack(
                 children: [
-                  AgoraVideoViewer(
-                    client: client!,
-                    layoutType: Layout.floating,
-                    enableHostControls: true,
-                  ),
+                  AgoraVideoViewer(client: client!),
                   AgoraVideoButtons(
                     client: client!,
                     disconnectButtonChild: IconButton(
