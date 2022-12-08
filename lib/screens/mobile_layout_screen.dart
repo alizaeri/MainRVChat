@@ -8,16 +8,16 @@ import 'package:rvchat/features/select_contacts/screens/select_contact_screen.da
 import 'package:rvchat/screens/test1.dart';
 
 import '../features/chat/screen/contacts_screen.dart';
+import 'profile_page.dart';
 
-class MobileLayoutScreenMain extends ConsumerStatefulWidget {
-  const MobileLayoutScreenMain({Key? key}) : super(key: key);
+class MobileLayoutScreen extends ConsumerStatefulWidget {
+  const MobileLayoutScreen({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<MobileLayoutScreenMain> createState() =>
-      _MobileLayoutScreenStateMain();
+  ConsumerState<MobileLayoutScreen> createState() => _MobileLayoutScreenState();
 }
 
-class _MobileLayoutScreenStateMain extends ConsumerState<MobileLayoutScreenMain>
+class _MobileLayoutScreenState extends ConsumerState<MobileLayoutScreen>
     with WidgetsBindingObserver {
   @override
   void initState() {
@@ -53,7 +53,7 @@ class _MobileLayoutScreenStateMain extends ConsumerState<MobileLayoutScreenMain>
     const Favorite(),
     const Favorite(),
     const ContactsScreen(),
-    const Favorite()
+    const ProfilePage(),
   ];
   @override
   Widget build(BuildContext context) {
