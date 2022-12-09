@@ -51,7 +51,20 @@ class _CallScreenState extends ConsumerState<CallScreen> {
           : SafeArea(
               child: Stack(
                 children: [
-                  AgoraVideoViewer(client: client!),
+                  AgoraVideoViewer(
+                    client: client!,
+                    layoutType: Layout.floating,
+
+                    //   showNumberOfUsers: true,
+                    // disabledVideoWidget: Center(
+                    //   child: Padding(
+                    //     padding: const EdgeInsets.all(24),
+                    //     child: Image.asset('assets/brand/logo.png'),
+                    //   ),
+                    // ),
+                    // custom buttons in this link // https://stackoverflow.com/questions/73136521/flutter-agora-unable-to-host-1-to-1-video-voice-calls
+                    // first time // https://stackoverflow.com/questions/64441672/agora-io-audio-working-but-video-not-transmitting
+                  ),
                   AgoraVideoButtons(
                     client: client!,
                     disconnectButtonChild: IconButton(
