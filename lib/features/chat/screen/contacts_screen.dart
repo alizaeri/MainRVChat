@@ -41,7 +41,7 @@ class ContactsScreen extends StatelessWidget {
                       "assets/icons/rv.png",
                       fit: BoxFit.cover,
                       color: white,
-                      scale: 7.5,
+                      scale: 5.5,
                     ),
                   ),
                   ElevatedButton(

@@ -5,10 +5,12 @@ import 'package:rvchat/colors.dart';
 import 'package:rvchat/common/widgets/loader.dart';
 import 'package:rvchat/common/widgets/loaderT.dart';
 import 'package:rvchat/common/widgets/loaderW.dart';
+import 'package:rvchat/features/auth/controller/auth_controller.dart';
 import 'package:rvchat/features/chat/controller/chat_controller.dart';
 import 'package:rvchat/features/chat/screen/mobile_chat_screen.dart';
 
 import 'package:rvchat/models/chat_contact.dart';
+import 'package:rvchat/models/user_model.dart';
 
 class ContactsList extends ConsumerWidget {
   const ContactsList({Key? key}) : super(key: key);
@@ -27,58 +29,83 @@ class ContactsList extends ConsumerWidget {
             itemCount: snapshot.data!.length,
             itemBuilder: (context, index) {
               var chatContactData = snapshot.data![index];
-              return Padding(
-                padding: const EdgeInsets.fromLTRB(15.0, 0, 15.0, 0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        Navigator.pushNamed(context, MobileChatScreen.routeName,
-                            arguments: {
-                              'name': chatContactData.name,
-                              'uid': chatContactData.contactId,
-                              'profilePic': chatContactData.profilePic,
-                            });
-                      },
-                      child: ListTile(
-                        title: Text(
-                          chatContactData.name,
-                          //info[index]['name'].toString(),
-                          style: const TextStyle(
-                            fontSize: 18,
-                          ),
-                        ),
-                        subtitle: Text(
-                          chatContactData.lastMessage,
-                          //info[index]['message'].toString(),
-                          style: const TextStyle(fontSize: 15),
-                        ),
-                        leading: CircleAvatar(
-                          radius: 30,
-                          backgroundColor: pinkL2,
-                          child: CircleAvatar(
-                            backgroundImage: NetworkImage(
-                              chatContactData.profilePic,
-                              // info[index]['profilePic'].toString(),
+              return StreamBuilder<UserModel>(
+                  stream: ref
+                      .read(authControllerProvider)
+                      .userDataById(chatContactData.contactId),
+                  builder: (context, snapshot2) {
+                    return Padding(
+                      padding: const EdgeInsets.fromLTRB(15.0, 0, 15.0, 0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              Navigator.pushNamed(
+                                  context, MobileChatScreen.routeName,
+                                  arguments: {
+                                    'name': chatContactData.name,
+                                    'uid': chatContactData.contactId,
+                                    'profilePic': chatContactData.profilePic,
+                                  });
+                            },
+                            child: ListTile(
+                              title: Text(
+                                chatContactData.name,
+                                //info[index]['name'].toString(),
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                ),
+                              ),
+                              subtitle: Text(
+                                chatContactData.lastMessage,
+                                //info[index]['message'].toString(),
+                                style: const TextStyle(fontSize: 15),
+                              ),
+                              leading: snapshot2.connectionState ==
+                                      ConnectionState.waiting
+                                  ? CircleAvatar(
+                                      backgroundImage: NetworkImage(
+                                        chatContactData.profilePic,
+                                        // info[index]['profilePic'].toString(),
+                                      ),
+                                      radius: 30,
+                                    )
+                                  : snapshot2.data!.isOnline
+                                      ? CircleAvatar(
+                                          radius: 30,
+                                          backgroundColor: pinkL2,
+                                          child: CircleAvatar(
+                                            backgroundImage: NetworkImage(
+                                              chatContactData.profilePic,
+                                              // info[index]['profilePic'].toString(),
+                                            ),
+                                            radius: 26,
+                                          ),
+                                        )
+                                      : CircleAvatar(
+                                          backgroundImage: NetworkImage(
+                                            chatContactData.profilePic,
+                                            // info[index]['profilePic'].toString(),
+                                          ),
+                                          radius: 30,
+                                        ),
+                              trailing: Text(
+                                DateFormat.Hm()
+                                    .format(chatContactData.timeSent),
+                                //info[index]['time'].toString(),
+                                style: const TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 13,
+                                ),
+                              ),
                             ),
-                            radius: 26,
                           ),
-                        ),
-                        trailing: Text(
-                          DateFormat.Hm().format(chatContactData.timeSent),
-                          //info[index]['time'].toString(),
-                          style: const TextStyle(
-                            color: Colors.grey,
-                            fontSize: 13,
-                          ),
-                        ),
+                          const Divider(color: dividerColor, indent: 0),
+                        ],
                       ),
-                    ),
-                    const Divider(color: dividerColor, indent: 0),
-                  ],
-                ),
-              );
+                    );
+                  });
             },
           );
         });
