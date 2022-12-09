@@ -38,7 +38,9 @@ class ProfilePage extends StatelessWidget {
                       backgroundColor: white,
                       radius: 75,
                       child: CircleAvatar(
-                        backgroundColor: pinkL1,
+                        backgroundImage: AssetImage(
+                          "assets/icons/avatar.png",
+                        ),
                         radius: 70,
                       ),
                     ),
@@ -100,7 +102,7 @@ class ProfilePage extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: Column(children: [Text("äsdfsadf")]),
+            child: Column(children: const [Text("äsdfsadf")]),
           ),
         ],
       ),
