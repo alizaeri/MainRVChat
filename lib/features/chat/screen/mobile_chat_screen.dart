@@ -39,6 +39,7 @@ class MobileChatScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return CallPickupScreen(
       scaffold: Scaffold(
+        backgroundColor: const Color(0xff6c5dd2),
         appBar: AppBar(
           elevation: 0,
           titleSpacing: 0,
@@ -111,42 +112,29 @@ class MobileChatScreen extends ConsumerWidget {
           ],
         ),
         body: Container(
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(30.0),
+              topRight: Radius.circular(30.0),
+            ),
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                Color.fromARGB(255, 189, 185, 233),
-                Color.fromARGB(255, 215, 215, 233),
+                whiteW1.withOpacity(0.7),
+                whiteW1.withOpacity(0.9),
               ],
             ),
           ),
           child: Column(
             children: [
-              Flexible(
-                child: Stack(children: [
-                  Container(
-                    height: 30,
-                    color: pinkL1,
-                    child: Container(
-                      height: 30,
-                      decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(30.0),
-                            topRight: Radius.circular(30.0),
-                          ),
-                          color: whiteW1),
-                    ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 7),
+                  child: ChatList(
+                    recieverUserId: uid,
                   ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 7),
-                      child: ChatList(
-                        recieverUserId: uid,
-                      ),
-                    ),
-                  ),
-                ]),
+                ),
               ),
               BottomChatField(
                 recieverUserId: uid,

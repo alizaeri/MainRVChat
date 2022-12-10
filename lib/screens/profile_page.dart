@@ -1,8 +1,6 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:rvchat/colors.dart';
-import 'package:rvchat/features/auth/screens/user_information_screen.dart';
+import 'package:rvchat/screens/user_information_edit_page.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -41,21 +39,18 @@ class ProfilePage extends StatelessWidget {
                         child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: whiteW1.withOpacity(0),
-                              elevation: 0),
+                        IconButton(
                           onPressed: () {
                             Navigator.pushNamed(
                               context,
-                              UserInformationScreen.routeName,
+                              UserInformationEditPage.routeName,
                             );
                           },
-                          child: Image.asset(
+                          icon: Image.asset(
                             "assets/icons/edit.png",
                             fit: BoxFit.cover,
-                            scale: 7,
                             color: white,
+                            scale: 8,
                           ),
                         ),
                         const SizedBox(width: 20)

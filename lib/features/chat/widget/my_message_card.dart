@@ -32,7 +32,7 @@ class MyMessageCard extends StatelessWidget {
               topLeft: Radius.circular(20),
               bottomLeft: Radius.circular(20),
               topRight: Radius.circular(0),
-              bottomRight: Radius.circular(20),
+              bottomRight: Radius.circular(15),
             ),
           ),
           color: pinkL1,
@@ -74,11 +74,25 @@ class MyMessageCard extends StatelessWidget {
                     const SizedBox(
                       width: 5,
                     ),
-                    Icon(
-                      isSeen ? Icons.done_all : Icons.done,
-                      size: 20,
-                      color: isSeen ? Colors.blue : Colors.white60,
-                    ),
+                    //Icon(  isSeen ? Icons.done_all : Icons.done, size: 20, color: isSeen ? yellow : grayL1),
+
+                    isSeen
+                        ? //==> Waiting Image.asset("assets/icons/waiting.png",fit: BoxFit.cover, color: whiteW1.withOpacity(0.5),scale: 15,)
+                        //==> Seen
+                        Image.asset(
+                            "assets/icons/seen.png",
+                            fit: BoxFit.cover,
+                            color: yellow,
+                            scale: 12,
+                          )
+                        //==>resive Image.asset("assets/icons/tick.png",fit: BoxFit.cover,color: yellow,scale: 10,)
+                        //==> send Image.asset("assets/icons/tick.png",fit: BoxFit.cover,color: whiteW1,scale: 10,)
+                        : Image.asset(
+                            "assets/icons/tick.png",
+                            fit: BoxFit.cover,
+                            color: yellow,
+                            scale: 10,
+                          )
                   ],
                 ),
               ),

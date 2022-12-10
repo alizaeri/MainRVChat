@@ -9,89 +9,57 @@ class ContactsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            height: 90,
-            color: pinkL1,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 30),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const SizedBox(width: 20),
-                  const Text(
-                    "RVC Chat List",
-                    style: TextStyle(
-                        fontFamily: "yknir",
-                        fontWeight: FontWeight.w400,
-                        fontSize: 20,
-                        color: white),
-                  ),
-                  Expanded(child: Container()),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: pinkL1,
-                        elevation: 0,
-                        minimumSize: const Size.fromWidth(25),
-                        tapTargetSize: MaterialTapTargetSize.shrinkWrap),
-                    onPressed: () {},
-                    child: Image.asset(
-                      "assets/icons/rv.png",
-                      fit: BoxFit.cover,
-                      color: white,
-                      scale: 5.5,
-                    ),
-                  ),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      backgroundColor: pinkL1,
-                      elevation: 0,
-                      minimumSize: const Size.fromWidth(25),
-                    ),
-                    onPressed: () {},
-                    child: Image.asset(
-                      "assets/icons/search.png",
-                      fit: BoxFit.cover,
-                      color: white,
-                      scale: 8,
-                    ),
-                  ),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      backgroundColor: pinkL1,
-                      minimumSize: const Size.fromWidth(25),
-                      elevation: 0,
-                    ),
-                    onPressed: () {},
-                    child: const Icon(Icons.more_vert),
-                  ),
-                ],
+      backgroundColor: const Color(0xff6c5dd2),
+      appBar: AppBar(
+        elevation: 0,
+        titleSpacing: 0,
+        backgroundColor: pinkL1,
+        automaticallyImplyLeading: false,
+        title: Row(
+          children: const [
+            SizedBox(
+              width: 15,
+            ),
+            Text(
+              "RVC Chat List",
+              style: TextStyle(
+                fontSize: 25,
+                fontFamily: "yknir",
+                fontWeight: FontWeight.w300,
               ),
             ),
+          ],
+        ),
+        centerTitle: false,
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: Image.asset(
+              "assets/icons/search.png",
+              fit: BoxFit.cover,
+              color: white,
+              scale: 8,
+            ),
           ),
-          Flexible(
-            child: Stack(children: [
-              Container(
-                height: 30,
-                color: pinkL1,
-                child: Container(
-                  height: 30,
-                  decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(30.0),
-                        topRight: Radius.circular(30.0),
-                      ),
-                      color: whiteW1),
-                ),
-              ),
-              const ContactsList()
-            ]),
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.more_vert),
           ),
         ],
+      ),
+      body: Container(
+        decoration: const BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(30.0),
+              topRight: Radius.circular(30.0),
+            ),
+            color: whiteW1),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: const [
+            Expanded(child: ContactsList()),
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

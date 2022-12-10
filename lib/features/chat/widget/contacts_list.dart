@@ -72,6 +72,7 @@ class ContactsList extends ConsumerWidget {
                                           chatContactData.profilePic,
                                           // info[index]['profilePic'].toString(),
                                         ),
+                                        backgroundColor: whiteW1,
                                         radius: 26,
                                       ),
                                     )
