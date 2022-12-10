@@ -65,11 +65,15 @@ class ContactsList extends ConsumerWidget {
                               leading: snapshot2.connectionState ==
                                       ConnectionState.waiting
                                   ? CircleAvatar(
-                                      backgroundImage: NetworkImage(
-                                        chatContactData.profilePic,
-                                        // info[index]['profilePic'].toString(),
-                                      ),
                                       radius: 30,
+                                      backgroundColor: grayL1.withOpacity(0.2),
+                                      child: CircleAvatar(
+                                        backgroundImage: NetworkImage(
+                                          chatContactData.profilePic,
+                                          // info[index]['profilePic'].toString(),
+                                        ),
+                                        radius: 26,
+                                      ),
                                     )
                                   : snapshot2.data!.isOnline
                                       ? CircleAvatar(
@@ -84,11 +88,16 @@ class ContactsList extends ConsumerWidget {
                                           ),
                                         )
                                       : CircleAvatar(
-                                          backgroundImage: NetworkImage(
-                                            chatContactData.profilePic,
-                                            // info[index]['profilePic'].toString(),
-                                          ),
                                           radius: 30,
+                                          backgroundColor:
+                                              grayL1.withOpacity(0.2),
+                                          child: CircleAvatar(
+                                            backgroundImage: NetworkImage(
+                                              chatContactData.profilePic,
+                                              // info[index]['profilePic'].toString(),
+                                            ),
+                                            radius: 26,
+                                          ),
                                         ),
                               trailing: Text(
                                 DateFormat.Hm()
