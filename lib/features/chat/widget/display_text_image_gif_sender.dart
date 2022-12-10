@@ -6,11 +6,11 @@ import 'package:rvchat/common/enums/message_enum.dart';
 import 'package:rvchat/features/chat/widget/video_player_item.dart';
 import 'package:rvchat/models/message.dart';
 
-class DisplayTextImageGIF extends StatelessWidget {
+class DisplayTextImageGIFSender extends StatelessWidget {
   final String message;
   final MessageEnum type;
 
-  const DisplayTextImageGIF(
+  const DisplayTextImageGIFSender(
       {super.key, required this.message, required this.type});
 
   @override
@@ -20,7 +20,7 @@ class DisplayTextImageGIF extends StatelessWidget {
     return type == MessageEnum.text
         ? Text(
             message,
-            style: const TextStyle(fontSize: 16, color: whiteW1),
+            style: const TextStyle(fontSize: 16, color: grayL1),
           )
         : type == MessageEnum.audio
             ? StatefulBuilder(builder: (context, setState) {

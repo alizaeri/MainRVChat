@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:rvchat/common/enums/message_enum.dart';
 import 'package:rvchat/common/widgets/loader.dart';
+import 'package:rvchat/common/widgets/loaderT.dart';
 import 'package:rvchat/features/chat/controller/chat_controller.dart';
 import 'package:rvchat/features/chat/widget/my_message_card.dart';
 import 'package:rvchat/features/chat/widget/sender_message_card.dart';
@@ -58,7 +59,7 @@ class _ChatListState extends ConsumerState<ChatList> {
             ref.read(chatControllerProvider).chatStream(widget.recieverUserId),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Loader();
+            return const LoaderT();
           }
           SchedulerBinding.instance.addPostFrameCallback((_) {
             messageController

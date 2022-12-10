@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rvchat/colors.dart';
 import 'package:rvchat/common/widgets/loader.dart';
+import 'package:rvchat/common/widgets/loaderT.dart';
 import 'package:rvchat/features/auth/controller/auth_controller.dart';
 import 'package:rvchat/features/call/controller/call_controller.dart';
 import 'package:rvchat/features/call/screens/call_pickup_screen.dart';
@@ -39,35 +40,69 @@ class MobileChatScreen extends ConsumerWidget {
     return CallPickupScreen(
       scaffold: Scaffold(
         appBar: AppBar(
-          backgroundColor: appBarColor,
+          elevation: 0,
+          titleSpacing: 0,
+          backgroundColor: pinkL1,
+          leading: IconButton(
+              onPressed: () => makeCall(ref, context),
+              icon: Image.asset(
+                "assets/icons/back_icon.png",
+                fit: BoxFit.cover,
+                color: white,
+                scale: 7,
+              )),
           title: StreamBuilder<UserModel>(
               stream: ref.read(authControllerProvider).userDataById(uid),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Loader();
+                  return const LoaderT();
                 }
                 return Column(
                   children: [
-                    Text(name),
                     Text(
-                      snapshot.data!.isOnline ? 'online' : 'offline',
+                      name,
                       style: const TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.normal,
+                        fontSize: 25,
+                        fontFamily: "yknir",
+                        fontWeight: FontWeight.w200,
                       ),
                     ),
+                    snapshot.data!.isOnline
+                        ? const Text(
+                            'online',
+                            style: TextStyle(
+                                fontSize: 13,
+                                fontFamily: "yknir",
+                                fontWeight: FontWeight.w400,
+                                color: yellow),
+                          )
+                        : Text('offline',
+                            style: TextStyle(
+                                fontSize: 13,
+                                fontFamily: "yknir",
+                                fontWeight: FontWeight.w400,
+                                color: whiteW1.withOpacity(0.5))),
                   ],
                 );
               }),
           centerTitle: false,
           actions: [
             IconButton(
-              onPressed: () => makeCall(ref, context),
-              icon: const Icon(Icons.video_call),
-            ),
+                onPressed: () => makeCall(ref, context),
+                icon: Image.asset(
+                  "assets/icons/rv.png",
+                  fit: BoxFit.cover,
+                  color: white,
+                  scale: 5.5,
+                )),
             IconButton(
               onPressed: () {},
-              icon: const Icon(Icons.call),
+              icon: Image.asset(
+                "assets/icons/call.png",
+                fit: BoxFit.cover,
+                color: white,
+                scale: 8,
+              ),
             ),
             IconButton(
               onPressed: () {},
@@ -75,17 +110,49 @@ class MobileChatScreen extends ConsumerWidget {
             ),
           ],
         ),
-        body: Column(
-          children: [
-            Expanded(
-              child: ChatList(
+        body: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Color.fromARGB(255, 189, 185, 233),
+                Color.fromARGB(255, 215, 215, 233),
+              ],
+            ),
+          ),
+          child: Column(
+            children: [
+              Flexible(
+                child: Stack(children: [
+                  Container(
+                    height: 30,
+                    color: pinkL1,
+                    child: Container(
+                      height: 30,
+                      decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(30.0),
+                            topRight: Radius.circular(30.0),
+                          ),
+                          color: whiteW1),
+                    ),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 7),
+                      child: ChatList(
+                        recieverUserId: uid,
+                      ),
+                    ),
+                  ),
+                ]),
+              ),
+              BottomChatField(
                 recieverUserId: uid,
               ),
-            ),
-            BottomChatField(
-              recieverUserId: uid,
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

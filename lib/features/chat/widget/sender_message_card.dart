@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rvchat/colors.dart';
 import 'package:rvchat/common/enums/message_enum.dart';
-import 'package:rvchat/features/chat/widget/display_text_image_gif.dart';
+import 'package:rvchat/features/chat/widget/display_text_image_gif_sender.dart';
 
 class SenderMessageCard extends StatelessWidget {
   const SenderMessageCard({
@@ -51,7 +51,7 @@ class SenderMessageCard extends StatelessWidget {
                         right: 5,
                         bottom: 25,
                       ),
-                child: DisplayTextImageGIF(
+                child: DisplayTextImageGIFSender(
                   message: message,
                   type: type,
                 ),
