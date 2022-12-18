@@ -81,6 +81,11 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                   ),
                   AgoraVideoButtons(
                     client: client!,
+                    enabledButtons: const [
+                      BuiltInButtons.toggleMic,
+                      BuiltInButtons.callEnd,
+                      BuiltInButtons.switchCamera,
+                    ],
                     disconnectButtonChild: IconButton(
                       onPressed: () async {
                         await client!.engine.leaveChannel();
