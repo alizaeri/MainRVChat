@@ -57,8 +57,6 @@ dependencies:
   permission_handler: ^10.2.0
   audioplayers: ^1.1.1
   agora_uikit: ^1.1.0
-  flutter_offline: ^2.1.0
-  
 
 dev_dependencies:
   flutter_test:

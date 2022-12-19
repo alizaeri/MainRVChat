@@ -79,21 +79,24 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                     showNumberOfUsers: true,
                     showAVState: true,
                   ),
-                  AgoraVideoButtons(
-                    client: client!,
-                    disconnectButtonChild: IconButton(
-                      onPressed: () async {
-                        await client!.engine.leaveChannel();
+                  Container(
+                    color: Colors.amber,
+                    child: AgoraVideoButtons(
+                      client: client!,
+                      disconnectButtonChild: IconButton(
+                        onPressed: () async {
+                          await client!.engine.leaveChannel();
 
-                        ref.read(callControllerProvider).endCall(
-                              widget.call.callerId,
-                              widget.call.receiverId,
-                              context,
-                            );
+                          ref.read(callControllerProvider).endCall(
+                                widget.call.callerId,
+                                widget.call.receiverId,
+                                context,
+                              );
 
-                        Navigator.pop(context);
-                      },
-                      icon: const Icon(Icons.call_end),
+                          Navigator.pop(context);
+                        },
+                        icon: const Icon(Icons.call_end),
+                      ),
                     ),
                   ),
                 ],

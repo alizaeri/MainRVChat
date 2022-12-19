@@ -6,6 +6,8 @@ import 'package:rvchat/features/select_contacts/screens/select_contact_screen.da
 import 'package:rvchat/features/chat/screen/mobile_chat_screen.dart';
 import 'package:rvchat/widgets/error.dart';
 
+import 'screens/user_information_edit_page.dart';
+
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
     case LoginScreen.routeName:
@@ -19,6 +21,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case UserInformationScreen.routeName:
       return MaterialPageRoute(
           builder: (context) => const UserInformationScreen());
+    case UserInformationEditPage.routeName:
+      return MaterialPageRoute(
+          builder: (context) => const UserInformationEditPage());
     case SelectContactsScreen.routeName:
       return MaterialPageRoute(
           builder: (context) => const SelectContactsScreen());

@@ -1,14 +1,18 @@
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rvchat/colors.dart';
 import 'package:rvchat/common/utils/utils.dart';
 import 'package:rvchat/common/widgets/loader.dart';
+import 'package:rvchat/common/widgets/loaderT.dart';
 import 'package:rvchat/features/auth/controller/auth_controller.dart';
+import 'package:rvchat/models/user_model.dart';
 
 class UserInformationEditPage extends ConsumerStatefulWidget {
-  static const String routeName = '/user-information';
+  static const String routeName = '/user-information-edit';
   const UserInformationEditPage({Key? key}) : super(key: key);
 
   @override
@@ -47,224 +51,251 @@ class _UserInformationEditPageState
   @override
   Widget build(BuildContext context) {
     bool fisClick = false;
+    final String uid = FirebaseAuth.instance.currentUser!.uid;
+
     return Scaffold(
-      body: Stack(
-        children: [
-          SingleChildScrollView(
-            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.manual,
-            child: ConstrainedBox(
-              constraints:
-                  BoxConstraints(maxHeight: MediaQuery.of(context).size.height),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  ///---------
-                  Expanded(
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        gradient: LinearGradient(
-                            //=> Background Linear Gradient
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [pinkL2, pinkL1, pinkL1]),
-                      ),
-                      child: Column(
-                        children: [
-                          const SizedBox(
-                            height: 60,
-                          ),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: IconButton(
-                                    onPressed: () {},
-                                    icon: Image.asset(
-                                      "assets/icons/back_icon.png",
-                                      fit: BoxFit.cover,
-                                      color: white,
-                                      scale: 5.5,
-                                    )),
-                              ),
-                              const Text(
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontFamily: "yknir",
-                                      fontWeight: FontWeight.w800,
-                                      fontSize: 40,
-                                      color: white),
-                                  "weqrwerewqrwerew"),
-                              Expanded(child: Container())
-                            ],
-                          ),
-                          Expanded(
-                            child: Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Stack(
-                                    children: [
-                                      image == null
-                                          ? const CircleAvatar(
-                                              backgroundColor: white,
-                                              radius: 75,
-                                              child: CircleAvatar(
-                                                backgroundImage: AssetImage(
-                                                  "assets/icons/avatar.png",
-                                                ),
-                                                radius: 70,
-                                              ),
-                                            )
-                                          : CircleAvatar(
-                                              backgroundColor: white,
-                                              radius: 75,
-                                              child: CircleAvatar(
-                                                backgroundImage: FileImage(
-                                                  image!,
-                                                ),
-                                                radius: 70,
-                                              ),
-                                            ),
-                                      Positioned(
-                                        top: 0,
-                                        left: 110,
-                                        child: CircleAvatar(
-                                          backgroundColor:
-                                              white.withOpacity(0.6),
-                                          child: IconButton(
-                                            onPressed: () {
-                                              selectImage();
-                                            },
-                                            icon: const ImageIcon(
-                                              AssetImage(
-                                                "assets/icons/camera.png",
-                                              ),
-                                              color: pinkL1,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  const Padding(
-                                    padding: EdgeInsets.only(top: 10),
-                                    child: Text(
+      body: StreamBuilder<UserModel>(
+          stream: ref.read(authControllerProvider).userDataById(uid),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const LoaderT();
+            }
+            return Stack(
+              children: [
+                SingleChildScrollView(
+                  keyboardDismissBehavior:
+                      ScrollViewKeyboardDismissBehavior.manual,
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                        maxHeight: MediaQuery.of(context).size.height),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        ///---------
+                        Expanded(
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              gradient: LinearGradient(
+                                  //=> Background Linear Gradient
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                  colors: [pinkL2, pinkL1, pinkL1]),
+                            ),
+                            child: Column(
+                              children: [
+                                const SizedBox(
+                                  height: 60,
+                                ),
+                                Row(
+                                  children: [
+                                    const SizedBox(width: 10),
+                                    SizedBox(
+                                      width: 40,
+                                      height: 40,
+                                      child: IconButton(
+                                          onPressed: () {
+                                            if (Navigator.canPop(context)) {
+                                              Navigator.pop(context);
+                                            } else {
+                                              SystemNavigator.pop();
+                                            }
+                                          },
+                                          icon: Image.asset(
+                                            "assets/icons/back_icon.png",
+                                            fit: BoxFit.cover,
+                                            color: white,
+                                            scale: 5,
+                                          )),
+                                    ),
+                                    Expanded(child: Container()),
+                                    const Text(
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                             fontFamily: "yknir",
-                                            fontWeight: FontWeight.w300,
-                                            fontSize: 18,
+                                            fontWeight: FontWeight.w800,
+                                            fontSize: 40,
                                             color: white),
-                                        "Select a Profile Photo"),
+                                        "Profile"),
+                                    Expanded(child: Container()),
+                                    const SizedBox(width: 50)
+                                  ],
+                                ),
+                                Expanded(
+                                  child: Center(
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Stack(
+                                          children: [
+                                            image == null
+                                                ? const CircleAvatar(
+                                                    backgroundColor: white,
+                                                    radius: 75,
+                                                    child: CircleAvatar(
+                                                      backgroundImage:
+                                                          AssetImage(
+                                                        "assets/icons/avatar.png",
+                                                      ),
+                                                      radius: 70,
+                                                    ),
+                                                  )
+                                                : CircleAvatar(
+                                                    backgroundColor: white,
+                                                    radius: 75,
+                                                    child: CircleAvatar(
+                                                      backgroundImage:
+                                                          FileImage(
+                                                        image!,
+                                                      ),
+                                                      radius: 70,
+                                                    ),
+                                                  ),
+                                            Positioned(
+                                              top: 0,
+                                              left: 110,
+                                              child: CircleAvatar(
+                                                backgroundColor:
+                                                    white.withOpacity(0.6),
+                                                child: IconButton(
+                                                  onPressed: () {
+                                                    selectImage();
+                                                  },
+                                                  icon: const ImageIcon(
+                                                    AssetImage(
+                                                      "assets/icons/camera.png",
+                                                    ),
+                                                    color: pinkL1,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        const Padding(
+                                          padding: EdgeInsets.only(top: 10),
+                                          child: Text(
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontFamily: "yknir",
+                                                  fontWeight: FontWeight.w300,
+                                                  fontSize: 18,
+                                                  color: white),
+                                              "Select a Profile Photo"),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ],
-                              ),
+                                ),
+                                const SizedBox(height: 20),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(35, 0, 35, 0),
+                                  child: Container(
+                                    height: 65,
+                                    decoration: BoxDecoration(
+                                        color: white.withOpacity(0.3),
+                                        borderRadius: BorderRadius.circular(20),
+                                        border: Border.all(
+                                          color: white,
+                                          width: 2,
+                                        )),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(top: 25),
+                                      child: TextField(
+                                        textAlign: TextAlign.center,
+                                        textInputAction: TextInputAction.next,
+                                        controller: nameController,
+                                        style: const TextStyle(
+                                            fontFamily: "yknir",
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 25,
+                                            color: white),
+                                        decoration: InputDecoration(
+                                          border: InputBorder.none,
+                                          hintStyle:
+                                              const TextStyle(color: white),
+                                          hintText: snapshot.data!.name,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 20),
+                                const Text(
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontFamily: "yknir",
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 18,
+                                        color: white),
+                                    "If you get Verification con from\n RVChat please inter and verify you cod"),
+                                Image.asset(
+                                  "assets/images/lineBg.png",
+                                  fit: BoxFit.cover,
+                                ),
+                              ],
                             ),
                           ),
+                        ),
+                        Column(children: [
+                          //----------------
+
                           const SizedBox(height: 20),
                           Padding(
                             padding: const EdgeInsets.fromLTRB(35, 0, 35, 0),
-                            child: Container(
-                              height: 65,
-                              decoration: BoxDecoration(
-                                  color: white.withOpacity(0.3),
-                                  borderRadius: BorderRadius.circular(20),
-                                  border: Border.all(
-                                    color: white,
-                                    width: 2,
-                                  )),
-                              child: Padding(
-                                padding: const EdgeInsets.only(top: 25),
-                                child: TextField(
-                                  textAlign: TextAlign.center,
-                                  textInputAction: TextInputAction.next,
-                                  controller: nameController,
-                                  style: const TextStyle(
-                                      fontFamily: "yknir",
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 25,
-                                      color: white),
-                                  decoration: const InputDecoration(
-                                    border: InputBorder.none,
-                                    hintStyle: TextStyle(color: white),
-                                    hintText: 'Enter Your Name---------',
-                                  ),
+                            child: SizedBox(
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: pinkL1,
+                                    elevation: 0,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(40.0)),
+                                    minimumSize: const Size.fromHeight(60)
+                                    //////// HERE
+                                    ),
+                                onPressed: () {
+                                  storeUserData();
+                                  setState(() {
+                                    fisClick = true;
+                                  });
+                                },
+                                child: const Padding(
+                                  padding: EdgeInsets.only(top: 6),
+                                  child: Text(
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontFamily: "yknir",
+                                        fontWeight: FontWeight.w800,
+                                        fontSize: 25,
+                                      ),
+                                      "APPLY"),
                                 ),
                               ),
                             ),
                           ),
                           const SizedBox(height: 20),
+                          //==> Enter phone number
                           const Text(
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   fontFamily: "yknir",
-                                  fontWeight: FontWeight.w400,
+                                  fontWeight: FontWeight.w300,
                                   fontSize: 18,
-                                  color: white),
+                                  color: grayL1),
                               "If you get Verification con from\n RVChat please inter and verify you cod"),
-                          Image.asset(
-                            "assets/images/lineBg.png",
-                            fit: BoxFit.cover,
-                          ),
-                        ],
-                      ),
+                          const SizedBox(height: 25),
+                          //==> CONTINUE Button
+                        ]),
+                      ],
                     ),
                   ),
-                  Column(children: [
-                    //----------------
-
-                    const SizedBox(height: 20),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(35, 0, 35, 0),
-                      child: SizedBox(
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: pinkL1,
-                              elevation: 0,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(40.0)),
-                              minimumSize: const Size.fromHeight(60)
-                              //////// HERE
-                              ),
-                          onPressed: () {
-                            storeUserData();
-                            setState(() {
-                              fisClick = true;
-                            });
-                          },
-                          child: const Padding(
-                            padding: EdgeInsets.only(top: 6),
-                            child: Text(
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontFamily: "yknir",
-                                  fontWeight: FontWeight.w800,
-                                  fontSize: 25,
-                                ),
-                                "APPLY"),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    //==> Enter phone number
-                    const Text(
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontFamily: "yknir",
-                            fontWeight: FontWeight.w300,
-                            fontSize: 18,
-                            color: grayL1),
-                        "If you get Verification con from\n RVChat please inter and verify you cod"),
-                    const SizedBox(height: 25),
-                    //==> CONTINUE Button
-                  ]),
-                ],
-              ),
-            ),
-          ),
-          fisClick ? const Loader() : const Center(),
-        ],
-      ),
+                ),
+                fisClick ? const Loader() : const Center(),
+              ],
+            );
+          }),
     );
   }
 }
