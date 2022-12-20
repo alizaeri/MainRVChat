@@ -1,5 +1,10 @@
 import 'package:agora_uikit/agora_uikit.dart';
+import 'package:agora_rtc_engine/src/binding_forward_export.dart';
+import 'package:agora_uikit/controllers/rtc_buttons.dart';
+
 import 'package:agora_uikit/controllers/session_controller.dart';
+import 'package:agora_uikit/models/agora_settings.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -25,12 +30,11 @@ class CallScreen extends ConsumerStatefulWidget {
 }
 
 class _CallScreenState extends ConsumerState<CallScreen> {
+  // AgoraSettings settings = ;
   AgoraClient? client;
   String baseUrl = 'https://agora-token-service-production-fc02.up.railway.app';
-  final SessionController _sessionController = SessionController();
-  SessionController get sessionController {
-    return _sessionController;
-  }
+  bool localUserJoined = false;
+  int uid = 0;
 
   @override
   void initState() {
@@ -38,18 +42,35 @@ class _CallScreenState extends ConsumerState<CallScreen> {
 
     client = AgoraClient(
       agoraConnectionData: AgoraConnectionData(
-        appId: AgoraConfig.appId,
-        channelName: widget.channelId,
-        tokenUrl: baseUrl,
-      ),
+          appId: AgoraConfig.appId,
+          channelName: widget.channelId,
+          tokenUrl: baseUrl,
+          uid: uid,
+          rtmEnabled: false),
       enabledPermission: [Permission.camera, Permission.microphone],
     );
+
     initAgora();
   }
 
   void initAgora() async {
     try {
       await client!.initialize();
+
+      client!.engine.registerEventHandler(
+        RtcEngineEventHandler(
+          onJoinChannelSuccess: (connection, elapsed) => setState(() async {
+            await toggleCamera(
+              sessionController: client!.sessionController,
+            );
+            print("?????joined");
+            localUserJoined = true;
+            await toggleCamera(
+              sessionController: client!.sessionController,
+            );
+          }),
+        ),
+      );
     } catch (e) {
       print(
           "exceotion is**************************************************************************************************************: $e"); // this logs that above error.
@@ -67,7 +88,7 @@ class _CallScreenState extends ConsumerState<CallScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: client == null
+      body: client == null && localUserJoined
           ? const Loader()
           : SafeArea(
               child: Stack(
@@ -75,11 +96,11 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                 children: [
                   AgoraVideoViewer(
                     client: client!,
-                    layoutType: Layout.floating,
-                    floatingLayoutContainerHeight: 200,
-                    floatingLayoutContainerWidth: 200,
-                    showNumberOfUsers: true,
-                    showAVState: true,
+                    // layoutType: Layout.floating,
+                    // floatingLayoutContainerHeight: 200,
+                    // floatingLayoutContainerWidth: 200,
+                    // showNumberOfUsers: true,
+                    // showAVState: true,
                   ),
                   Container(
                     child: Container(
