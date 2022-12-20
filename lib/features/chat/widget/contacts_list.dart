@@ -1,3 +1,6 @@
+import 'dart:html';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -20,75 +23,69 @@ class ContactsList extends ConsumerWidget {
     return StreamBuilder<List<ChatContact>>(
         stream: ref.watch(chatControllerProvider).chatContacts(),
         builder: (context, snapshot) {
+          List<ChatContact> result = [];
+
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const LoaderT();
           }
-          return ListView.builder(
-            shrinkWrap: true,
-            padding: null,
-            itemCount: snapshot.data!.length,
-            itemBuilder: (context, index) {
-              var chatContactData = snapshot.data![index];
-              return StreamBuilder<UserModel>(
-                  stream: ref
-                      .read(authControllerProvider)
-                      .userDataById(chatContactData.contactId),
-                  builder: (context, snapshot2) {
-                    return Padding(
-                      padding: const EdgeInsets.fromLTRB(15.0, 0, 15.0, 0),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              Navigator.pushNamed(
-                                  context, MobileChatScreen.routeName,
-                                  arguments: {
-                                    'name': chatContactData.name,
-                                    'uid': chatContactData.contactId,
-                                    'profilePic': chatContactData.profilePic,
-                                  });
-                            },
-                            child: ListTile(
-                              title: Text(
-                                chatContactData.name,
-                                //info[index]['name'].toString(),
-                                style: const TextStyle(
-                                  fontSize: 18,
-                                ),
-                              ),
-                              subtitle: Text(
-                                chatContactData.lastMessage,
-                                //info[index]['message'].toString(),
-                                style: const TextStyle(fontSize: 15),
-                              ),
-                              leading: snapshot2.connectionState ==
-                                      ConnectionState.waiting
-                                  ? CircleAvatar(
-                                      radius: 30,
-                                      backgroundColor: grayL1.withOpacity(0.2),
-                                      child: CircleAvatar(
-                                        backgroundImage: NetworkImage(
-                                          chatContactData.profilePic,
-                                          // info[index]['profilePic'].toString(),
-                                        ),
-                                        backgroundColor: whiteW1,
-                                        radius: 26,
-                                      ),
-                                    )
-                                  : snapshot2.data!.isOnline
+          return Column(
+            children: [
+              // TextField(
+              //   onChanged: (String) {
+              //     for (int i = 0; i < snapshot.data!.length; i++) {
+              //       if (snapshot.data![i].name == String) {
+
+              //         result.add(snapshot.data![i]);
+              //       }
+              //     }
+              //   },
+              // ),
+              ListView.builder(
+                shrinkWrap: true,
+                padding: null,
+                itemCount: snapshot.data!.length,
+                itemBuilder: (context, index) {
+                  var chatContactData = snapshot.data![index];
+                  if (result != null) {
+                    chatContactData = result[index];
+                  }
+                  return StreamBuilder<UserModel>(
+                      stream: ref
+                          .read(authControllerProvider)
+                          .userDataById(chatContactData.contactId),
+                      builder: (context, snapshot2) {
+                        return Padding(
+                          padding: const EdgeInsets.fromLTRB(15.0, 0, 15.0, 0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  Navigator.pushNamed(
+                                      context, MobileChatScreen.routeName,
+                                      arguments: {
+                                        'name': chatContactData.name,
+                                        'uid': chatContactData.contactId,
+                                        'profilePic':
+                                            chatContactData.profilePic,
+                                      });
+                                },
+                                child: ListTile(
+                                  title: Text(
+                                    chatContactData.name,
+                                    //info[index]['name'].toString(),
+                                    style: const TextStyle(
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                  subtitle: Text(
+                                    chatContactData.lastMessage,
+                                    //info[index]['message'].toString(),
+                                    style: const TextStyle(fontSize: 15),
+                                  ),
+                                  leading: snapshot2.connectionState ==
+                                          ConnectionState.waiting
                                       ? CircleAvatar(
-                                          radius: 30,
-                                          backgroundColor: pinkL2,
-                                          child: CircleAvatar(
-                                            backgroundImage: NetworkImage(
-                                              chatContactData.profilePic,
-                                              // info[index]['profilePic'].toString(),
-                                            ),
-                                            radius: 26,
-                                          ),
-                                        )
-                                      : CircleAvatar(
                                           radius: 30,
                                           backgroundColor:
                                               grayL1.withOpacity(0.2),
@@ -97,26 +94,53 @@ class ContactsList extends ConsumerWidget {
                                               chatContactData.profilePic,
                                               // info[index]['profilePic'].toString(),
                                             ),
+                                            backgroundColor: whiteW1,
                                             radius: 26,
                                           ),
-                                        ),
-                              trailing: Text(
-                                DateFormat.Hm()
-                                    .format(chatContactData.timeSent),
-                                //info[index]['time'].toString(),
-                                style: const TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 13,
+                                        )
+                                      : snapshot2.data!.isOnline
+                                          ? CircleAvatar(
+                                              radius: 30,
+                                              backgroundColor: pinkL2,
+                                              child: CircleAvatar(
+                                                backgroundImage: NetworkImage(
+                                                  chatContactData.profilePic,
+                                                  // info[index]['profilePic'].toString(),
+                                                ),
+                                                radius: 26,
+                                              ),
+                                            )
+                                          : CircleAvatar(
+                                              radius: 30,
+                                              backgroundColor:
+                                                  grayL1.withOpacity(0.2),
+                                              child: CircleAvatar(
+                                                backgroundImage: NetworkImage(
+                                                  chatContactData.profilePic,
+                                                  // info[index]['profilePic'].toString(),
+                                                ),
+                                                radius: 26,
+                                              ),
+                                            ),
+                                  trailing: Text(
+                                    DateFormat.Hm()
+                                        .format(chatContactData.timeSent),
+                                    //info[index]['time'].toString(),
+                                    style: const TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 13,
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
+                              const Divider(color: dividerColor, indent: 0),
+                            ],
                           ),
-                          const Divider(color: dividerColor, indent: 0),
-                        ],
-                      ),
-                    );
-                  });
-            },
+                        );
+                      });
+                },
+              ),
+            ],
           );
         });
   }

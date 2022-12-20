@@ -38,11 +38,11 @@
 	<key>NSAppleMusicUsageDescription</key>
 	<string>Needs to hear recording</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Camera Library Use</string>
+	<string>Access the camera</string>
 	<key>NSContactsUsageDescription</key>
 	<string>Contact list to chat</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Mic Use</string>
+	<string>Access the microphone</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Photo Library Use</string>
 	<key>UIBackgroundModes</key>

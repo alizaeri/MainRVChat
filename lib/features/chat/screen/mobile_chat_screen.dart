@@ -45,7 +45,7 @@ class MobileChatScreen extends ConsumerWidget {
           titleSpacing: 0,
           backgroundColor: pinkL1,
           leading: IconButton(
-              onPressed: () => makeCall(ref, context),
+              onPressed: () => Navigator.pop(context),
               icon: Image.asset(
                 "assets/icons/back_icon.png",
                 fit: BoxFit.cover,
