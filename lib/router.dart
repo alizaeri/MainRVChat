@@ -21,6 +21,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case UserInformationScreen.routeName:
       return MaterialPageRoute(
           builder: (context) => const UserInformationScreen());
+
     case UserInformationEditPage.routeName:
       return MaterialPageRoute(
           builder: (context) => const UserInformationEditPage());

@@ -3,6 +3,7 @@ import 'package:agora_uikit/controllers/session_controller.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rvchat/colors.dart';
 import 'package:rvchat/common/widgets/loader.dart';
 import 'package:rvchat/config/agora_config.dart';
 import 'package:rvchat/features/call/controller/call_controller.dart';
@@ -70,6 +71,7 @@ class _CallScreenState extends ConsumerState<CallScreen> {
           ? const Loader()
           : SafeArea(
               child: Stack(
+                alignment: Alignment.bottomCenter,
                 children: [
                   AgoraVideoViewer(
                     client: client!,
@@ -80,23 +82,73 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                     showAVState: true,
                   ),
                   Container(
-                    color: Colors.amber,
-                    child: AgoraVideoButtons(
-                      client: client!,
-                      disconnectButtonChild: IconButton(
-                        onPressed: () async {
-                          await client!.engine.leaveChannel();
-
-                          ref.read(callControllerProvider).endCall(
-                                widget.call.callerId,
-                                widget.call.receiverId,
-                                context,
-                              );
-
-                          Navigator.pop(context);
-                        },
-                        icon: const Icon(Icons.call_end),
+                    child: Container(
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                            //=> Background Linear Gradient
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              grayL1.withOpacity(0),
+                              grayL1.withOpacity(0.8)
+                            ]),
                       ),
+                      height: 250,
+                      child: Stack(alignment: Alignment.center, children: [
+                        AgoraVideoButtons(
+                          client: client!,
+                          switchCameraButtonChild: RawMaterialButton(
+                            onPressed: () {},
+                            shape: const CircleBorder(),
+                            elevation: 2.0,
+                            fillColor: grayL1,
+                            padding: const EdgeInsets.all(14),
+                            //padding: const EdgeInsets.all(0),
+                            child: Image.asset(
+                              "assets/icons/mic_i.png",
+                              fit: BoxFit.cover,
+                              color: white,
+                              scale: 7,
+                            ),
+                          ),
+                          disconnectButtonChild: RawMaterialButton(
+                            onPressed: () async {
+                              await client!.engine.leaveChannel();
+                              ref.read(callControllerProvider).endCall(
+                                    widget.call.callerId,
+                                    widget.call.receiverId,
+                                    context,
+                                  );
+                              Navigator.pop(context);
+                            },
+                            shape: const CircleBorder(),
+                            elevation: 2.0,
+                            fillColor: pink,
+                            padding: const EdgeInsets.all(14),
+                            child: Image.asset(
+                              "assets/icons/call_end.png",
+                              fit: BoxFit.cover,
+                              color: white,
+                              scale: 5,
+                            ),
+                          ),
+                          muteButtonChild: RawMaterialButton(
+                            onPressed: () {},
+                            shape: const CircleBorder(),
+                            elevation: 2.0,
+                            fillColor: grayL1,
+                            padding: const EdgeInsets.all(14),
+                            //padding: const EdgeInsets.all(0),
+                            child: Image.asset(
+                              "assets/icons/sp_i.png",
+                              fit: BoxFit.cover,
+                              color: white,
+                              scale: 7,
+                            ),
+                          ),
+                        ),
+                      ]),
                     ),
                   ),
                 ],

@@ -30,3 +30,4 @@ const yellow = Color(0xffffb800);
 const grayL1 = Color(0xff1e1e1d);
 const white = Color(0xffffffff);
 const whiteW1 = Color(0xfff1f1fa);
+const pink = Color(0xffff00ae);
