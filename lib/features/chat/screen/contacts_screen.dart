@@ -3,8 +3,36 @@ import 'package:rvchat/colors.dart';
 import 'package:rvchat/features/chat/widget/contacts_list.dart';
 import 'package:rvchat/features/select_contacts/screens/select_contact_screen.dart';
 
-class ContactsScreen extends StatelessWidget {
+class ContactsScreen extends StatefulWidget {
   const ContactsScreen({Key? key}) : super(key: key);
+
+  @override
+  State<ContactsScreen> createState() => _ContactsScreenState();
+}
+
+class _ContactsScreenState extends State<ContactsScreen> {
+  String searchText = '';
+  TextEditingController _controller = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+
+    _controller.addListener(_onSearchChange);
+  }
+
+  @override
+  void dispose() {
+    _controller.removeListener(_onSearchChange);
+    _controller.dispose();
+  }
+
+  _onSearchChange() {
+    // ignore: avoid_print
+    print(_controller.text);
+    setState(() {
+      searchText = _controller.text;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,8 +84,22 @@ class ContactsScreen extends StatelessWidget {
             color: whiteW1),
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          children: const [
-            Expanded(child: ContactsList()),
+          children: [
+            Container(
+              margin: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+              child: TextField(
+                controller: _controller,
+                decoration: InputDecoration(
+                    prefixIcon: const Icon(Icons.search),
+                    hintText: 'Search Contact',
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: const BorderSide(color: Colors.blue))),
+              ),
+            ),
+            Expanded(
+              child: ContactsList(searchText),
+            ),
           ],
         ),
       ),
