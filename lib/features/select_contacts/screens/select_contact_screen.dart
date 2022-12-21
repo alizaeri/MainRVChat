@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rvchat/colors.dart';
@@ -9,7 +6,7 @@ import 'package:rvchat/common/widgets/loader.dart';
 import 'package:rvchat/features/select_contacts/controller/select_contact_controller.dart';
 import 'package:rvchat/widgets/error.dart';
 
-class SelectContactsScreen extends ConsumerWidget {
+class SelectContactsScreen extends ConsumerStatefulWidget {
   static const String routeName = '/select-contact';
   const SelectContactsScreen({Key? key}) : super(key: key);
 
@@ -21,7 +18,38 @@ class SelectContactsScreen extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<SelectContactsScreen> createState() =>
+      _SelectContactsScreenState();
+}
+
+class _SelectContactsScreenState extends ConsumerState<SelectContactsScreen> {
+  TextEditingController _controller = TextEditingController();
+  List<String> allList = [];
+  String searchContact = '';
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller.addListener(_onSearchChange);
+  }
+
+  @override
+  void dispose() {
+    _controller.removeListener(_onSearchChange);
+    _controller.dispose();
+  }
+
+  _onSearchChange() {
+    // ignore: avoid_print
+    print(_controller.text);
+    setState(() {
+      searchContact = _controller.text;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xff6c5dd2),
       appBar: AppBar(
@@ -69,47 +97,106 @@ class SelectContactsScreen extends ConsumerWidget {
         ],
       ),
       body: ref.watch(getContactsProvider).when(
-            data: (contactList) => Container(
-              decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(30.0),
-                    topRight: Radius.circular(30.0),
+            data: (contactList) => Column(
+              children: [
+                Container(
+                  margin: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+                  child: TextField(
+                    controller: _controller,
+                    decoration: InputDecoration(
+                        prefixIcon: const Icon(Icons.search),
+                        hintText: 'Search Contact',
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20),
+                            borderSide: const BorderSide(color: Colors.blue))),
+                    // onChanged: filterContact,
                   ),
-                  color: whiteW1),
-              child: ListView.builder(
-                  itemCount: contactList.length,
-                  itemBuilder: (context, index) {
-                    final contact = contactList[index];
-                    return InkWell(
-                      onTap: () => selectContact(ref, contact, context),
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 8.0),
-                        child: ListTile(
-                          title: Text(
-                            contact.displayName,
-                            style: const TextStyle(
-                              fontSize: 18,
-                            ),
-                          ),
-                          leading: contact.photo == null
-                              ? null
-                              : CircleAvatar(
-                                  radius: 32,
-                                  backgroundColor: grayL1,
-                                  child: CircleAvatar(
-                                    radius: 31,
-                                    backgroundColor: white,
-                                    child: CircleAvatar(
-                                      backgroundImage:
-                                          MemoryImage(contact.photo!),
-                                      radius: 30,
+                ),
+                Expanded(
+                  child: Container(
+                    decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(30.0),
+                          topRight: Radius.circular(30.0),
+                        ),
+                        color: whiteW1),
+                    child: ListView.builder(
+                        itemCount: contactList.length,
+                        itemBuilder: (context, index) {
+                          if (searchContact.isEmpty) {
+                            final contact = contactList[index];
+                            return InkWell(
+                              onTap: () =>
+                                  widget.selectContact(ref, contact, context),
+                              child: Padding(
+                                padding: const EdgeInsets.only(bottom: 8.0),
+                                child: ListTile(
+                                  title: Text(
+                                    contact.displayName,
+                                    style: const TextStyle(
+                                      fontSize: 18,
                                     ),
                                   ),
+                                  leading: contact.photo == null
+                                      ? null
+                                      : CircleAvatar(
+                                          radius: 32,
+                                          backgroundColor: grayL1,
+                                          child: CircleAvatar(
+                                            radius: 31,
+                                            backgroundColor: white,
+                                            child: CircleAvatar(
+                                              backgroundImage:
+                                                  MemoryImage(contact.photo!),
+                                              radius: 30,
+                                            ),
+                                          ),
+                                        ),
                                 ),
-                        ),
-                      ),
-                    );
-                  }),
+                              ),
+                            );
+                          } else if (contactList[index]
+                              .displayName
+                              .toLowerCase()
+                              .contains(searchContact.toLowerCase())) {
+                            final contact = contactList[index];
+                            return InkWell(
+                              onTap: () =>
+                                  widget.selectContact(ref, contact, context),
+                              child: Padding(
+                                padding: const EdgeInsets.only(bottom: 8.0),
+                                child: ListTile(
+                                  title: Text(
+                                    contact.displayName,
+                                    style: const TextStyle(
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                  leading: contact.photo == null
+                                      ? null
+                                      : CircleAvatar(
+                                          radius: 32,
+                                          backgroundColor: grayL1,
+                                          child: CircleAvatar(
+                                            radius: 31,
+                                            backgroundColor: white,
+                                            child: CircleAvatar(
+                                              backgroundImage:
+                                                  MemoryImage(contact.photo!),
+                                              radius: 30,
+                                            ),
+                                          ),
+                                        ),
+                                ),
+                              ),
+                            );
+                          } else {
+                            return Container();
+                          }
+                        }),
+                  ),
+                ),
+              ],
             ),
             error: (err, trace) => ErrorScreen(error: err.toString()),
             loading: () => const Loader(),
