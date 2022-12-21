@@ -57,7 +57,9 @@ class _SelectContactsScreenState extends ConsumerState<SelectContactsScreen> {
         titleSpacing: 0,
         backgroundColor: pinkL1,
         leading: IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pop(context);
+            },
             icon: Image.asset(
               "assets/icons/back_icon.png",
               fit: BoxFit.cover,
