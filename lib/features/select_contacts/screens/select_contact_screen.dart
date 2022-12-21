@@ -38,6 +38,7 @@ class _SelectContactsScreenState extends ConsumerState<SelectContactsScreen> {
   void dispose() {
     _controller.removeListener(_onSearchChange);
     _controller.dispose();
+    super.dispose();
   }
 
   _onSearchChange() {

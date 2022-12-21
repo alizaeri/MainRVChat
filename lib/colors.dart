@@ -23,11 +23,12 @@ const bgmmColor2 = Color(0xff6c5dd2);
 //const mobileChatBoxColor = Color.fromRGBO(31, 44, 52, 1);
 //const mobileChatBoxColor = Color.fromRGBO(31, 44, 52, 1);
 //const mobileChatBoxColor = Color.fromRGBO(31, 44, 52, 1);
-
+const pink = Color(0xffff004e);
 const pinkL1 = Color(0xff6c5dd2);
 const pinkL2 = Color(0xff8374e8);
+const pinkL3 = Color(0xff361959);
+
 const yellow = Color(0xffffb800);
 const grayL1 = Color(0xff1e1e1d);
 const white = Color(0xffffffff);
 const whiteW1 = Color(0xfff1f1fa);
-const pink = Color(0xffff004e);
