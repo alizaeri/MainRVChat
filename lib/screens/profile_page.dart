@@ -1,11 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rvchat/colors.dart';
-import 'package:rvchat/common/widgets/loaderT.dart';
 import 'package:rvchat/features/auth/controller/auth_controller.dart';
+import 'package:rvchat/features/call/screens/call_screen.dart';
 import 'package:rvchat/models/user_model.dart';
 import 'package:rvchat/screens/user_information_edit_page.dart';
+
+import '../common/widgets/loaderT.dart';
 
 class ProfilePage extends ConsumerWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -13,7 +17,7 @@ class ProfilePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final size = MediaQuery.of(context).size;
-    final uid = FirebaseAuth.instance.currentUser!.uid;
+    final String uid = FirebaseAuth.instance.currentUser!.uid;
     return Scaffold(
       body: StreamBuilder<UserModel>(
           stream: ref.read(authControllerProvider).userDataById(uid),
@@ -39,14 +43,14 @@ class ProfilePage extends ConsumerWidget {
                       Row(
                         children: [
                           Expanded(child: Container()),
-                          Text(
+                          const Text(
                               textAlign: TextAlign.center,
-                              style: const TextStyle(
+                              style: TextStyle(
                                   fontFamily: "yknir",
                                   fontWeight: FontWeight.w800,
                                   fontSize: 40,
                                   color: white),
-                              snapshot.data!.name),
+                              "Profile"),
                           Expanded(
                               child: Row(
                             mainAxisAlignment: MainAxisAlignment.end,
@@ -75,22 +79,21 @@ class ProfilePage extends ConsumerWidget {
                         backgroundColor: white,
                         radius: size.width * 0.21,
                         child: CircleAvatar(
-                          backgroundImage: snapshot.data!.profilePic != null
-                              ? NetworkImage(snapshot.data!.profilePic)
-                              : const AssetImage(
-                                  "assets/icons/avatar.png",
-                                ) as ImageProvider,
+                          backgroundImage: //snapshot.data!.profilePic == null ?
+                              const AssetImage("assets/icons/avatar.png")
+                          //as ImageProvider : NetworkImage( snapshot.data!.profilePic )
+                          ,
                           radius: size.width * 0.2,
                         ),
                       ),
                       const SizedBox(height: 20),
-                      const Text(
-                          style: TextStyle(
+                      Text(
+                          style: const TextStyle(
                               fontFamily: "yknir",
                               fontWeight: FontWeight.w100,
                               fontSize: 40,
                               color: white),
-                          "Alen Parish"),
+                          snapshot.data!.name),
                       const SizedBox(height: 5),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -144,8 +147,8 @@ class ProfilePage extends ConsumerWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Text(
+                      children: [
+                        const Text(
                             style: TextStyle(
                                 fontFamily: "yknir",
                                 fontWeight: FontWeight.w400,
@@ -156,11 +159,11 @@ class ProfilePage extends ConsumerWidget {
                             style: TextStyle(
                                 fontFamily: "yknir",
                                 fontWeight: FontWeight.w100,
-                                fontSize: 40,
+                                fontSize: size.width * 0.1,
                                 color: grayL1),
-                            "Alen Parish"),
-                        Divider(),
-                        Text(
+                            snapshot.data!.name),
+                        const Divider(),
+                        const Text(
                             style: TextStyle(
                                 fontFamily: "yknir",
                                 fontWeight: FontWeight.w400,
@@ -171,11 +174,11 @@ class ProfilePage extends ConsumerWidget {
                             style: TextStyle(
                                 fontFamily: "yknir",
                                 fontWeight: FontWeight.w100,
-                                fontSize: 40,
+                                fontSize: size.width * 0.1,
                                 color: grayL1),
                             "United State"),
-                        Divider(),
-                        Text(
+                        const Divider(),
+                        const Text(
                             style: TextStyle(
                                 fontFamily: "yknir",
                                 fontWeight: FontWeight.w400,
@@ -186,10 +189,10 @@ class ProfilePage extends ConsumerWidget {
                             style: TextStyle(
                                 fontFamily: "yknir",
                                 fontWeight: FontWeight.w100,
-                                fontSize: 40,
+                                fontSize: size.width * 0.1,
                                 color: grayL1),
-                            "+16505555555"),
-                        SizedBox(
+                            snapshot.data!.phoneNumber),
+                        const SizedBox(
                           height: 20,
                         )
                       ],
