@@ -37,24 +37,24 @@ class CallPickupScreen extends ConsumerWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    CircleAvatar(
+                      radius: 100,
+                      backgroundColor: white,
+                      child: CircleAvatar(
+                        backgroundImage: NetworkImage(call.callerPic),
+                        radius: 90,
+                      ),
+                    ),
+                    const SizedBox(height: 15),
                     const Text(
                       'Incoming Call',
                       style: TextStyle(
-                        fontSize: 22,
+                        fontSize: 15,
                         color: Colors.white,
                         fontWeight: FontWeight.w900,
                       ),
                     ),
-                    const SizedBox(height: 50),
-                    CircleAvatar(
-                      radius: 75,
-                      backgroundColor: white,
-                      child: CircleAvatar(
-                        backgroundImage: NetworkImage(call.callerPic),
-                        radius: 70,
-                      ),
-                    ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 10),
                     Text(
                       call.callerName,
                       style: const TextStyle(
@@ -64,10 +64,13 @@ class CallPickupScreen extends ConsumerWidget {
                         fontWeight: FontWeight.w200,
                       ),
                     ),
-                    const SizedBox(height: 40),
+                    const SizedBox(height: 80),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+                        Expanded(
+                          child: Container(),
+                        ),
                         CircleAvatar(
                           radius: 30,
                           backgroundColor: pink,
@@ -79,10 +82,17 @@ class CallPickupScreen extends ConsumerWidget {
                                     context,
                                   );
                             },
-                            icon: const Icon(Icons.call_end, color: white),
+                            icon: Image.asset(
+                              "assets/icons/endcall.png",
+                              fit: BoxFit.cover,
+                              color: white,
+                              scale: 7,
+                            ),
                           ),
                         ),
-                        const SizedBox(width: 40),
+                        Expanded(
+                          child: Container(),
+                        ),
                         CircleAvatar(
                           radius: 30,
                           backgroundColor: Colors.green,
@@ -99,11 +109,16 @@ class CallPickupScreen extends ConsumerWidget {
                                 ),
                               );
                             },
-                            icon: const Icon(
-                              Icons.call,
+                            icon: Image.asset(
+                              "assets/icons/call.png",
+                              fit: BoxFit.cover,
                               color: white,
+                              scale: 7,
                             ),
                           ),
+                        ),
+                        Expanded(
+                          child: Container(),
                         ),
                       ],
                     ),
