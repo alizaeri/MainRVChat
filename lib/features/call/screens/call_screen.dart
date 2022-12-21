@@ -119,7 +119,7 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                       child: Stack(alignment: Alignment.center, children: [
                         AgoraVideoButtons(
                           client: client!,
-                          switchCameraButtonChild: RawMaterialButton(
+                          muteButtonChild: RawMaterialButton(
                             onPressed: () {},
                             shape: const CircleBorder(),
                             elevation: 2.0,
@@ -128,6 +128,20 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                             //padding: const EdgeInsets.all(0),
                             child: Image.asset(
                               "assets/icons/mic_i.png",
+                              fit: BoxFit.cover,
+                              color: white,
+                              scale: 7,
+                            ),
+                          ),
+                          switchCameraButtonChild: RawMaterialButton(
+                            onPressed: () {},
+                            shape: const CircleBorder(),
+                            elevation: 2.0,
+                            fillColor: grayL1,
+                            padding: const EdgeInsets.all(14),
+                            //padding: const EdgeInsets.all(0),
+                            child: Image.asset(
+                              "assets/icons/camera-sw.png",
                               fit: BoxFit.cover,
                               color: white,
                               scale: 7,
@@ -154,7 +168,7 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                               scale: 5,
                             ),
                           ),
-                          muteButtonChild: RawMaterialButton(
+                          disableVideoButtonChild: RawMaterialButton(
                             onPressed: () {},
                             shape: const CircleBorder(),
                             elevation: 2.0,
@@ -162,7 +176,7 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                             padding: const EdgeInsets.all(14),
                             //padding: const EdgeInsets.all(0),
                             child: Image.asset(
-                              "assets/icons/sp_i.png",
+                              "assets/icons/camera_off.png",
                               fit: BoxFit.cover,
                               color: white,
                               scale: 7,
