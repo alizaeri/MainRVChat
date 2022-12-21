@@ -120,7 +120,11 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                         AgoraVideoButtons(
                           client: client!,
                           muteButtonChild: RawMaterialButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              toggleMute(
+                                sessionController: client!.sessionController,
+                              );
+                            },
                             shape: const CircleBorder(),
                             elevation: 2.0,
                             fillColor: grayL1,
@@ -134,7 +138,11 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                             ),
                           ),
                           switchCameraButtonChild: RawMaterialButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              switchCamera(
+                                sessionController: client!.sessionController,
+                              );
+                            },
                             shape: const CircleBorder(),
                             elevation: 2.0,
                             fillColor: grayL1,
@@ -169,7 +177,11 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                             ),
                           ),
                           disableVideoButtonChild: RawMaterialButton(
-                            onPressed: () {},
+                            onPressed: () async {
+                              await toggleCamera(
+                                sessionController: client!.sessionController,
+                              );
+                            },
                             shape: const CircleBorder(),
                             elevation: 2.0,
                             fillColor: grayL1,
