@@ -29,6 +29,7 @@ class _RandomeVideoChatState extends ConsumerState<RandomeVideoChat> {
     rVChat = true;
 
     ref.read(authControllerProvider).setUserRandomState(rVChat);
+    getAllData();
 
     super.initState();
   }
@@ -139,7 +140,6 @@ class _RandomeVideoChatState extends ConsumerState<RandomeVideoChat> {
                     //////// HERE
                     ),
                 onPressed: () async {
-                  getAllData();
                   if (selectRandomUser != null) {
                     makeCall(ref, context, selectRandomUser!);
                   }
