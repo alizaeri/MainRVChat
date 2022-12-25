@@ -69,11 +69,12 @@ class AuthRepository {
       {required String name,
       required File? profilePic,
       required ProviderRef ref,
-      required BuildContext context}) async {
+      required BuildContext context,
+      required defPic}) async {
     try {
       String uid = auth.currentUser!.uid;
       String photoUrl =
-          'https://pbs.twimg.com/profile_images/1419974913260232732/Cy_CUavB.jpg';
+          'https://firebasestorage.googleapis.com/v0/b/mainrvchat.appspot.com/o/avatar.png?alt=media&token=6ac19ca3-c79d-4d64-9ee0-53c673440cbc';
       if (profilePic != null) {
         photoUrl = await ref
             .read(CommonFirebaseStorageRepositoryProvider)
@@ -81,15 +82,19 @@ class AuthRepository {
               'profilePic/$uid',
               profilePic,
             );
+      } else {
+        photoUrl = defPic;
       }
       var user = UserModel(
           name: name,
           uid: uid,
           profilePic: photoUrl,
           isOnline: true,
+          rVChat: false,
           phoneNumber: auth.currentUser!.phoneNumber!,
           groupId: []);
       await firestore.collection('users').doc(uid).set(user.toMap());
+      Navigator.pop(context);
       Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => const MobileLayoutScreen()),

@@ -23,7 +23,7 @@ class SelectContactsScreen extends ConsumerStatefulWidget {
 }
 
 class _SelectContactsScreenState extends ConsumerState<SelectContactsScreen> {
-  TextEditingController _controller = TextEditingController();
+  final TextEditingController _controller = TextEditingController();
   List<String> allList = [];
   String searchContact = '';
 
@@ -104,15 +104,25 @@ class _SelectContactsScreenState extends ConsumerState<SelectContactsScreen> {
               children: [
                 Container(
                   margin: const EdgeInsets.fromLTRB(16, 16, 16, 16),
-                  child: TextField(
-                    controller: _controller,
-                    decoration: InputDecoration(
-                        prefixIcon: const Icon(Icons.search),
+                  child: Theme(
+                    data: ThemeData(
+                      primaryColor: Colors.redAccent,
+                      primaryColorDark: Colors.red,
+                    ),
+                    child: TextField(
+                      controller: _controller,
+                      decoration: const InputDecoration(
+                        prefixIcon: Icon(Icons.search),
                         hintText: 'Search Contact',
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20),
-                            borderSide: const BorderSide(color: Colors.blue))),
-                    // onChanged: filterContact,
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            width: 10,
+                            color: Color.fromARGB(255, 255, 0, 0),
+                          ),
+                        ),
+                      ),
+                      // onChanged: filterContact,
+                    ),
                   ),
                 ),
                 Expanded(

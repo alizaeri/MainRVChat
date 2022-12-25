@@ -96,11 +96,11 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                 children: [
                   AgoraVideoViewer(
                     client: client!,
-                    // layoutType: Layout.floating,
+                    layoutType: Layout.floating,
                     // floatingLayoutContainerHeight: 200,
                     // floatingLayoutContainerWidth: 200,
                     // showNumberOfUsers: true,
-                    // showAVState: true,
+                    showAVState: true,
                   ),
                   Container(
                     child: Container(
@@ -179,6 +179,9 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                           disableVideoButtonChild: RawMaterialButton(
                             onPressed: () async {
                               await toggleCamera(
+                                sessionController: client!.sessionController,
+                              );
+                              toggleVisible(
                                 sessionController: client!.sessionController,
                               );
                             },
