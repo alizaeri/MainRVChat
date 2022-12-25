@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:rvchat/Mycolors.dart';
 import 'package:rvchat/colors.dart';
+import 'package:rvchat/colors.dart';
+
 import 'package:rvchat/features/chat/widget/contacts_list.dart';
 import 'package:rvchat/features/select_contacts/screens/select_contact_screen.dart';
 
@@ -94,7 +97,8 @@ class _ContactsScreenState extends State<ContactsScreen> {
                     hintText: 'Search Contact',
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20),
-                        borderSide: const BorderSide(color: Colors.blue))),
+                        borderSide:
+                            const BorderSide(color: Color(0xFF000000)))),
               ),
             ),
             Expanded(

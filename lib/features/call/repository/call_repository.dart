@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rvchat/common/utils/utils.dart';
+import 'package:rvchat/common/widgets/loader.dart';
 import 'package:rvchat/features/call/screens/call_screen.dart';
 import 'package:rvchat/models/call.dart';
 
@@ -29,26 +30,44 @@ class CallRepository {
     BuildContext context,
     Call receiverCallData,
   ) async {
+    bool exist = false;
     try {
       await firestore
           .collection('call')
-          .doc(senderCallData.callerId)
-          .set(senderCallData.toMap());
-      await firestore
-          .collection('call')
           .doc(senderCallData.receiverId)
-          .set(receiverCallData.toMap());
-
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => CallScreen(
-            channelId: senderCallData.callId,
-            call: senderCallData,
-            isGroupChat: false,
+          .get()
+          .then((doc) {
+        exist = doc.exists;
+      });
+      if (exist) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Loader(),
           ),
-        ),
-      );
+        );
+        return;
+      } else {
+        await firestore
+            .collection('call')
+            .doc(senderCallData.callerId)
+            .set(senderCallData.toMap());
+        await firestore
+            .collection('call')
+            .doc(senderCallData.receiverId)
+            .set(receiverCallData.toMap());
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => CallScreen(
+              channelId: senderCallData.callId,
+              call: senderCallData,
+              isGroupChat: false,
+            ),
+          ),
+        );
+      }
     } catch (e) {
       showSnackBar(context: context, content: e.toString());
     }

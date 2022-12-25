@@ -79,10 +79,10 @@ class ProfilePage extends ConsumerWidget {
                         backgroundColor: white,
                         radius: size.width * 0.21,
                         child: CircleAvatar(
-                          backgroundImage: //snapshot.data!.profilePic == null ?
-                              const AssetImage("assets/icons/avatar.png")
-                          //as ImageProvider : NetworkImage( snapshot.data!.profilePic )
-                          ,
+                          backgroundImage: snapshot.data!.profilePic == null
+                              ? const AssetImage("assets/icons/avatar.png")
+                                  as ImageProvider
+                              : NetworkImage(snapshot.data!.profilePic),
                           radius: size.width * 0.2,
                         ),
                       ),
@@ -176,7 +176,7 @@ class ProfilePage extends ConsumerWidget {
                                 fontWeight: FontWeight.w100,
                                 fontSize: size.width * 0.1,
                                 color: grayL1),
-                            "United State"),
+                            "Iran"),
                         const Divider(),
                         const Text(
                             style: TextStyle(

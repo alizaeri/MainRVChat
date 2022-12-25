@@ -36,15 +36,23 @@ class _UserInformationEditPageState
     setState(() {});
   }
 
-  void storeUserData() async {
+  void storeUserData(String defName, String defPic) async {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Loader(),
+      ),
+    );
     String name = nameController.text.trim();
 
     if (name.isNotEmpty) {
-      ref.read(authControllerProvider).saveUserDataToFirebase(
-            context,
-            name,
-            image,
-          );
+      ref
+          .read(authControllerProvider)
+          .saveUserDataToFirebase(context, name, image, defPic);
+    } else {
+      ref
+          .read(authControllerProvider)
+          .saveUserDataToFirebase(context, defName, image, defPic);
     }
   }
 
@@ -129,14 +137,17 @@ class _UserInformationEditPageState
                                         Stack(
                                           children: [
                                             image == null
-                                                ? const CircleAvatar(
+                                                ? CircleAvatar(
                                                     backgroundColor: white,
                                                     radius: 75,
                                                     child: CircleAvatar(
                                                       backgroundImage:
-                                                          AssetImage(
-                                                        "assets/icons/avatar.png",
-                                                      ),
+                                                          NetworkImage(snapshot
+                                                              .data!
+                                                              .profilePic),
+                                                      //     AssetImage(
+                                                      //   "assets/icons/avatar.png",
+                                                      // ),
                                                       radius: 70,
                                                     ),
                                                   )
@@ -256,7 +267,8 @@ class _UserInformationEditPageState
                                     //////// HERE
                                     ),
                                 onPressed: () {
-                                  storeUserData();
+                                  storeUserData(snapshot.data!.name,
+                                      snapshot.data!.profilePic);
                                   setState(() {
                                     fisClick = true;
                                   });

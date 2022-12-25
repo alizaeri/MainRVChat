@@ -31,9 +31,13 @@ class AuthController {
   }
 
   void saveUserDataToFirebase(
-      BuildContext context, String name, File? profilePic) {
+      BuildContext context, String name, File? profilePic, String defPic) {
     authRepository.saveUserDataToFirebase(
-        name: name, profilePic: profilePic, ref: ref, context: context);
+        name: name,
+        profilePic: profilePic,
+        ref: ref,
+        context: context,
+        defPic: defPic);
   }
 
   Future<UserModel?> getUserData() async {
