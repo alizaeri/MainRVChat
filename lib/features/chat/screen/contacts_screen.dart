@@ -12,7 +12,7 @@ class ContactsScreen extends StatefulWidget {
 
 class _ContactsScreenState extends State<ContactsScreen> {
   String searchText = '';
-  TextEditingController _controller = TextEditingController();
+  final TextEditingController _controller = TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -22,6 +22,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
 
   @override
   void dispose() {
+    super.dispose();
     _controller.removeListener(_onSearchChange);
     _controller.dispose();
   }
@@ -36,6 +37,11 @@ class _ContactsScreenState extends State<ContactsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData(
+      colorScheme: ThemeData().colorScheme.copyWith(
+            primary: pinkL1,
+          ),
+    );
     return Scaffold(
       backgroundColor: const Color(0xff6c5dd2),
       appBar: AppBar(
@@ -90,11 +96,14 @@ class _ContactsScreenState extends State<ContactsScreen> {
               child: TextField(
                 controller: _controller,
                 decoration: InputDecoration(
-                    prefixIcon: const Icon(Icons.search),
+                    prefixIcon: const Icon(
+                      Icons.search,
+                    ),
                     hintText: 'Search Contact',
                     border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
-                        borderSide: const BorderSide(color: Colors.blue))),
+                      borderRadius: BorderRadius.circular(40),
+                      borderSide: const BorderSide(color: pinkL1),
+                    )),
               ),
             ),
             Expanded(
