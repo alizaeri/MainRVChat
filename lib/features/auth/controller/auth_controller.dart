@@ -52,4 +52,9 @@ class AuthController {
   void setUserState(bool isOnline) {
     authRepository.setUserState(isOnline);
   }
+
+  void setUserRandomState(bool rVChat) {
+    authRepository.setUserRandomState(rVChat);
+    print('????? marhaleye aval');
+  }
 }

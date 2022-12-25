@@ -117,4 +117,11 @@ class AuthRepository {
       'isOnline': isOnline,
     });
   }
+
+  void setUserRandomState(bool rVChat) async {
+    await firestore.collection('users').doc(auth.currentUser!.uid).update({
+      'rVChat': rVChat,
+    });
+    print('????? marhaleye dovom');
+  }
 }

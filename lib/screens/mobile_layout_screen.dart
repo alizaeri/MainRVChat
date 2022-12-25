@@ -9,6 +9,7 @@ import 'package:rvchat/features/call/screens/call_pickup_screen.dart';
 import 'package:rvchat/features/call/screens/call_screen.dart';
 import 'package:rvchat/features/select_contacts/screens/select_contact_screen.dart';
 import 'package:rvchat/models/call.dart';
+import 'package:rvchat/screens/random_video_chat.dart';
 
 import 'package:rvchat/screens/test1.dart';
 
@@ -58,7 +59,7 @@ class _MobileLayoutScreenState extends ConsumerState<MobileLayoutScreen>
   final _pageNo = [
     const Favorite(),
     const Favorite(),
-    const Favorite(),
+    const RandomeVideoChat(),
     const ContactsScreen(),
     const ProfilePage(),
   ];

@@ -39,4 +39,6 @@ class UserModel {
       groupId: List<String>.from(map['groupId']),
     );
   }
+
+  toList() {}
 }
