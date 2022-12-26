@@ -195,11 +195,11 @@ class _RandomeVideoChatState extends ConsumerState<RandomeVideoChat>
                       CircleAvatar(
                         backgroundColor: white.withOpacity(0.3),
                         radius: 20,
-                        child: const ImageIcon(
-                          AssetImage(
-                            "assets/icons/prof.png",
-                          ),
+                        child: Image.asset(
+                          "assets/icons/user_chat.png",
+                          fit: BoxFit.cover,
                           color: white,
+                          scale: 4,
                         ),
                       ),
                       const SizedBox(height: 5),
@@ -216,19 +216,18 @@ class _RandomeVideoChatState extends ConsumerState<RandomeVideoChat>
                         backgroundColor: white.withOpacity(0.3),
                         radius: 20,
                         child: Stack(children: [
-                          const ImageIcon(
-                            AssetImage(
-                              "assets/icons/prof.png",
-                            ),
+                          Image.asset(
+                            "assets/icons/like_icon2.png",
+                            fit: BoxFit.cover,
                             color: white,
+                            scale: 4,
                           ),
                           Positioned(
-                            left: 15,
-                            top: 2,
-                            child: Image.asset(
-                              "assets/icons/online_point.png",
-                              fit: BoxFit.cover,
-                              scale: 7,
+                            left: 20,
+                            top: 3,
+                            child: CircleAvatar(
+                              backgroundColor: pink,
+                              radius: 3,
                             ),
                           ),
                         ]),
