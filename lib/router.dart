@@ -4,6 +4,8 @@ import 'package:rvchat/features/auth/screens/otp_screen.dart';
 import 'package:rvchat/features/auth/screens/user_information_screen.dart';
 import 'package:rvchat/features/select_contacts/screens/select_contact_screen.dart';
 import 'package:rvchat/features/chat/screen/mobile_chat_screen.dart';
+import 'package:rvchat/models/user_model.dart';
+import 'package:rvchat/screens/profile_user_view.dart';
 import 'package:rvchat/widgets/error.dart';
 
 import 'screens/user_information_edit_page.dart';
@@ -25,6 +27,10 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case UserInformationEditPage.routeName:
       return MaterialPageRoute(
           builder: (context) => const UserInformationEditPage());
+    case ProfileUserView.routeName:
+      final user = settings.arguments as UserModel;
+      return MaterialPageRoute(
+          builder: (context) => ProfileUserView(selectUser: user));
     case SelectContactsScreen.routeName:
       return MaterialPageRoute(
           builder: (context) => const SelectContactsScreen());
