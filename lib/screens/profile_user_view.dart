@@ -14,39 +14,53 @@ import 'package:rvchat/models/user_model.dart';
 
 class ProfileUserView extends ConsumerStatefulWidget {
   final UserModel selectUser;
+  final int following;
+  final int followers;
   static const String routeName = '/profile-user-view';
 
-  const ProfileUserView({Key? key, required this.selectUser}) : super(key: key);
+  const ProfileUserView({
+    Key? key,
+    required this.selectUser,
+    required this.following,
+    required this.followers,
+  }) : super(key: key);
   @override
   ConsumerState<ProfileUserView> createState() => _ProfileUserViewState();
 }
 
 class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
   bool isLiked = false;
-  int following = 0;
-  int followers = 0;
+  // int following = 0;
+  // int followers = 0;
+  int tempFollowing = 0;
+  int tempFollowers = 0;
 
   @override
   void initState() {
+    tempFollowing = widget.following;
+    tempFollowers = widget.followers;
     super.initState();
-    // checkIfLikedOrNot();
+    super.initState();
+    checkIfLikedOrNot();
   }
 
-  void calculateFollow() async {
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .collection('following')
-        .get();
+  // void calculateFollow() async {
+  //   QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+  //       .collection('users')
+  //       .doc(FirebaseAuth.instance.currentUser!.uid)
+  //       .collection('following')
+  //       .get();
 
-    following = querySnapshot.docs.length;
-    QuerySnapshot querySnapshot2 = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .collection('following')
-        .get();
-    followers = querySnapshot2.docs.length;
-  }
+  //   following = querySnapshot.docs.length;
+  //   tempFollowers = following;
+  //   QuerySnapshot querySnapshot2 = await FirebaseFirestore.instance
+  //       .collection('users')
+  //       .doc(FirebaseAuth.instance.currentUser!.uid)
+  //       .collection('following')
+  //       .get();
+  //   followers = querySnapshot2.docs.length;
+  //   tempFollowing = followers;
+  // }
 
   Stream<UserModel> checkIfLikedOrNot() {
     print('!!!!! ejra shod');
@@ -76,6 +90,12 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
 
   void addUserToFavorit() async {
     if (!isLiked) {
+      if (widget.following == tempFollowing) {
+        setState(() {
+          tempFollowing++;
+        });
+      }
+
       await FirebaseFirestore.instance
           .collection('users')
           .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -93,6 +113,11 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
             widget.selectUser.toMap(),
           );
     } else {
+      if (widget.following != tempFollowing) {
+        setState(() {
+          tempFollowing--;
+        });
+      }
       // });
 
       await FirebaseFirestore.instance
@@ -108,25 +133,25 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .delete();
     }
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(widget.selectUser.uid)
-        .collection('following')
-        .get();
+    // QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+    //     .collection('users')
+    //     .doc(widget.selectUser.uid)
+    //     .collection('following')
+    //     .get();
 
-    setState(() {
-      following = querySnapshot.docs.length;
-    });
+    // setState(() {
+    //   following = querySnapshot.docs.length;
+    // });
 
-    QuerySnapshot querySnapshot2 = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(widget.selectUser.uid)
-        .collection('followers')
-        .get();
+    // QuerySnapshot querySnapshot2 = await FirebaseFirestore.instance
+    //     .collection('users')
+    //     .doc(widget.selectUser.uid)
+    //     .collection('followers')
+    //     .get();
 
-    setState(() {
-      followers = querySnapshot2.docs.length;
-    });
+    // setState(() {
+    //   followers = querySnapshot2.docs.length;
+    // });
   }
 
   @override
@@ -272,7 +297,7 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
                                           fontWeight: FontWeight.w300,
                                           fontSize: 25,
                                           color: white),
-                                      followers.toString()),
+                                      tempFollowers.toString()),
                                 ),
                                 const SizedBox(
                                   width: 40,
@@ -296,7 +321,7 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
                                           fontWeight: FontWeight.w300,
                                           fontSize: 25,
                                           color: white),
-                                      following.toString()),
+                                      tempFollowing.toString()),
                                 ),
                               ],
                             ),

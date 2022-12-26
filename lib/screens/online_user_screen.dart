@@ -94,11 +94,36 @@ class MyCard extends StatefulWidget {
 }
 
 class _MyCardState extends State<MyCard> {
+  int following = 0;
+  int followers = 0;
+  void calculateFollow() async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(widget.user.uid)
+        .collection('following')
+        .get();
+
+    following = querySnapshot.docs.length;
+    QuerySnapshot querySnapshot2 = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(widget.user.uid)
+        .collection('followers')
+        .get();
+    followers = querySnapshot2.docs.length;
+    // ignore: use_build_context_synchronously
+    Navigator.pushNamed(context, ProfileUserView.routeName, arguments: {
+      'user': widget.user,
+      'following': following,
+      'followers': followers,
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Navigator.pushNamed(context, ProfileUserView.routeName,
-          arguments: widget.user),
+      onTap: () {
+        calculateFollow();
+      },
       child: Container(
         color: const Color.fromARGB(255, 239, 127, 107),
         child: Column(

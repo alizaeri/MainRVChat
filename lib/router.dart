@@ -28,9 +28,17 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(
           builder: (context) => const UserInformationEditPage());
     case ProfileUserView.routeName:
-      final user = settings.arguments as UserModel;
+      final argument = settings.arguments as Map<String, dynamic>;
+      final UserModel user = argument['user'];
+      final int following = argument['following'];
+      final int followers = argument['followers'];
+      // final user = settings.arguments as UserModel;
       return MaterialPageRoute(
-          builder: (context) => ProfileUserView(selectUser: user));
+          builder: (context) => ProfileUserView(
+                selectUser: user,
+                following: following,
+                followers: followers,
+              ));
     case SelectContactsScreen.routeName:
       return MaterialPageRoute(
           builder: (context) => const SelectContactsScreen());
