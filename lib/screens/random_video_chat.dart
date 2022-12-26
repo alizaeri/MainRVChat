@@ -184,7 +184,69 @@ class _RandomeVideoChatState extends ConsumerState<RandomeVideoChat>
                       fontSize: 18,
                       color: white),
                   "Elena Johanson"),
-              Expanded(child: Container()),
+              Expanded(
+                  child: Container(
+                alignment: Alignment.bottomRight,
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 15),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      CircleAvatar(
+                        backgroundColor: white.withOpacity(0.3),
+                        radius: 20,
+                        child: const ImageIcon(
+                          AssetImage(
+                            "assets/icons/prof.png",
+                          ),
+                          color: white,
+                        ),
+                      ),
+                      const SizedBox(height: 5),
+                      const Text(
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontFamily: "yknir",
+                              fontWeight: FontWeight.w300,
+                              fontSize: 20,
+                              color: white),
+                          "25k"),
+                      const SizedBox(height: 10),
+                      CircleAvatar(
+                        backgroundColor: white.withOpacity(0.3),
+                        radius: 20,
+                        child: Stack(children: [
+                          const ImageIcon(
+                            AssetImage(
+                              "assets/icons/prof.png",
+                            ),
+                            color: white,
+                          ),
+                          Positioned(
+                            left: 15,
+                            top: 2,
+                            child: Image.asset(
+                              "assets/icons/online_point.png",
+                              fit: BoxFit.cover,
+                              scale: 7,
+                            ),
+                          ),
+                        ]),
+                      ),
+                      const SizedBox(height: 5),
+                      const Text(
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontFamily: "yknir",
+                              fontWeight: FontWeight.w300,
+                              fontSize: 20,
+                              color: white),
+                          "25k"),
+                      const SizedBox(height: 10),
+                    ],
+                  ),
+                ),
+              )),
               Padding(
                 padding: const EdgeInsets.fromLTRB(35, 0, 35, 0),
                 child: SizedBox(
