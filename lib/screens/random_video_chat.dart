@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rvchat/models/user_model.dart';
@@ -144,50 +143,83 @@ class _RandomeVideoChatState extends ConsumerState<RandomeVideoChat>
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage("assets/images/pic.jpg"),
             fit: BoxFit.cover,
           ),
         ),
-        child: Column(
-          children: [
-            const SizedBox(
-              height: 200,
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(35, 0, 35, 0),
-              child: SizedBox(
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: pinkL1,
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(40.0)),
-                      minimumSize: const Size.fromHeight(60)
-                      //////// HERE
-                      ),
-                  onPressed: () async {
-                    getAllData();
-                    if (selectRandomUser != null) {
-                      makeCall(ref, context, selectRandomUser!);
-                    }
-                  },
-                  child: const Padding(
-                    padding: EdgeInsets.only(top: 6),
-                    child: Text(
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontFamily: "yknir",
-                          fontWeight: FontWeight.w800,
-                          fontSize: 25,
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+                //=> Background Linear Gradient
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  grayL1,
+                  grayL1.withOpacity(0),
+                  grayL1.withOpacity(0),
+                  grayL1
+                ]),
+          ),
+          child: Column(
+            children: [
+              const SizedBox(height: 50),
+              const CircleAvatar(
+                backgroundColor: white,
+                radius: 42,
+                child: CircleAvatar(
+                  backgroundImage: AssetImage(
+                    "assets/icons/avatar.png",
+                  ),
+                  radius: 40,
+                ),
+              ),
+              const SizedBox(height: 10),
+              const Text(
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontFamily: "yknir",
+                      fontWeight: FontWeight.w300,
+                      fontSize: 18,
+                      color: white),
+                  "Elena Johanson"),
+              Expanded(child: Container()),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(35, 0, 35, 0),
+                child: SizedBox(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: pinkL1,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(40.0)),
+                        minimumSize: const Size.fromHeight(60)
+                        //////// HERE
                         ),
-                        "APPLY"),
+                    onPressed: () async {
+                      getAllData();
+                      if (selectRandomUser != null) {
+                        makeCall(ref, context, selectRandomUser!);
+                      }
+                    },
+                    child: const Padding(
+                      padding: EdgeInsets.only(top: 6),
+                      child: Text(
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontFamily: "yknir",
+                            fontWeight: FontWeight.w800,
+                            fontSize: 25,
+                          ),
+                          "Randomize"),
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+              const SizedBox(height: 40),
+            ],
+          ),
         ),
       ),
     );
