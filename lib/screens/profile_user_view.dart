@@ -23,6 +23,8 @@ class ProfileUserView extends ConsumerStatefulWidget {
 
 class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
   bool isLiked = false;
+  int following = 0;
+  int followers = 0;
 
   @override
   void initState() {
@@ -30,9 +32,28 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
     // checkIfLikedOrNot();
   }
 
+  void calculateFollow() async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('following')
+        .get();
+
+    following = querySnapshot.docs.length;
+    QuerySnapshot querySnapshot2 = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('following')
+        .get();
+    followers = querySnapshot2.docs.length;
+  }
+
   Stream<UserModel> checkIfLikedOrNot() {
+    print('!!!!! ejra shod');
     return FirebaseFirestore.instance
         .collection("users")
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection("following")
         .doc(widget.selectUser.uid)
         .snapshots()
         .map(
@@ -54,20 +75,20 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
   }
 
   void addUserToFavorit() async {
-    // bool exist = false;
-    // await FirebaseFirestore.instance
-    //     .collection('users')
-    //     .doc(widget.selectUser.uid)
-    //     .get()
-    //     .then((doc) {
-    //   exist = doc.exists;
-    // });
     if (!isLiked) {
       await FirebaseFirestore.instance
           .collection('users')
           .doc(FirebaseAuth.instance.currentUser!.uid)
-          .collection('favorit')
+          .collection('following')
           .doc(widget.selectUser.uid)
+          .set(
+            widget.selectUser.toMap(),
+          );
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(widget.selectUser.uid)
+          .collection('followers')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
           .set(
             widget.selectUser.toMap(),
           );
@@ -77,10 +98,35 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
       await FirebaseFirestore.instance
           .collection('users')
           .doc(FirebaseAuth.instance.currentUser!.uid)
-          .collection('favorit')
+          .collection('following')
           .doc(widget.selectUser.uid)
           .delete();
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(widget.selectUser.uid)
+          .collection('followers')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .delete();
     }
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(widget.selectUser.uid)
+        .collection('following')
+        .get();
+
+    setState(() {
+      following = querySnapshot.docs.length;
+    });
+
+    QuerySnapshot querySnapshot2 = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(widget.selectUser.uid)
+        .collection('followers')
+        .get();
+
+    setState(() {
+      followers = querySnapshot2.docs.length;
+    });
   }
 
   @override
@@ -169,12 +215,19 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
                                       onPressed: () {
                                         addUserToFavorit();
                                       },
-                                      icon: Image.asset(
-                                        "assets/icons/like_icon.png",
-                                        fit: BoxFit.cover,
-                                        color: white,
-                                        scale: 8,
-                                      ),
+                                      icon: isLiked
+                                          ? Image.asset(
+                                              "assets/icons/like_icon.png",
+                                              fit: BoxFit.cover,
+                                              color: white,
+                                              scale: 8,
+                                            )
+                                          : Image.asset(
+                                              "assets/icons/tick.png",
+                                              fit: BoxFit.cover,
+                                              color: white,
+                                              scale: 8,
+                                            ),
                                     ),
                                   ],
                                 ))
@@ -211,7 +264,7 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
                                   fit: BoxFit.cover,
                                   scale: 5,
                                 ),
-                                const Padding(
+                                Padding(
                                   padding: EdgeInsets.fromLTRB(2, 10, 0, 0),
                                   child: Text(
                                       style: TextStyle(
@@ -219,17 +272,23 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
                                           fontWeight: FontWeight.w300,
                                           fontSize: 25,
                                           color: white),
-                                      "105k"),
+                                      followers.toString()),
                                 ),
                                 const SizedBox(
                                   width: 40,
                                 ),
-                                Image.asset(
-                                  "assets/icons/like_icon.png",
-                                  fit: BoxFit.cover,
-                                  scale: 5,
+                                IconButton(
+                                  onPressed: () {
+                                    addUserToFavorit();
+                                  },
+                                  icon: Image.asset(
+                                    "assets/icons/like_icon.png",
+                                    fit: BoxFit.cover,
+                                    color: white,
+                                    scale: 5,
+                                  ),
                                 ),
-                                const Padding(
+                                Padding(
                                   padding: EdgeInsets.fromLTRB(5, 10, 0, 0),
                                   child: Text(
                                       style: TextStyle(
@@ -237,7 +296,7 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
                                           fontWeight: FontWeight.w300,
                                           fontSize: 25,
                                           color: white),
-                                      "25k"),
+                                      following.toString()),
                                 ),
                               ],
                             ),
