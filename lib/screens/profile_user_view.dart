@@ -90,9 +90,9 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
 
   void addUserToFavorit() async {
     if (!isLiked) {
-      if (widget.following == tempFollowing) {
+      if (widget.followers == tempFollowers) {
         setState(() {
-          tempFollowing++;
+          tempFollowers++;
         });
       }
 
@@ -113,9 +113,9 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
             widget.selectUser.toMap(),
           );
     } else {
-      if (widget.following != tempFollowing) {
+      if (widget.followers != tempFollowers) {
         setState(() {
-          tempFollowing--;
+          tempFollowers--;
         });
       }
       // });
