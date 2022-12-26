@@ -42,30 +42,42 @@ class _OnlineUsersScreenState extends State<OnlineUsersScreen> {
               return const LoaderT();
             }
             // if (snapshot.hasData) {
-            List<UserModel> users = snapshot.data!;
+
+            List<UserModel> users = snapshot.data;
+
+            users.removeWhere(
+                (item) => item.uid == FirebaseAuth.instance.currentUser!.uid);
 
             var size = MediaQuery.of(context).size;
             final double itemHeight = (size.height - kToolbarHeight - 10) / 3;
             final double itemWidth = size.width / 2;
 
-            return GridView(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: (itemWidth / itemHeight),
-                crossAxisSpacing: 8,
-                mainAxisSpacing: 8,
-              ),
-              primary: false,
-              shrinkWrap: true,
-              children:
-                  List<Widget>.generate(users.length, // same length as the data
-                      (index) {
-                return MyCard(
-                  user: users[index],
-                );
-                //gridViewTile(recipesList, index);
-              }),
-            );
+            if (users.isNotEmpty) {
+              return GridView(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  childAspectRatio: (itemWidth / itemHeight),
+                  crossAxisSpacing: 8,
+                  mainAxisSpacing: 8,
+                ),
+                primary: false,
+                shrinkWrap: true,
+                children: List<Widget>.generate(
+                    users.length, // same length as the data
+                    (index) {
+                  return MyCard(
+                    user: users[index],
+                  );
+
+                  //gridViewTile(recipesList, index);
+                }),
+              );
+            } else {
+              return const Center(
+                child: Text('there is no user online'),
+              );
+            }
+
             // }
             // return const Center(child: Text("check your connection"));
           }),

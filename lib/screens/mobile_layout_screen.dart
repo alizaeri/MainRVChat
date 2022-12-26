@@ -35,8 +35,12 @@ class _MobileLayoutScreenState extends ConsumerState<MobileLayoutScreen>
   }
 
   @override
+  @mustCallSuper
+  @protected
   void dispose() {
     super.dispose();
+    ref.read(authControllerProvider).setUserState(false);
+
     WidgetsBinding.instance.removeObserver(this);
   }
 
@@ -51,6 +55,7 @@ class _MobileLayoutScreenState extends ConsumerState<MobileLayoutScreen>
       case AppLifecycleState.detached:
       case AppLifecycleState.paused:
         ref.read(authControllerProvider).setUserState(false);
+        ref.read(authControllerProvider).setUserRandomState(false);
         break;
     }
   }

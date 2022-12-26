@@ -19,7 +19,8 @@ class RandomeVideoChat extends ConsumerStatefulWidget {
   ConsumerState<RandomeVideoChat> createState() => _RandomeVideoChatState();
 }
 
-class _RandomeVideoChatState extends ConsumerState<RandomeVideoChat> {
+class _RandomeVideoChatState extends ConsumerState<RandomeVideoChat>
+    with WidgetsBindingObserver {
   bool rVChat = false;
   UserModel? selectRandomUser;
 
@@ -33,6 +34,7 @@ class _RandomeVideoChatState extends ConsumerState<RandomeVideoChat> {
     // jabe ja shod
 
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
@@ -44,7 +46,25 @@ class _RandomeVideoChatState extends ConsumerState<RandomeVideoChat> {
         .update({
       'rVChat': rVChat,
     });
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    switch (state) {
+      case AppLifecycleState.resumed:
+        ref.read(authControllerProvider).setUserState(true);
+        ref.read(authControllerProvider).setUserRandomState(true);
+        break;
+      case AppLifecycleState.inactive:
+      case AppLifecycleState.detached:
+      case AppLifecycleState.paused:
+        ref.read(authControllerProvider).setUserState(false);
+        ref.read(authControllerProvider).setUserRandomState(false);
+        break;
+    }
   }
 
 //   Future<UserModel?> getRandomUserData() async {
