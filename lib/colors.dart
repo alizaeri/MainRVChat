@@ -1,7 +1,5 @@
 import 'dart:ui';
 
-import 'package:flutter/material.dart';
-
 const backgroundColor = Color.fromRGBO(19, 28, 33, 1);
 const textColor = Color.fromRGBO(241, 241, 242, 1);
 const appBarColor = Color.fromRGBO(31, 44, 52, 1);
@@ -34,18 +32,3 @@ const yellow = Color(0xffffb800);
 const grayL1 = Color(0xff1e1e1d);
 const white = Color(0xffffffff);
 const whiteW1 = Color(0xfff1f1fa);
-const MaterialColor salehi = MaterialColor(
-  0xFFFFEBEE, // 0% comes in here, this will be color picked if no shade is selected when defining a Color property which doesn’t require a swatch.
-  <int, Color>{
-    50: Color(0xFFFFEBEE), //10%
-    100: Color(0xFFFFEBEE), //20%
-    200: Color(0xFFFFEBEE), //30%
-    300: Color(0xFFFFEBEE), //40%
-    400: Color(0xFFFFEBEE), //50%
-    500: Color(0xFFFFEBEE), //60%
-    600: Color(0xFFFFEBEE), //70%
-    700: Color(0xFFFFEBEE), //80%
-    800: Color(0xFFFFEBEE), //90%
-    900: Color(0xFFFFEBEE), //100%
-  },
-);

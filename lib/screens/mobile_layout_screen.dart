@@ -81,18 +81,18 @@ class _MobileLayoutScreenState extends ConsumerState<MobileLayoutScreen>
         const {3: '99+'},
         items: [
           TabItem(
-            icon: ImageIcon(const AssetImage("assets/icons/list.png"),
+            icon: ImageIcon(const AssetImage("assets/icons/online.png"),
                 color: white.withOpacity(0.5)),
-            activeIcon: const ImageIcon(AssetImage("assets/icons/list.png"),
+            activeIcon: const ImageIcon(AssetImage("assets/icons/online.png"),
                 color: pinkL1),
-            title: "List",
+            title: "Online",
           ),
           TabItem(
               icon: ImageIcon(const AssetImage("assets/icons/fave.png"),
                   color: white.withOpacity(0.5)),
               activeIcon: const ImageIcon(AssetImage("assets/icons/fave.png"),
                   color: pinkL1),
-              title: "search"),
+              title: "Favorite"),
           TabItem(
               icon: ImageIcon(const AssetImage("assets/icons/rv.png"),
                   color: white.withOpacity(0.5)),

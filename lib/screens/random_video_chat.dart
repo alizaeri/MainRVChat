@@ -143,44 +143,52 @@ class _RandomeVideoChatState extends ConsumerState<RandomeVideoChat>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          const SizedBox(
-            height: 200,
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/images/pic.jpg"),
+            fit: BoxFit.cover,
           ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(35, 0, 35, 0),
-            child: SizedBox(
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: pinkL1,
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(40.0)),
-                    minimumSize: const Size.fromHeight(60)
-                    //////// HERE
-                    ),
-                onPressed: () async {
-                  getAllData();
-                  if (selectRandomUser != null) {
-                    makeCall(ref, context, selectRandomUser!);
-                  }
-                },
-                child: const Padding(
-                  padding: EdgeInsets.only(top: 6),
-                  child: Text(
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontFamily: "yknir",
-                        fontWeight: FontWeight.w800,
-                        fontSize: 25,
+        ),
+        child: Column(
+          children: [
+            const SizedBox(
+              height: 200,
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(35, 0, 35, 0),
+              child: SizedBox(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: pinkL1,
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(40.0)),
+                      minimumSize: const Size.fromHeight(60)
+                      //////// HERE
                       ),
-                      "APPLY"),
+                  onPressed: () async {
+                    getAllData();
+                    if (selectRandomUser != null) {
+                      makeCall(ref, context, selectRandomUser!);
+                    }
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.only(top: 6),
+                    child: Text(
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontFamily: "yknir",
+                          fontWeight: FontWeight.w800,
+                          fontSize: 25,
+                        ),
+                        "APPLY"),
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
