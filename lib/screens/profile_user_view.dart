@@ -38,7 +38,6 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
     tempFollowing = widget.following;
 
     super.initState();
-    checkIfLikedOrNot();
   }
 
   // void calculateFollow() async {
@@ -87,14 +86,16 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
 
   void addUserToFavorit() async {
     if (!isLiked) {
-      setState(() {
-        tempFollowing++;
-      });
+      if (tempFollowing < widget.following + 1) {
+        setState(() {
+          tempFollowing++;
+        });
+      }
 
       await FirebaseFirestore.instance
           .collection('users')
           .doc(FirebaseAuth.instance.currentUser!.uid)
-          .collection('followers')
+          .collection('following')
           .doc(widget.selectUser.uid)
           .set(
             widget.selectUser.toMap(),
@@ -102,28 +103,31 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
       await FirebaseFirestore.instance
           .collection('users')
           .doc(widget.selectUser.uid)
-          .collection('following')
+          .collection('followers')
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .set(
             widget.selectUser.toMap(),
           );
     } else {
-      setState(() {
-        tempFollowing--;
-      });
+      if (tempFollowing == widget.following ||
+          tempFollowing == widget.following + 1) {
+        setState(() {
+          tempFollowing--;
+        });
+      }
 
       // });
 
       await FirebaseFirestore.instance
           .collection('users')
           .doc(FirebaseAuth.instance.currentUser!.uid)
-          .collection('followers')
+          .collection('following')
           .doc(widget.selectUser.uid)
           .delete();
       await FirebaseFirestore.instance
           .collection('users')
           .doc(widget.selectUser.uid)
-          .collection('following')
+          .collection('followers')
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .delete();
     }
@@ -166,6 +170,7 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
                     return const LoaderT();
                   }
                   if (snapshot2.hasData) {
+                    print(snapshot2.data!.name);
                     isLiked = true;
                   } else {
                     isLiked = false;
@@ -226,7 +231,7 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
                                         onPressed: () {
                                           addUserToFavorit();
                                         },
-                                        icon: isLiked
+                                        icon: !isLiked
                                             ? Image.asset(
                                                 "assets/icons/like_icon.png",
                                                 fit: BoxFit.cover,
@@ -293,7 +298,7 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
                                   onPressed: () {
                                     addUserToFavorit();
                                   },
-                                  icon: isLiked
+                                  icon: !isLiked
                                       ? Image.asset(
                                           "assets/icons/like_icon.png",
                                           fit: BoxFit.cover,

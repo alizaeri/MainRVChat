@@ -100,14 +100,14 @@ class _MyCardState extends State<MyCard> {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection('users')
         .doc(widget.user.uid)
-        .collection('following')
+        .collection('followers')
         .get();
 
     following = querySnapshot.docs.length;
     QuerySnapshot querySnapshot2 = await FirebaseFirestore.instance
         .collection('users')
         .doc(widget.user.uid)
-        .collection('followers')
+        .collection('following')
         .get();
     followers = querySnapshot2.docs.length;
     // ignore: use_build_context_synchronously
