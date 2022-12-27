@@ -35,52 +35,58 @@ class _OnlineUsersScreenState extends State<OnlineUsersScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: StreamBuilder(
-          stream: getUsersStream(),
-          builder: (BuildContext context, AsyncSnapshot snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const LoaderT();
-            }
-            // if (snapshot.hasData) {
+      body: Container(
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: StreamBuilder(
+              stream: getUsersStream(),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const LoaderT();
+                }
+                // if (snapshot.hasData) {
 
-            List<UserModel> users = snapshot.data;
+                List<UserModel> users = snapshot.data;
 
-            users.removeWhere(
-                (item) => item.uid == FirebaseAuth.instance.currentUser!.uid);
+                users.removeWhere((item) =>
+                    item.uid == FirebaseAuth.instance.currentUser!.uid);
 
-            var size = MediaQuery.of(context).size;
-            final double itemHeight = (size.height - kToolbarHeight - 10) / 3;
-            final double itemWidth = size.width / 2;
+                var size = MediaQuery.of(context).size;
+                final double itemHeight =
+                    (size.height - kToolbarHeight - 10) / 3;
+                final double itemWidth = size.width / 2;
 
-            if (users.isNotEmpty) {
-              return GridView(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: (itemWidth / itemHeight),
-                  crossAxisSpacing: 8,
-                  mainAxisSpacing: 8,
-                ),
-                primary: false,
-                shrinkWrap: true,
-                children: List<Widget>.generate(
-                    users.length, // same length as the data
-                    (index) {
-                  return MyCard(
-                    user: users[index],
+                if (users.isNotEmpty) {
+                  return GridView(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      childAspectRatio: (itemWidth / itemHeight),
+                      crossAxisSpacing: 8,
+                      mainAxisSpacing: 8,
+                    ),
+                    primary: false,
+                    shrinkWrap: true,
+                    children: List<Widget>.generate(
+                        users.length, // same length as the data
+                        (index) {
+                      return MyCard(
+                        user: users[index],
+                      );
+
+                      //gridViewTile(recipesList, index);
+                    }),
                   );
+                } else {
+                  return const Center(
+                    child: Text('there is no user online'),
+                  );
+                }
 
-                  //gridViewTile(recipesList, index);
-                }),
-              );
-            } else {
-              return const Center(
-                child: Text('there is no user online'),
-              );
-            }
-
-            // }
-            // return const Center(child: Text("check your connection"));
-          }),
+                // }
+                // return const Center(child: Text("check your connection"));
+              }),
+        ),
+      ),
     );
   }
 }
@@ -120,69 +126,71 @@ class _MyCardState extends State<MyCard> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: () {
         calculateFollow();
       },
-      child: Container(
-        color: const Color.fromARGB(255, 239, 127, 107),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Padding(
-                padding: const EdgeInsets.fromLTRB(0, 20, 0, 10),
-                child: CircleAvatar(
-                  radius: 75,
-                  backgroundColor: pinkL2,
-                  child: CircleAvatar(
-                    backgroundImage: NetworkImage(
-                      widget.user.profilePic,
-                      // info[index]['profilePic'].toString(),
-                    ),
-                    radius: 70,
+      child: Column(
+        children: [
+          Container(
+            width: (size.width / 3),
+            height: (size.width / 3),
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+              image: DecorationImage(
+                  image: NetworkImage(
+                    widget.user.profilePic,
+                    // info[index]['profilePic'].toString(),
                   ),
-                )),
-            Text(
-              widget.user.name,
-              maxLines: 2,
-              overflow: TextOverflow.fade,
-              style: const TextStyle(
-                  color: Colors.white, fontWeight: FontWeight.bold),
+                  fit: BoxFit.cover),
             ),
-            const SizedBox(
-              height: 5,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 8, 8),
-                  child: SizedBox(
-                    height: 40,
-                    width: 40,
-                    child: IconButton(
-                      onPressed: () {
-                        setState(() {
-                          // pressAttention = !pressAttention;
-                          // widget._deleteDoc(recipe: widget.recipe);
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 0, 8, 8),
+                      child: SizedBox(
+                        height: 40,
+                        width: 40,
+                        child: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              // pressAttention = !pressAttention;
+                              // widget._deleteDoc(recipe: widget.recipe);
 
-                          /*
-                          widget._saveRecipeToUserSubcollection(
-                              recipe: widget.recipe);
-                              */
-                        });
-                      },
-                      icon: const Icon(Icons.abc
+                              /*
+                              widget._saveRecipeToUserSubcollection(
+                                  recipe: widget.recipe);
+                                  */
+                            });
+                          },
+                          icon: const Icon(Icons.abc
 
-                          //Color.fromARGB(255, 239, 61, 100),
-                          ),
-                    ),
-                  ),
+                              //Color.fromARGB(255, 239, 61, 100),
+                              ),
+                        ),
+                      ),
+                    )
+                  ],
                 )
               ],
-            )
-          ],
-        ), // Use the fullName property of each item
+            ), // Use the fullName property of each item
+          ),
+          SizedBox(height: 10),
+          const Text(
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontFamily: "yknir",
+                  fontWeight: FontWeight.w300,
+                  fontSize: 15,
+                  color: grayL1),
+              "Elena Johanson"),
+          SizedBox(height: 10)
+        ],
       ),
     );
   }
