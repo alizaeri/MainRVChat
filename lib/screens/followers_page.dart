@@ -16,7 +16,6 @@ class FollowPage extends StatefulWidget {
 }
 
 class _FollowPageState extends State<FollowPage> {
-  List<UserModel> onlineUser = [];
   Stream<List<UserModel>> getfollowingUser() {
     return FirebaseFirestore.instance
         .collection('users')
@@ -25,14 +24,11 @@ class _FollowPageState extends State<FollowPage> {
         .snapshots()
         .map((event) {
       List<UserModel> followingList = [];
+
       for (var doc in event.docs) {
         followingList.add(UserModel.fromMap(doc.data()));
       }
-      for (var user in followingList) {
-        if (user.isOnline == true) {
-          onlineUser.add(user);
-        }
-      }
+
       return followingList;
     });
   }
@@ -57,7 +53,7 @@ class _FollowPageState extends State<FollowPage> {
 
           if (users.isNotEmpty) {
             return Padding(
-              padding: EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                 vertical: 50,
               ),
               child: Column(
@@ -67,30 +63,34 @@ class _FollowPageState extends State<FollowPage> {
                     child: ListView.builder(
                         padding: const EdgeInsets.only(left: 10),
                         scrollDirection: Axis.horizontal,
-                        itemCount: onlineUser.length,
+                        itemCount: users.length,
                         itemBuilder: (BuildContext context, int index) {
-                          return Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Column(
-                              children: [
-                                CircleAvatar(
-                                  radius: 35,
-                                  backgroundImage: NetworkImage(
-                                      onlineUser[index].profilePic),
-                                ),
-                                const SizedBox(
-                                  height: 6,
-                                ),
-                                Text(
-                                  onlineUser[index].name,
-                                  style: const TextStyle(
-                                      color: Colors.blueGrey,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600),
-                                ),
-                              ],
-                            ),
-                          );
+                          if (users[index].isOnline == true) {
+                            return Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Column(
+                                children: [
+                                  CircleAvatar(
+                                    radius: 35,
+                                    backgroundImage:
+                                        NetworkImage(users[index].profilePic),
+                                  ),
+                                  const SizedBox(
+                                    height: 6,
+                                  ),
+                                  Text(
+                                    users[index].name,
+                                    style: const TextStyle(
+                                        color: Colors.blueGrey,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                ],
+                              ),
+                            );
+                          } else {
+                            return Container();
+                          }
                         }),
                   ),
                   GridView(
