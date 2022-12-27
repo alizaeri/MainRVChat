@@ -54,7 +54,7 @@ class _MobileLayoutScreenState extends ConsumerState<MobileLayoutScreen>
     }
   }
 
-  int selectedPage = 2;
+  int selectedPage = 0;
 
   final _pageNo = [
     const OnlineUsersScreen(),
