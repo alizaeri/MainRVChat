@@ -1,8 +1,7 @@
-import 'dart:ffi';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rvchat/colors.dart';
@@ -193,7 +192,28 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
                             const SizedBox(height: 50),
                             Row(
                               children: [
-                                Expanded(child: Container()),
+                                Expanded(
+                                  child: Container(
+                                    alignment: Alignment.centerLeft,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left: 5),
+                                      child: IconButton(
+                                          onPressed: () {
+                                            if (Navigator.canPop(context)) {
+                                              Navigator.pop(context);
+                                            } else {
+                                              SystemNavigator.pop();
+                                            }
+                                          },
+                                          icon: Image.asset(
+                                            "assets/icons/back_icon.png",
+                                            fit: BoxFit.cover,
+                                            color: white,
+                                            scale: 5,
+                                          )),
+                                    ),
+                                  ),
+                                ),
                                 const Text(
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
@@ -203,59 +223,30 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
                                         color: white),
                                     "Profile"),
                                 Expanded(
-                                    child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    IconButton(
-                                      onPressed: () {
-                                        Navigator.pushNamed(
-                                            context, MobileChatScreen.routeName,
-                                            arguments: {
-                                              'name': snapshot.data!.name,
-                                              'uid': snapshot.data!.uid,
-                                              'profilePic':
-                                                  snapshot.data!.profilePic,
-                                            });
-                                      },
-                                      icon: Image.asset(
-                                        "assets/icons/edit.png",
-                                        fit: BoxFit.cover,
-                                        color: white,
-                                        scale: 8,
+                                  child: Container(
+                                    alignment: Alignment.centerRight,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(right: 10),
+                                      child: IconButton(
+                                        onPressed: () {
+                                          addUserToFavorit();
+                                        },
+                                        icon: isLiked
+                                            ? Image.asset(
+                                                "assets/icons/like_icon.png",
+                                                fit: BoxFit.cover,
+                                                color: white,
+                                                scale: 3,
+                                              )
+                                            : Image.asset(
+                                                "assets/icons/like_icon_fill.png",
+                                                color: yellow,
+                                                scale: 3,
+                                              ),
                                       ),
                                     ),
-                                    IconButton(
-                                      onPressed: () {
-                                        makeCall(
-                                            ref, context, widget.selectUser);
-                                      },
-                                      icon: Image.asset(
-                                        "assets/icons/rv.png",
-                                        fit: BoxFit.cover,
-                                        color: white,
-                                        scale: 8,
-                                      ),
-                                    ),
-                                    IconButton(
-                                      onPressed: () {
-                                        addUserToFavorit();
-                                      },
-                                      icon: isLiked
-                                          ? Image.asset(
-                                              "assets/icons/like_icon.png",
-                                              fit: BoxFit.cover,
-                                              color: white,
-                                              scale: 8,
-                                            )
-                                          : Image.asset(
-                                              "assets/icons/tick.png",
-                                              fit: BoxFit.cover,
-                                              color: white,
-                                              scale: 8,
-                                            ),
-                                    ),
-                                  ],
-                                ))
+                                  ),
+                                ),
                               ],
                             ),
                             SizedBox(height: size.height * 0.02),
@@ -290,9 +281,10 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
                                   scale: 5,
                                 ),
                                 Padding(
-                                  padding: EdgeInsets.fromLTRB(2, 10, 0, 0),
+                                  padding:
+                                      const EdgeInsets.fromLTRB(2, 10, 0, 0),
                                   child: Text(
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontFamily: "yknir",
                                           fontWeight: FontWeight.w300,
                                           fontSize: 25,
@@ -306,17 +298,24 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
                                   onPressed: () {
                                     addUserToFavorit();
                                   },
-                                  icon: Image.asset(
-                                    "assets/icons/like_icon.png",
-                                    fit: BoxFit.cover,
-                                    color: white,
-                                    scale: 5,
-                                  ),
+                                  icon: isLiked
+                                      ? Image.asset(
+                                          "assets/icons/like_icon.png",
+                                          fit: BoxFit.cover,
+                                          color: white,
+                                          scale: 5,
+                                        )
+                                      : Image.asset(
+                                          "assets/icons/like_icon_fill.png",
+                                          color: white,
+                                          scale: 5,
+                                        ),
                                 ),
                                 Padding(
-                                  padding: EdgeInsets.fromLTRB(5, 10, 0, 0),
+                                  padding:
+                                      const EdgeInsets.fromLTRB(5, 10, 0, 0),
                                   child: Text(
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontFamily: "yknir",
                                           fontWeight: FontWeight.w300,
                                           fontSize: 25,
@@ -370,24 +369,128 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
                                       fontSize: size.width * 0.1,
                                       color: grayL1),
                                   "Iran"),
-                              const Divider(),
-                              const Text(
-                                  style: TextStyle(
-                                      fontFamily: "yknir",
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 18,
-                                      color: pinkL1),
-                                  "Phone Number"),
-                              Text(
-                                  style: TextStyle(
-                                      fontFamily: "yknir",
-                                      fontWeight: FontWeight.w100,
-                                      fontSize: size.width * 0.1,
-                                      color: grayL1),
-                                  snapshot.data!.phoneNumber),
-                              const SizedBox(
-                                height: 20,
-                              )
+                              const SizedBox(height: 20),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(35, 0, 35, 0),
+                                child: SizedBox(
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: pinkL1,
+                                      elevation: 0,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(15.0)),
+                                      minimumSize: const Size.fromHeight(60),
+                                      padding: const EdgeInsets.all(0),
+                                      //////// HERE
+                                    ),
+                                    onPressed: () {
+                                      Navigator.pushNamed(
+                                          context, MobileChatScreen.routeName,
+                                          arguments: {
+                                            'name': snapshot.data!.name,
+                                            'uid': snapshot.data!.uid,
+                                            'profilePic':
+                                                snapshot.data!.profilePic,
+                                          });
+                                    },
+                                    child: Row(
+                                      children: [
+                                        const Expanded(
+                                          child: Padding(
+                                            padding: EdgeInsets.only(top: 3),
+                                            child: Text(
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  fontFamily: "yknir",
+                                                  fontWeight: FontWeight.w300,
+                                                  fontSize: 25,
+                                                ),
+                                                "Text Chat"),
+                                          ),
+                                        ),
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                const BorderRadius.only(
+                                              bottomRight:
+                                                  Radius.circular(15.0),
+                                              topRight: Radius.circular(15.0),
+                                            ),
+                                            color: white.withOpacity(0.2),
+                                          ),
+                                          height: 60,
+                                          width: 80,
+                                          child: Image.asset(
+                                            "assets/icons/chat.png",
+                                            color: white,
+                                            scale: 5,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 20),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(35, 0, 35, 0),
+                                child: SizedBox(
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: pink,
+                                      elevation: 0,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(15.0)),
+                                      minimumSize: const Size.fromHeight(60),
+                                      padding: const EdgeInsets.all(0),
+                                      //////// HERE
+                                    ),
+                                    onPressed: () {
+                                      makeCall(ref, context, widget.selectUser);
+                                    },
+                                    child: Row(
+                                      children: [
+                                        const Expanded(
+                                          child: Padding(
+                                            padding: EdgeInsets.only(top: 3),
+                                            child: Text(
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  fontFamily: "yknir",
+                                                  fontWeight: FontWeight.w300,
+                                                  fontSize: 25,
+                                                ),
+                                                "Video Call"),
+                                          ),
+                                        ),
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                const BorderRadius.only(
+                                              bottomRight:
+                                                  Radius.circular(15.0),
+                                              topRight: Radius.circular(15.0),
+                                            ),
+                                            color: white.withOpacity(0.2),
+                                          ),
+                                          height: 60,
+                                          width: 80,
+                                          child: Image.asset(
+                                            "assets/icons/rv.png",
+                                            color: white,
+                                            scale: 5,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 20),
                             ],
                           ),
                         ),

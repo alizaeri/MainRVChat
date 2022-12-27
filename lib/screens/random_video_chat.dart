@@ -222,7 +222,7 @@ class _RandomeVideoChatState extends ConsumerState<RandomeVideoChat>
                             color: white,
                             scale: 4,
                           ),
-                          Positioned(
+                          const Positioned(
                             left: 20,
                             top: 3,
                             child: CircleAvatar(
@@ -251,29 +251,49 @@ class _RandomeVideoChatState extends ConsumerState<RandomeVideoChat>
                 child: SizedBox(
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: pinkL1,
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(40.0)),
-                        minimumSize: const Size.fromHeight(60)
-                        //////// HERE
-                        ),
+                      backgroundColor: pinkL1,
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15.0)),
+                      minimumSize: const Size.fromHeight(60),
+                      padding: EdgeInsets.all(0),
+                      //////// HERE
+                    ),
                     onPressed: () async {
                       getAllData();
                       if (selectRandomUser != null) {
                         makeCall(ref, context, selectRandomUser!);
                       }
                     },
-                    child: const Padding(
-                      padding: EdgeInsets.only(top: 6),
-                      child: Text(
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontFamily: "yknir",
-                            fontWeight: FontWeight.w800,
-                            fontSize: 25,
+                    child: Row(
+                      children: [
+                        const Expanded(
+                          child: Text(
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontFamily: "yknir",
+                                fontWeight: FontWeight.w300,
+                                fontSize: 25,
+                              ),
+                              "Randomize"),
+                        ),
+                        Container(
+                          decoration: const BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                              bottomRight: Radius.circular(15.0),
+                              topRight: Radius.circular(15.0),
+                            ),
+                            color: pinkL2,
                           ),
-                          "Randomize"),
+                          height: 60,
+                          width: 80,
+                          child: Image.asset(
+                            "assets/icons/random.png",
+                            color: white,
+                            scale: 5,
+                          ),
+                        )
+                      ],
                     ),
                   ),
                 ),
