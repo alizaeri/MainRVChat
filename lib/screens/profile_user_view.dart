@@ -32,15 +32,12 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
   // int following = 0;
   // int followers = 0;
   int tempFollowing = 0;
-  int tempFollowers = 0;
 
   @override
   void initState() {
     tempFollowing = widget.following;
-    tempFollowers = widget.followers;
+
     super.initState();
-    super.initState();
-    checkIfLikedOrNot();
   }
 
   // void calculateFollow() async {
@@ -89,9 +86,9 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
 
   void addUserToFavorit() async {
     if (!isLiked) {
-      if (widget.followers == tempFollowers) {
+      if (tempFollowing < widget.following + 1) {
         setState(() {
-          tempFollowers++;
+          tempFollowing++;
         });
       }
 
@@ -112,11 +109,13 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
             widget.selectUser.toMap(),
           );
     } else {
-      if (widget.followers != tempFollowers) {
+      if (tempFollowing == widget.following ||
+          tempFollowing == widget.following + 1) {
         setState(() {
-          tempFollowers--;
+          tempFollowing--;
         });
       }
+
       // });
 
       await FirebaseFirestore.instance
@@ -171,6 +170,7 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
                     return const LoaderT();
                   }
                   if (snapshot2.hasData) {
+                    print(snapshot2.data!.name);
                     isLiked = true;
                   } else {
                     isLiked = false;
@@ -231,7 +231,7 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
                                         onPressed: () {
                                           addUserToFavorit();
                                         },
-                                        icon: isLiked
+                                        icon: !isLiked
                                             ? Image.asset(
                                                 "assets/icons/like_icon.png",
                                                 fit: BoxFit.cover,
@@ -289,7 +289,7 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
                                           fontWeight: FontWeight.w300,
                                           fontSize: 25,
                                           color: white),
-                                      tempFollowers.toString()),
+                                      widget.followers.toString()),
                                 ),
                                 const SizedBox(
                                   width: 40,
@@ -298,7 +298,7 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
                                   onPressed: () {
                                     addUserToFavorit();
                                   },
-                                  icon: isLiked
+                                  icon: !isLiked
                                       ? Image.asset(
                                           "assets/icons/like_icon.png",
                                           fit: BoxFit.cover,
