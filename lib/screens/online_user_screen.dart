@@ -35,56 +35,100 @@ class _OnlineUsersScreenState extends State<OnlineUsersScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xff6c5dd2),
+      appBar: AppBar(
+        elevation: 0,
+        titleSpacing: 0,
+        backgroundColor: pinkL1,
+        automaticallyImplyLeading: false,
+        title: Row(
+          children: const [
+            SizedBox(
+              width: 15,
+            ),
+            Text(
+              "People Online",
+              style: TextStyle(
+                fontSize: 25,
+                fontFamily: "yknir",
+                fontWeight: FontWeight.w300,
+              ),
+            ),
+          ],
+        ),
+        centerTitle: false,
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.more_vert),
+          ),
+        ],
+      ),
       body: Container(
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: StreamBuilder(
-              stream: getUsersStream(),
-              builder: (BuildContext context, AsyncSnapshot snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const LoaderT();
-                }
-                // if (snapshot.hasData) {
+        decoration: const BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(30.0),
+              topRight: Radius.circular(30.0),
+            ),
+            color: whiteW1),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(height: 10),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: StreamBuilder(
+                    stream: getUsersStream(),
+                    builder: (BuildContext context, AsyncSnapshot snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const LoaderT();
+                      }
+                      // if (snapshot.hasData) {
 
-                List<UserModel> users = snapshot.data;
+                      List<UserModel> users = snapshot.data;
 
-                users.removeWhere((item) =>
-                    item.uid == FirebaseAuth.instance.currentUser!.uid);
+                      users.removeWhere((item) =>
+                          item.uid == FirebaseAuth.instance.currentUser!.uid);
 
-                var size = MediaQuery.of(context).size;
-                final double itemHeight =
-                    (size.height - kToolbarHeight - 10) / 3;
-                final double itemWidth = size.width / 2;
+                      var size = MediaQuery.of(context).size;
+                      final double itemHeight =
+                          (size.height - kToolbarHeight - 10) / 3;
+                      final double itemWidth = size.width / 2;
 
-                if (users.isNotEmpty) {
-                  return GridView(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      childAspectRatio: (itemWidth / itemHeight),
-                      crossAxisSpacing: 8,
-                      mainAxisSpacing: 8,
-                    ),
-                    primary: false,
-                    shrinkWrap: true,
-                    children: List<Widget>.generate(
-                        users.length, // same length as the data
-                        (index) {
-                      return MyCard(
-                        user: users[index],
-                      );
+                      if (users.isNotEmpty) {
+                        return GridView(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                            childAspectRatio: 0.7,
+                            crossAxisSpacing: 8,
+                            mainAxisSpacing: 8,
+                          ),
+                          primary: false,
+                          shrinkWrap: true,
+                          children: List<Widget>.generate(
+                              users.length, // same length as the data
+                              (index) {
+                            return MyCard(
+                              user: users[index],
+                            );
 
-                      //gridViewTile(recipesList, index);
+                            //gridViewTile(recipesList, index);
+                          }),
+                        );
+                      } else {
+                        return const Center(
+                          child: Text('there is no user online'),
+                        );
+                      }
+
+                      // }
+                      // return const Center(child: Text("check your connection"));
                     }),
-                  );
-                } else {
-                  return const Center(
-                    child: Text('there is no user online'),
-                  );
-                }
-
-                // }
-                // return const Center(child: Text("check your connection"));
-              }),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -145,42 +189,95 @@ class _MyCardState extends State<MyCard> {
                   ),
                   fit: BoxFit.cover),
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
+            child: Stack(
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 0, 8, 8),
-                      child: SizedBox(
-                        height: 40,
-                        width: 40,
-                        child: IconButton(
-                          onPressed: () {
-                            setState(() {
-                              // pressAttention = !pressAttention;
-                              // widget._deleteDoc(recipe: widget.recipe);
-
-                              /*
-                              widget._saveRecipeToUserSubcollection(
-                                  recipe: widget.recipe);
-                                  */
-                            });
-                          },
-                          icon: const Icon(Icons.abc
-
-                              //Color.fromARGB(255, 239, 61, 100),
+                    Expanded(child: Container()),
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(0),
+                          topRight: Radius.circular(0),
+                          bottomRight: Radius.circular(10.0),
+                          bottomLeft: Radius.circular(10.0),
+                        ),
+                        gradient: LinearGradient(
+                            //=> Background Linear Gradient
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [grayL1.withOpacity(0), grayL1]),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(5, 15, 5, 5),
+                        child: Row(
+                          children: [
+                            CircleAvatar(
+                              backgroundColor: white.withOpacity(0.3),
+                              radius: 10,
+                              child: Image.asset(
+                                "assets/icons/user_chat.png",
+                                fit: BoxFit.cover,
+                                color: white,
+                                scale: 8,
                               ),
+                            ),
+                            const SizedBox(width: 2),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5),
+                              child: const Text(
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontFamily: "yknir",
+                                      fontWeight: FontWeight.w300,
+                                      fontSize: 15,
+                                      color: white),
+                                  "25k"),
+                            ),
+                            Expanded(child: Container()),
+                            CircleAvatar(
+                              backgroundColor: white.withOpacity(0.3),
+                              radius: 10,
+                              child: Image.asset(
+                                "assets/icons/like_icon2.png",
+                                fit: BoxFit.cover,
+                                color: white,
+                                scale: 8,
+                              ),
+                            ),
+                            const SizedBox(width: 2),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5),
+                              child: const Text(
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontFamily: "yknir",
+                                      fontWeight: FontWeight.w300,
+                                      fontSize: 15,
+                                      color: white),
+                                  "25k"),
+                            ),
+                          ],
                         ),
                       ),
                     )
                   ],
-                )
+                ),
+                const Positioned(
+                    left: 8,
+                    top: 5,
+                    child: Text(
+                        style: TextStyle(
+                            fontFamily: "yknir",
+                            fontWeight: FontWeight.w800,
+                            fontSize: 15,
+                            color: pink),
+                        "Live"))
               ],
             ), // Use the fullName property of each item
           ),
-          SizedBox(height: 10),
+          SizedBox(height: 5),
           const Text(
               textAlign: TextAlign.center,
               style: TextStyle(

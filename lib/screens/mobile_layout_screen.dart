@@ -5,6 +5,7 @@ import 'package:rvchat/colors.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:rvchat/features/auth/controller/auth_controller.dart';
 import 'package:rvchat/features/call/screens/call_pickup_screen.dart';
+import 'package:rvchat/screens/followers_page.dart';
 import 'package:rvchat/screens/online_user_screen.dart';
 import 'package:rvchat/screens/random_video_chat.dart';
 import 'package:rvchat/screens/test1.dart';
@@ -58,7 +59,7 @@ class _MobileLayoutScreenState extends ConsumerState<MobileLayoutScreen>
 
   final _pageNo = [
     const OnlineUsersScreen(),
-    const Favorite(),
+    const FollowPage(),
     const RandomeVideoChat(),
     const ContactsScreen(),
     const ProfilePage(),
