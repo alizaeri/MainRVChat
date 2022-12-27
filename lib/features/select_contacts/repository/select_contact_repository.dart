@@ -35,26 +35,32 @@ class SelectContactRepository {
     try {
       var userCollection = await firestore.collection('users').get();
       bool isFound = false;
+      String selectedPhoneNum = selectContact.phones[0].number.replaceAll(
+        ' ',
+        '',
+      );
+      selectedPhoneNum = selectedPhoneNum.replaceAll(
+        '(',
+        '',
+      );
+      selectedPhoneNum = selectedPhoneNum.replaceAll(
+        ')',
+        '',
+      );
+      selectedPhoneNum = selectedPhoneNum.replaceAll(
+        '-',
+        '',
+      );
+      selectedPhoneNum = selectedPhoneNum.replaceAll(
+        '_',
+        '',
+      );
 
       for (var document in userCollection.docs) {
         var userData = UserModel.fromMap(document.data());
         // print(selectContact.phones[0].number);
-        String selectedPhoneNum = selectContact.phones[0].number.replaceAll(
-          ' ',
-          '',
-        );
-        selectedPhoneNum = selectContact.phones[0].number.replaceAll(
-          '(',
-          '',
-        );
-        selectedPhoneNum = selectContact.phones[0].number.replaceAll(
-          ')',
-          '',
-        );
-        selectedPhoneNum = selectContact.phones[0].number.replaceAll(
-          '-',
-          '',
-        );
+
+        print(selectedPhoneNum);
 
         if (selectedPhoneNum == userData.phoneNumber) {
           isFound = true;
