@@ -33,13 +33,11 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
   // int following = 0;
   // int followers = 0;
   int tempFollowing = 0;
-  int tempFollowers = 0;
 
   @override
   void initState() {
     tempFollowing = widget.following;
-    tempFollowers = widget.followers;
-    super.initState();
+
     super.initState();
     checkIfLikedOrNot();
   }
@@ -90,16 +88,14 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
 
   void addUserToFavorit() async {
     if (!isLiked) {
-      if (widget.followers == tempFollowers) {
-        setState(() {
-          tempFollowers++;
-        });
-      }
+      setState(() {
+        tempFollowing++;
+      });
 
       await FirebaseFirestore.instance
           .collection('users')
           .doc(FirebaseAuth.instance.currentUser!.uid)
-          .collection('following')
+          .collection('followers')
           .doc(widget.selectUser.uid)
           .set(
             widget.selectUser.toMap(),
@@ -107,29 +103,28 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
       await FirebaseFirestore.instance
           .collection('users')
           .doc(widget.selectUser.uid)
-          .collection('followers')
+          .collection('following')
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .set(
             widget.selectUser.toMap(),
           );
     } else {
-      if (widget.followers != tempFollowers) {
-        setState(() {
-          tempFollowers--;
-        });
-      }
+      setState(() {
+        tempFollowing--;
+      });
+
       // });
 
       await FirebaseFirestore.instance
           .collection('users')
           .doc(FirebaseAuth.instance.currentUser!.uid)
-          .collection('following')
+          .collection('followers')
           .doc(widget.selectUser.uid)
           .delete();
       await FirebaseFirestore.instance
           .collection('users')
           .doc(widget.selectUser.uid)
-          .collection('followers')
+          .collection('following')
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .delete();
     }
@@ -297,7 +292,7 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
                                           fontWeight: FontWeight.w300,
                                           fontSize: 25,
                                           color: white),
-                                      tempFollowers.toString()),
+                                      widget.followers.toString()),
                                 ),
                                 const SizedBox(
                                   width: 40,
