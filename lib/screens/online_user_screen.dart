@@ -225,14 +225,14 @@ class _MyCardState extends State<MyCard> {
                             const SizedBox(width: 2),
                             Padding(
                               padding: const EdgeInsets.only(top: 5),
-                              child: const Text(
+                              child: Text(
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       fontFamily: "yknir",
                                       fontWeight: FontWeight.w300,
                                       fontSize: 15,
                                       color: white),
-                                  "25k"),
+                                  widget.user.following.toString()),
                             ),
                             Expanded(child: Container()),
                             CircleAvatar(
@@ -248,14 +248,14 @@ class _MyCardState extends State<MyCard> {
                             const SizedBox(width: 2),
                             Padding(
                               padding: const EdgeInsets.only(top: 5),
-                              child: const Text(
+                              child: Text(
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       fontFamily: "yknir",
                                       fontWeight: FontWeight.w300,
                                       fontSize: 15,
                                       color: white),
-                                  "25k"),
+                                  widget.user.followers.toString()),
                             ),
                           ],
                         ),
@@ -277,14 +277,14 @@ class _MyCardState extends State<MyCard> {
             ), // Use the fullName property of each item
           ),
           SizedBox(height: 5),
-          const Text(
+          Text(
               textAlign: TextAlign.center,
               style: TextStyle(
                   fontFamily: "yknir",
                   fontWeight: FontWeight.w300,
                   fontSize: 15,
                   color: grayL1),
-              "Elena Johanson"),
+              widget.user.name),
           SizedBox(height: 10)
         ],
       ),

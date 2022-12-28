@@ -43,36 +43,6 @@ class _FollowPageState extends State<FollowPage> {
     });
   }
 
-  // Stream<List<UserModel>> getonlinesfollowingUser() {
-  //   return FirebaseFirestore.instance
-  //       .collection('users')
-  //       .snapshots()
-  //       .map((event) {
-  //     for (var doc in event.docs) {
-  //       allUser.add(UserModel.fromMap(doc.data()));
-  //     }
-  //     for (var item in followingList) {
-  //       for (var element in allUser) {
-  //         if (element.uid == item.uid) {
-  //           onlineList.add(element);
-  //           print(element.uid);
-  //         }
-  //       }
-  //     }
-
-  //     return onlineList;
-  //   });
-  // }
-
-  // Future getAllUserData() async {
-  //   FirebaseFirestore.instance.collection('users').snapshots().map((event) {
-  //     for (var doc in event.docs) {
-  //       man.add(UserModel.fromMap(doc.data()));
-  //     }
-  //   });
-  //   print(man);
-  // }
-
   Stream<List<UserModel>> getfollowingUser() {
     return FirebaseFirestore.instance
         .collection('users')

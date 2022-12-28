@@ -92,6 +92,8 @@ class AuthRepository {
           isOnline: true,
           rVChat: false,
           phoneNumber: auth.currentUser!.phoneNumber!,
+          following: 0,
+          followers: 0,
           groupId: []);
       await firestore.collection('users').doc(uid).set(user.toMap());
       Navigator.pop(context);
