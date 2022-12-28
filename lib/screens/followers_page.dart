@@ -36,6 +36,35 @@ class _FollowPageState extends State<FollowPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xff6c5dd2),
+      appBar: AppBar(
+        elevation: 0,
+        titleSpacing: 0,
+        backgroundColor: pinkL1,
+        automaticallyImplyLeading: false,
+        title: Row(
+          children: const [
+            SizedBox(
+              width: 15,
+            ),
+            Text(
+              "My Favorite",
+              style: TextStyle(
+                fontSize: 25,
+                fontFamily: "yknir",
+                fontWeight: FontWeight.w300,
+              ),
+            ),
+          ],
+        ),
+        centerTitle: false,
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.more_vert),
+          ),
+        ],
+      ),
       body: StreamBuilder<List<UserModel>>(
         stream: getfollowingUser(),
         builder: (context, snapshot) {
@@ -52,68 +81,82 @@ class _FollowPageState extends State<FollowPage> {
           final double itemWidth = size.width / 2;
 
           if (users.isNotEmpty) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 50,
-              ),
-              child: Column(
-                children: [
-                  Container(
-                    height: 120,
-                    child: ListView.builder(
-                        padding: const EdgeInsets.only(left: 10),
-                        scrollDirection: Axis.horizontal,
-                        itemCount: users.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          if (users[index].isOnline == true) {
-                            return Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Column(
-                                children: [
-                                  CircleAvatar(
-                                    radius: 35,
-                                    backgroundImage:
-                                        NetworkImage(users[index].profilePic),
-                                  ),
-                                  const SizedBox(
-                                    height: 6,
-                                  ),
-                                  Text(
-                                    users[index].name,
-                                    style: const TextStyle(
-                                        color: Colors.blueGrey,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600),
-                                  ),
-                                ],
+            return Column(
+              children: [
+                SizedBox(
+                  height: 90,
+                  child: ListView.builder(
+                      padding: const EdgeInsets.only(left: 10),
+                      scrollDirection: Axis.horizontal,
+                      itemCount: users.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Padding(
+                          padding: const EdgeInsets.fromLTRB(5, 0, 5, 5),
+                          child: Column(
+                            children: [
+                              CircleAvatar(
+                                radius: 32,
+                                backgroundColor: white,
+                                child: CircleAvatar(
+                                  radius: 30,
+                                  backgroundImage:
+                                      NetworkImage(users[index].profilePic),
+                                ),
                               ),
-                            );
-                          } else {
-                            return Container();
-                          }
-                        }),
-                  ),
-                  GridView(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      childAspectRatio: (itemWidth / itemHeight),
-                      crossAxisSpacing: 8,
-                      mainAxisSpacing: 8,
-                    ),
-                    primary: false,
-                    shrinkWrap: true,
-                    children: List<Widget>.generate(
-                        users.length, // same length as the data
-                        (index) {
-                      return MyCard(
-                        user: users[index],
-                      );
+                              const SizedBox(height: 5),
+                              const Text(
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontFamily: "yknir",
+                                      fontWeight: FontWeight.w300,
+                                      fontSize: 15,
+                                      color: white),
+                                  "Fr Kalani"),
+                            ],
+                          ),
+                        );
+                      }),
+                ),
+                Expanded(
+                  child: Container(
+                    decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(30.0),
+                          topRight: Radius.circular(30.0),
+                        ),
+                        color: whiteW1),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const SizedBox(height: 10),
+                        Padding(
+                          padding: EdgeInsets.all(10),
+                          child: GridView(
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              childAspectRatio: 0.5,
+                              crossAxisSpacing: 8,
+                              mainAxisSpacing: 8,
+                            ),
+                            primary: false,
+                            shrinkWrap: true,
+                            children: List<Widget>.generate(
+                                users.length, // same length as the data
+                                (index) {
+                              return MyCard(
+                                user: users[index],
+                              );
 
-                      //gridViewTile(recipesList, index);
-                    }),
+                              //gridViewTile(recipesList, index);
+                            }),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
-                ],
-              ),
+                ),
+              ],
             );
           } else {
             return const Center(
@@ -161,69 +204,114 @@ class _MyCardState extends State<MyCard> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: () {
         calculateFollow();
       },
-      child: Container(
-        color: const Color.fromARGB(255, 239, 127, 107),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Padding(
-                padding: const EdgeInsets.fromLTRB(0, 20, 0, 10),
-                child: CircleAvatar(
-                  radius: 75,
-                  backgroundColor: pinkL2,
-                  child: CircleAvatar(
-                    backgroundImage: NetworkImage(
-                      widget.user.profilePic,
-                      // info[index]['profilePic'].toString(),
-                    ),
-                    radius: 70,
+      child: Column(
+        children: [
+          Container(
+            width: (size.width / 2),
+            height: (size.width / 2),
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+              image: DecorationImage(
+                  image: NetworkImage(
+                    widget.user.profilePic,
+                    // info[index]['profilePic'].toString(),
                   ),
-                )),
-            Text(
-              widget.user.name,
-              maxLines: 2,
-              overflow: TextOverflow.fade,
-              style: const TextStyle(
-                  color: Colors.white, fontWeight: FontWeight.bold),
+                  fit: BoxFit.cover),
             ),
-            const SizedBox(
-              height: 5,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+            child: Stack(
               children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 8, 8),
-                  child: SizedBox(
-                    height: 40,
-                    width: 40,
-                    child: IconButton(
-                      onPressed: () {
-                        setState(() {
-                          // pressAttention = !pressAttention;
-                          // widget._deleteDoc(recipe: widget.recipe);
-
-                          /*
-                          widget._saveRecipeToUserSubcollection(
-                              recipe: widget.recipe);
-                              */
-                        });
-                      },
-                      icon: const Icon(Icons.abc
-
-                          //Color.fromARGB(255, 239, 61, 100),
-                          ),
-                    ),
-                  ),
-                )
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Expanded(child: Container()),
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(0),
+                          topRight: Radius.circular(0),
+                          bottomRight: Radius.circular(10.0),
+                          bottomLeft: Radius.circular(10.0),
+                        ),
+                        gradient: LinearGradient(
+                            //=> Background Linear Gradient
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [grayL1.withOpacity(0), grayL1]),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(5, 15, 5, 5),
+                        child: Row(
+                          children: [
+                            CircleAvatar(
+                              backgroundColor: white.withOpacity(0.3),
+                              radius: 10,
+                              child: Image.asset(
+                                "assets/icons/user_chat.png",
+                                fit: BoxFit.cover,
+                                color: white,
+                                scale: 8,
+                              ),
+                            ),
+                            const SizedBox(width: 2),
+                            const Padding(
+                              padding: EdgeInsets.only(top: 5),
+                              child: Text(
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontFamily: "yknir",
+                                      fontWeight: FontWeight.w300,
+                                      fontSize: 15,
+                                      color: white),
+                                  "25k"),
+                            ),
+                            Expanded(child: Container()),
+                            CircleAvatar(
+                              backgroundColor: white.withOpacity(0.3),
+                              radius: 10,
+                              child: Image.asset(
+                                "assets/icons/like_icon2.png",
+                                fit: BoxFit.cover,
+                                color: white,
+                                scale: 8,
+                              ),
+                            ),
+                            const SizedBox(width: 2),
+                            const Padding(
+                              padding: EdgeInsets.only(top: 5),
+                              child: Text(
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontFamily: "yknir",
+                                      fontWeight: FontWeight.w300,
+                                      fontSize: 15,
+                                      color: white),
+                                  "25k"),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               ],
-            )
-          ],
-        ), // Use the fullName property of each item
+            ), // Use the fullName property of each item
+          ),
+          const SizedBox(height: 5),
+          const Text(
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontFamily: "yknir",
+                  fontWeight: FontWeight.w300,
+                  fontSize: 15,
+                  color: grayL1),
+              "Elena Johanson"),
+          const SizedBox(height: 10)
+        ],
       ),
     );
   }
