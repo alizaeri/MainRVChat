@@ -16,6 +16,63 @@ class FollowPage extends StatefulWidget {
 }
 
 class _FollowPageState extends State<FollowPage> {
+  List<UserModel> onlineList = [];
+  List<UserModel> man = [];
+
+  @override
+  void initState() {
+    getfollowingUser();
+
+    super.initState();
+  }
+
+  Stream<List<UserModel>> getUsersStream() {
+    return FirebaseFirestore.instance
+        .collection('users')
+        .snapshots()
+        .map((event) {
+      List<UserModel> allUser = [];
+
+      for (var document in event.docs) {
+        if (document['isOnline'] == true) {
+          allUser.add(UserModel.fromMap(document.data()));
+        }
+      }
+
+      return allUser;
+    });
+  }
+
+  // Stream<List<UserModel>> getonlinesfollowingUser() {
+  //   return FirebaseFirestore.instance
+  //       .collection('users')
+  //       .snapshots()
+  //       .map((event) {
+  //     for (var doc in event.docs) {
+  //       allUser.add(UserModel.fromMap(doc.data()));
+  //     }
+  //     for (var item in followingList) {
+  //       for (var element in allUser) {
+  //         if (element.uid == item.uid) {
+  //           onlineList.add(element);
+  //           print(element.uid);
+  //         }
+  //       }
+  //     }
+
+  //     return onlineList;
+  //   });
+  // }
+
+  // Future getAllUserData() async {
+  //   FirebaseFirestore.instance.collection('users').snapshots().map((event) {
+  //     for (var doc in event.docs) {
+  //       man.add(UserModel.fromMap(doc.data()));
+  //     }
+  //   });
+  //   print(man);
+  // }
+
   Stream<List<UserModel>> getfollowingUser() {
     return FirebaseFirestore.instance
         .collection('users')
@@ -24,9 +81,9 @@ class _FollowPageState extends State<FollowPage> {
         .snapshots()
         .map((event) {
       List<UserModel> followingList = [];
-
       for (var doc in event.docs) {
         followingList.add(UserModel.fromMap(doc.data()));
+        print(doc['uid']);
       }
 
       return followingList;
@@ -60,37 +117,53 @@ class _FollowPageState extends State<FollowPage> {
                 children: [
                   Container(
                     height: 120,
-                    child: ListView.builder(
-                        padding: const EdgeInsets.only(left: 10),
-                        scrollDirection: Axis.horizontal,
-                        itemCount: users.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          if (users[index].isOnline == true) {
-                            return Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Column(
-                                children: [
-                                  CircleAvatar(
-                                    radius: 35,
-                                    backgroundImage:
-                                        NetworkImage(users[index].profilePic),
-                                  ),
-                                  const SizedBox(
-                                    height: 6,
-                                  ),
-                                  Text(
-                                    users[index].name,
-                                    style: const TextStyle(
-                                        color: Colors.blueGrey,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600),
-                                  ),
-                                ],
-                              ),
-                            );
-                          } else {
-                            return Container();
+                    child: StreamBuilder<List<UserModel>>(
+                        stream: getUsersStream(),
+                        builder: (context, snapshot2) {
+                          if (snapshot2.connectionState ==
+                              ConnectionState.waiting) {
+                            return const LoaderT();
                           }
+                          List<UserModel> usersOnlines = snapshot2.data!;
+                          List<UserModel> finallist = [];
+
+                          for (var document in usersOnlines) {
+                            for (var item in users) {
+                              if (document.uid == item.uid &&
+                                  item.isOnline == true) {
+                                finallist.add(document);
+                              }
+                            }
+                          }
+
+                          return ListView.builder(
+                              padding: const EdgeInsets.only(left: 10),
+                              scrollDirection: Axis.horizontal,
+                              itemCount: finallist.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Column(
+                                    children: [
+                                      CircleAvatar(
+                                        radius: 35,
+                                        backgroundImage: NetworkImage(
+                                            finallist[index].profilePic),
+                                      ),
+                                      const SizedBox(
+                                        height: 6,
+                                      ),
+                                      Text(
+                                        finallist[index].name,
+                                        style: const TextStyle(
+                                            color: Colors.blueGrey,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              });
                         }),
                   ),
                   GridView(

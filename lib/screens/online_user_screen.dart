@@ -26,7 +26,6 @@ class _OnlineUsersScreenState extends State<OnlineUsersScreen> {
           users.add(UserModel.fromMap(document.data()));
         }
       }
-      print(users);
 
       return users;
     });

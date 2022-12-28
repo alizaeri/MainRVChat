@@ -150,21 +150,6 @@ class _SelectContactsScreenState extends ConsumerState<SelectContactsScreen> {
                                       fontSize: 18,
                                     ),
                                   ),
-                                  leading: contact.photo == null
-                                      ? null
-                                      : CircleAvatar(
-                                          radius: 32,
-                                          backgroundColor: grayL1,
-                                          child: CircleAvatar(
-                                            radius: 31,
-                                            backgroundColor: white,
-                                            child: CircleAvatar(
-                                              backgroundImage:
-                                                  MemoryImage(contact.photo!),
-                                              radius: 30,
-                                            ),
-                                          ),
-                                        ),
                                 ),
                               ),
                             );
@@ -185,21 +170,6 @@ class _SelectContactsScreenState extends ConsumerState<SelectContactsScreen> {
                                       fontSize: 18,
                                     ),
                                   ),
-                                  leading: contact.photo == null
-                                      ? null
-                                      : CircleAvatar(
-                                          radius: 32,
-                                          backgroundColor: grayL1,
-                                          child: CircleAvatar(
-                                            radius: 31,
-                                            backgroundColor: white,
-                                            child: CircleAvatar(
-                                              backgroundImage:
-                                                  MemoryImage(contact.photo!),
-                                              radius: 30,
-                                            ),
-                                          ),
-                                        ),
                                 ),
                               ),
                             );
