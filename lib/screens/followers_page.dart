@@ -62,6 +62,7 @@ class _FollowPageState extends State<FollowPage> {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: const Color(0xff6c5dd2),
       appBar: AppBar(
@@ -107,57 +108,55 @@ class _FollowPageState extends State<FollowPage> {
           if (users.isNotEmpty) {
             return Column(
               children: [
-                SizedBox(
-                  height: 90,
-                  child: StreamBuilder<List<UserModel>>(
-                      stream: getUsersStream(),
-                      builder: (context, snapshot2) {
-                        if (snapshot2.connectionState ==
-                            ConnectionState.waiting) {
-                          return const LoaderT();
+                StreamBuilder<List<UserModel>>(
+                  stream: getUsersStream(),
+                  builder: (context, snapshot2) {
+                    if (snapshot2.connectionState == ConnectionState.waiting) {
+                      return const LoaderT();
+                    }
+                    List<UserModel> usersOnlines = snapshot2.data!;
+                    List<UserModel> finallist = [];
+                    for (var document in usersOnlines) {
+                      for (var item in users) {
+                        if (document.uid == item.uid && item.isOnline == true) {
+                          finallist.add(document);
                         }
-                        List<UserModel> usersOnlines = snapshot2.data!;
-                        List<UserModel> finallist = [];
-                        for (var document in usersOnlines) {
-                          for (var item in users) {
-                            if (document.uid == item.uid &&
-                                item.isOnline == true) {
-                              finallist.add(document);
-                            }
-                          }
-                        }
-
-                        return ListView.builder(
-                            padding: const EdgeInsets.only(left: 10),
-                            scrollDirection: Axis.horizontal,
-                            itemCount: finallist.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(5.0, 0, 5.0, 5.0),
-                                child: Column(
-                                  children: [
-                                    CircleAvatar(
-                                      radius: 32,
-                                      backgroundColor: white,
-                                      child: CircleAvatar(
-                                        radius: 30,
-                                        backgroundImage: NetworkImage(
-                                            finallist[index].profilePic),
-                                      ),
+                      }
+                    }
+                    return SizedBox(
+                      height: 90,
+                      child: ListView.builder(
+                          padding: const EdgeInsets.only(left: 10),
+                          scrollDirection: Axis.horizontal,
+                          itemCount: finallist.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return Padding(
+                              padding:
+                                  const EdgeInsets.fromLTRB(5.0, 0, 5.0, 5.0),
+                              child: Column(
+                                children: [
+                                  CircleAvatar(
+                                    radius: 32,
+                                    backgroundColor: white,
+                                    child: CircleAvatar(
+                                      radius: 30,
+                                      backgroundImage: NetworkImage(
+                                          finallist[index].profilePic),
                                     ),
-                                    Text(
-                                      finallist[index].name,
-                                      style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w300),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            });
-                      }),
+                                  ),
+                                  Text(
+                                    finallist[index].name,
+                                    style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w300),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }),
+                    );
+                  },
                 ),
                 Expanded(
                   child: Container(
@@ -201,8 +200,25 @@ class _FollowPageState extends State<FollowPage> {
               ],
             );
           } else {
-            return const Center(
-              child: Text('there is no favorite user'),
+            return Column(
+              children: [
+                Expanded(
+                  child: Container(
+                    width: size.width,
+                    decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(30.0),
+                          topRight: Radius.circular(30.0),
+                        ),
+                        color: whiteW1),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [Text('there is no favorite user')],
+                    ),
+                  ),
+                ),
+              ],
             );
           }
         },
@@ -344,14 +360,15 @@ class _MyCardState extends State<MyCard> {
             ), // Use the fullName property of each item
           ),
           const SizedBox(height: 5),
-          const Text(
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontFamily: "yknir",
-                  fontWeight: FontWeight.w300,
-                  fontSize: 15,
-                  color: grayL1),
-              "Elena Johanson"),
+          Text(
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+                fontFamily: "yknir",
+                fontWeight: FontWeight.w300,
+                fontSize: 15,
+                color: grayL1),
+            widget.user.name,
+          ),
           const SizedBox(height: 10)
         ],
       ),
