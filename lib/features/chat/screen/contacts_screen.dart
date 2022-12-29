@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:rvchat/Mycolors.dart';
 import 'package:rvchat/colors.dart';
 import 'package:rvchat/colors.dart';
+import 'package:rvchat/features/auth/screens/login_screen.dart';
 
 import 'package:rvchat/features/chat/widget/contacts_list.dart';
 import 'package:rvchat/features/select_contacts/screens/select_contact_screen.dart';
@@ -115,6 +116,8 @@ class _ContactsScreenState extends State<ContactsScreen> {
                     case 1:
                       {
                         FirebaseAuth.instance.signOut();
+                        Navigator.pushNamed(context, LoginScreen.routeName);
+
                         break;
                       }
                   }

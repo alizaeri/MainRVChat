@@ -122,6 +122,40 @@ class AuthRepository {
         );
   }
 
+  Stream<List<UserModel>> allOnlineUsers() {
+    return FirebaseFirestore.instance
+        .collection('users')
+        .snapshots()
+        .map((event) {
+      List<UserModel> users = [];
+      for (var document in event.docs) {
+        if (document['isOnline'] == true) {
+          print('online find ++++++++++++++');
+          users.add(UserModel.fromMap(document.data()));
+        }
+      }
+
+      return users;
+    });
+  }
+
+  Stream<List<UserModel>> allLiveUsers() {
+    return FirebaseFirestore.instance
+        .collection('users')
+        .snapshots()
+        .map((event) {
+      List<UserModel> users = [];
+      for (var document in event.docs) {
+        if (document['rVChat'] == true) {
+          print('live find ++++++++++++++');
+          users.add(UserModel.fromMap(document.data()));
+        }
+      }
+
+      return users;
+    });
+  }
+
   void setUserState(bool isOnline) async {
     await firestore.collection('users').doc(auth.currentUser!.uid).update({
       'isOnline': isOnline,
@@ -132,6 +166,5 @@ class AuthRepository {
     await firestore.collection('users').doc(auth.currentUser!.uid).update({
       'rVChat': rVChat,
     });
-    print('????? marhaleye dovom');
   }
 }
