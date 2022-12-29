@@ -13,7 +13,9 @@ import 'package:rvchat/models/user_model.dart';
 
 class UserInformationEditPage extends ConsumerStatefulWidget {
   static const String routeName = '/user-information-edit';
-  const UserInformationEditPage({Key? key}) : super(key: key);
+  final String country;
+  const UserInformationEditPage({Key? key, required this.country})
+      : super(key: key);
 
   @override
   ConsumerState<UserInformationEditPage> createState() =>
@@ -48,11 +50,10 @@ class _UserInformationEditPageState
     if (name.isNotEmpty) {
       ref
           .read(authControllerProvider)
-          .saveUserDataToFirebase(context, name, image, defPic);
+          .saveUserDataToFirebase(context, name, image, defPic, widget.country);
     } else {
-      ref
-          .read(authControllerProvider)
-          .saveUserDataToFirebase(context, defName, image, defPic);
+      ref.read(authControllerProvider).saveUserDataToFirebase(
+          context, defName, image, defPic, widget.country);
     }
   }
 
@@ -240,7 +241,7 @@ class _UserInformationEditPageState
                                         fontWeight: FontWeight.w400,
                                         fontSize: 18,
                                         color: white),
-                                    "If you get Verification con from\n RVChat please inter and verify you cod"),
+                                    "Shange your name"),
                                 Image.asset(
                                   "assets/images/lineBg.png",
                                   fit: BoxFit.cover,
@@ -296,7 +297,7 @@ class _UserInformationEditPageState
                                   fontWeight: FontWeight.w300,
                                   fontSize: 18,
                                   color: grayL1),
-                              "If you get Verification con from\n RVChat please inter and verify you cod"),
+                              "Save to your profile"),
                           const SizedBox(height: 25),
                           //==> CONTINUE Button
                         ]),

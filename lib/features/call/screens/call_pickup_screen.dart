@@ -2,9 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rvchat/colors.dart';
+import 'package:rvchat/common/widgets/loaderW.dart';
+import 'package:rvchat/features/auth/controller/auth_controller.dart';
 import 'package:rvchat/features/call/controller/call_controller.dart';
 import 'package:rvchat/features/call/screens/call_screen.dart';
+import 'package:rvchat/features/landing/screens/landing_screen.dart';
 import 'package:rvchat/models/call.dart';
+import 'package:rvchat/widgets/error.dart';
 
 class CallPickupScreen extends ConsumerWidget {
   final Widget scaffold;
@@ -15,7 +19,20 @@ class CallPickupScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final size = MediaQuery.of(context).size;
+    return localWidget(scaffold: scaffold);
+  }
+}
+
+class localWidget extends ConsumerWidget {
+  const localWidget({
+    Key? key,
+    required this.scaffold,
+  }) : super(key: key);
+
+  final Widget scaffold;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
     return StreamBuilder<DocumentSnapshot>(
       stream: ref.watch(callControllerProvider).callStream,
       builder: (context, snapshot) {

@@ -57,10 +57,9 @@ class ProfilePage extends ConsumerWidget {
                             children: [
                               IconButton(
                                 onPressed: () {
-                                  Navigator.pushNamed(
-                                    context,
-                                    UserInformationEditPage.routeName,
-                                  );
+                                  Navigator.pushNamed(context,
+                                      UserInformationEditPage.routeName,
+                                      arguments: snapshot.data!.country);
                                 },
                                 icon: Image.asset(
                                   "assets/icons/edit.png",
@@ -103,7 +102,7 @@ class ProfilePage extends ConsumerWidget {
                             fit: BoxFit.cover,
                             scale: 5,
                           ),
-                          const Padding(
+                          Padding(
                             padding: EdgeInsets.fromLTRB(2, 10, 0, 0),
                             child: Text(
                                 style: TextStyle(
@@ -111,7 +110,7 @@ class ProfilePage extends ConsumerWidget {
                                     fontWeight: FontWeight.w300,
                                     fontSize: 25,
                                     color: white),
-                                "105k"),
+                                snapshot.data!.followers.toString()),
                           ),
                           const SizedBox(
                             width: 40,
@@ -121,7 +120,7 @@ class ProfilePage extends ConsumerWidget {
                             fit: BoxFit.cover,
                             scale: 5,
                           ),
-                          const Padding(
+                          Padding(
                             padding: EdgeInsets.fromLTRB(5, 10, 0, 0),
                             child: Text(
                                 style: TextStyle(
@@ -129,7 +128,7 @@ class ProfilePage extends ConsumerWidget {
                                     fontWeight: FontWeight.w300,
                                     fontSize: 25,
                                     color: white),
-                                "25k"),
+                                snapshot.data!.following.toString()),
                           ),
                         ],
                       ),
@@ -176,7 +175,7 @@ class ProfilePage extends ConsumerWidget {
                                 fontWeight: FontWeight.w100,
                                 fontSize: size.width * 0.1,
                                 color: grayL1),
-                            "Iran"),
+                            snapshot.data!.country),
                         const Divider(),
                         const Text(
                             style: TextStyle(

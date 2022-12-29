@@ -315,7 +315,7 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
                                           fontWeight: FontWeight.w300,
                                           fontSize: 25,
                                           color: white),
-                                      widget.followers.toString()),
+                                      snapshot.data!.following.toString()),
                                 ),
                                 const SizedBox(
                                   width: 40,
@@ -346,7 +346,8 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
                                           fontWeight: FontWeight.w300,
                                           fontSize: 25,
                                           color: white),
-                                      tempFollowing.toString()),
+                                      snapshot.data!.followers.toString()),
+                                  // tempFollowing.toString()),
                                 ),
                               ],
                             ),
@@ -394,7 +395,7 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
                                       fontWeight: FontWeight.w100,
                                       fontSize: size.width * 0.1,
                                       color: grayL1),
-                                  "Iran"),
+                                  snapshot.data!.country),
                               const SizedBox(height: 20),
                               Padding(
                                 padding:

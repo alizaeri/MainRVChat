@@ -26,6 +26,7 @@ class _SelectContactsScreenState extends ConsumerState<SelectContactsScreen> {
   final TextEditingController _controller = TextEditingController();
   List<String> allList = [];
   String searchContact = '';
+  bool searchToggle = false;
 
   @override
   void initState() {
@@ -85,7 +86,11 @@ class _SelectContactsScreenState extends ConsumerState<SelectContactsScreen> {
         centerTitle: false,
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              setState(() {
+                searchToggle = !searchToggle;
+              });
+            },
             icon: Image.asset(
               "assets/icons/search.png",
               fit: BoxFit.cover,
@@ -109,20 +114,22 @@ class _SelectContactsScreenState extends ConsumerState<SelectContactsScreen> {
                       primaryColor: Colors.redAccent,
                       primaryColorDark: Colors.red,
                     ),
-                    child: TextField(
-                      controller: _controller,
-                      decoration: const InputDecoration(
-                        prefixIcon: Icon(Icons.search),
-                        hintText: 'Search Contact',
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            width: 10,
-                            color: Color.fromARGB(255, 255, 0, 0),
-                          ),
-                        ),
-                      ),
-                      // onChanged: filterContact,
-                    ),
+                    child: searchToggle
+                        ? TextField(
+                            controller: _controller,
+                            decoration: const InputDecoration(
+                              prefixIcon: Icon(Icons.search),
+                              hintText: 'Search Contact',
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  width: 2,
+                                  color: Color.fromARGB(255, 255, 255, 255),
+                                ),
+                              ),
+                            ),
+                            // onChanged: filterContact,
+                          )
+                        : Container(),
                   ),
                 ),
                 Expanded(

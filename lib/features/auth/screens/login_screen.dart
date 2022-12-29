@@ -41,12 +41,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   bool fisClick = false;
 
-  void sendPhoneNumber() {
+  void sendPhoneNumber(String countryName) {
     String phoneNumber = phoneController.text.trim();
     if (phoneNumber.isNotEmpty && country != null) {
-      ref
-          .read(authControllerProvider)
-          .singInWithPhone(context, '+${country!.phoneCode}$phoneNumber');
+      ref.read(authControllerProvider).singInWithPhone(
+          context, '+${country!.phoneCode}$phoneNumber', countryName);
     } else {
       showSnackBar(context: context, content: "Fill out all the feilds");
       fisClick = false;
@@ -260,7 +259,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                               //////// HERE
                               ),
                           onPressed: () {
-                            sendPhoneNumber();
+                            print(country!.name);
+                            sendPhoneNumber(country!.name);
                             setState(() {
                               fisClick = true;
                             });
