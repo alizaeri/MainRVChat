@@ -42,7 +42,7 @@ class _UserInformationScreenState extends ConsumerState<UserInformationScreen> {
     );
     String name = nameController.text.trim();
     String defPic =
-        'https://firebasestorage.googleapis.com/v0/b/mainrvchat.appspot.com/o/avatar.png?alt=media&token=6ac19ca3-c79d-4d64-9ee0-53c673440cbc';
+        'https://firebasestorage.googleapis.com/v0/b/mainrvchat.appspot.com/o/avatar.png?alt=media&token=8f42e74c-ac50-453e-9731-c51a1a4b0f4f';
     if (name.isNotEmpty) {
       ref
           .read(authControllerProvider)
