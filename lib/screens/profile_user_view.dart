@@ -40,24 +40,6 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
     super.initState();
   }
 
-  // void calculateFollow() async {
-  //   QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-  //       .collection('users')
-  //       .doc(FirebaseAuth.instance.currentUser!.uid)
-  //       .collection('following')
-  //       .get();
-
-  //   following = querySnapshot.docs.length;
-  //   tempFollowers = following;
-  //   QuerySnapshot querySnapshot2 = await FirebaseFirestore.instance
-  //       .collection('users')
-  //       .doc(FirebaseAuth.instance.currentUser!.uid)
-  //       .collection('following')
-  //       .get();
-  //   followers = querySnapshot2.docs.length;
-  //   tempFollowing = followers;
-  // }
-
   Stream<UserModel> checkIfLikedOrNot() {
     print('!!!!! ejra shod');
     return FirebaseFirestore.instance
@@ -194,25 +176,6 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .update({'following': following - 1});
     }
-    // QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-    //     .collection('users')
-    //     .doc(widget.selectUser.uid)
-    //     .collection('following')
-    //     .get();
-
-    // setState(() {
-    //   following = querySnapshot.docs.length;
-    // });
-
-    // QuerySnapshot querySnapshot2 = await FirebaseFirestore.instance
-    //     .collection('users')
-    //     .doc(widget.selectUser.uid)
-    //     .collection('followers')
-    //     .get();
-
-    // setState(() {
-    //   followers = querySnapshot2.docs.length;
-    // });
   }
 
   @override
@@ -352,7 +315,7 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
                                           fontWeight: FontWeight.w300,
                                           fontSize: 25,
                                           color: white),
-                                      widget.followers.toString()),
+                                      snapshot.data!.following.toString()),
                                 ),
                                 const SizedBox(
                                   width: 40,
@@ -383,7 +346,8 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
                                           fontWeight: FontWeight.w300,
                                           fontSize: 25,
                                           color: white),
-                                      tempFollowing.toString()),
+                                      snapshot.data!.followers.toString()),
+                                  // tempFollowing.toString()),
                                 ),
                               ],
                             ),
@@ -431,7 +395,7 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
                                       fontWeight: FontWeight.w100,
                                       fontSize: size.width * 0.1,
                                       color: grayL1),
-                                  "Iran"),
+                                  snapshot.data!.country),
                               const SizedBox(height: 20),
                               Padding(
                                 padding:

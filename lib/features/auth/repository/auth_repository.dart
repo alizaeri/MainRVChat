@@ -18,7 +18,8 @@ class AuthRepository {
   final FirebaseAuth auth;
   final FirebaseFirestore firestore;
   AuthRepository({required this.auth, required this.firestore});
-  void signInWithPhone(BuildContext context, String phoneNumber) async {
+  void signInWithPhone(
+      BuildContext context, String phoneNumber, String country) async {
     try {
       await auth.verifyPhoneNumber(
           phoneNumber: phoneNumber,
@@ -29,8 +30,10 @@ class AuthRepository {
             throw Exception(e.message);
           },
           codeSent: ((String verificationId, int? respondToken) async {
-            Navigator.pushNamed(context, OTPScreen.routeName,
-                arguments: verificationId);
+            Navigator.pushNamed(context, OTPScreen.routeName, arguments: {
+              'verificationId': verificationId,
+              'country': country,
+            }); // country ro beftestam inja
           }),
           codeAutoRetrievalTimeout: (String verificationId) {});
     } on FirebaseAuthException catch (e) {
@@ -38,17 +41,20 @@ class AuthRepository {
     }
   }
 
-  void verifyOTP({
-    required BuildContext context,
-    required String verficationID,
-    required String userOTP,
-  }) async {
+  void verifyOTP(
+      {required BuildContext context,
+      required String verficationID,
+      required String userOTP,
+      required String country}) async {
     try {
       PhoneAuthCredential credential = PhoneAuthProvider.credential(
           verificationId: verficationID, smsCode: userOTP);
       await auth.signInWithCredential(credential);
       Navigator.pushNamedAndRemoveUntil(
-          context, UserInformationScreen.routeName, (route) => false);
+          context,
+          UserInformationScreen.routeName,
+          arguments: country,
+          (route) => false);
     } on FirebaseAuthException catch (e) {
       showSnackBar(context: context, content: e.message!);
     }
@@ -70,7 +76,8 @@ class AuthRepository {
       required File? profilePic,
       required ProviderRef ref,
       required BuildContext context,
-      required defPic}) async {
+      required defPic,
+      required country}) async {
     try {
       String uid = auth.currentUser!.uid;
       String photoUrl =
@@ -94,6 +101,7 @@ class AuthRepository {
           phoneNumber: auth.currentUser!.phoneNumber!,
           following: 0,
           followers: 0,
+          country: country,
           groupId: []);
       await firestore.collection('users').doc(uid).set(user.toMap());
       Navigator.pop(context);

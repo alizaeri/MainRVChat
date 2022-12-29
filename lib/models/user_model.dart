@@ -7,6 +7,7 @@ class UserModel {
   final String phoneNumber;
   final int following;
   final int followers;
+  final String country;
   final List<String> groupId;
   UserModel({
     required this.name,
@@ -17,6 +18,7 @@ class UserModel {
     required this.phoneNumber,
     required this.following,
     required this.followers,
+    required this.country,
     required this.groupId,
   });
 
@@ -30,6 +32,7 @@ class UserModel {
       'phoneNumber': phoneNumber,
       'following': following,
       'followers': followers,
+      'country': country,
       'groupId': groupId,
     };
   }
@@ -44,6 +47,7 @@ class UserModel {
       phoneNumber: map['phoneNumber'] ?? '',
       following: map['following'] ?? 0,
       followers: map['followers'] ?? 0,
+      country: map['country'] ?? '',
       groupId: List<String>.from(map['groupId']),
     );
   }

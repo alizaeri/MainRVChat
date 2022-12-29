@@ -14,19 +14,30 @@ Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
     case LoginScreen.routeName:
       return MaterialPageRoute(builder: (context) => const LoginScreen());
+
     case OTPScreen.routeName:
-      final verificationId = settings.arguments as String;
+      final argument = settings.arguments as Map<String, dynamic>;
+      final String verificationId = argument['verificationId'];
+      final String country = argument['country'];
+
       return MaterialPageRoute(
-          builder: (context) => OTPScreen(
-                verificationId: verificationId,
-              ));
+          builder: (context) =>
+              OTPScreen(verificationId: verificationId, country: country));
+
     case UserInformationScreen.routeName:
+      final String country = settings.arguments as String;
       return MaterialPageRoute(
-          builder: (context) => const UserInformationScreen());
+          builder: (context) => UserInformationScreen(
+                country: country,
+              ));
 
     case UserInformationEditPage.routeName:
+      final String country = settings.arguments as String;
       return MaterialPageRoute(
-          builder: (context) => const UserInformationEditPage());
+          builder: (context) => UserInformationEditPage(
+                country: country,
+              ));
+
     case ProfileUserView.routeName:
       final argument = settings.arguments as Map<String, dynamic>;
       final UserModel user = argument['user'];
@@ -39,9 +50,11 @@ Route<dynamic> generateRoute(RouteSettings settings) {
                 following: following,
                 followers: followers,
               ));
+
     case SelectContactsScreen.routeName:
       return MaterialPageRoute(
           builder: (context) => const SelectContactsScreen());
+
     case MobileChatScreen.routeName:
       final argument = settings.arguments as Map<String, dynamic>;
       final String name = argument['name'];

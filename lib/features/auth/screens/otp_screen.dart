@@ -10,14 +10,18 @@ import 'package:rvchat/features/auth/controller/auth_controller.dart';
 import '../../../colors.dart';
 
 class OTPScreen extends ConsumerWidget {
-  const OTPScreen({Key? key, required this.verificationId}) : super(key: key);
+  const OTPScreen(
+      {Key? key, required this.verificationId, required this.country})
+      : super(key: key);
   static const String routeName = '/otp-screen';
   final String verificationId;
+  final String country;
 
-  void verifyOTP(WidgetRef ref, BuildContext context, String userOTP) {
+  void verifyOTP(
+      WidgetRef ref, BuildContext context, String userOTP, String country) {
     ref
         .read(authControllerProvider)
-        .verifyOTP(context, verificationId, userOTP);
+        .verifyOTP(context, verificationId, userOTP, country);
   }
 
   @override
@@ -158,7 +162,7 @@ class OTPScreen extends ConsumerWidget {
                             onChanged: (val) {
                               if (val.length == 6) {
                                 print("verfing otp");
-                                verifyOTP(ref, context, val.trim());
+                                verifyOTP(ref, context, val.trim(), country);
                               }
                               print("this function was run");
                             },

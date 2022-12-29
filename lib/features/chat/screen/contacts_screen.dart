@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:rvchat/Mycolors.dart';
 import 'package:rvchat/colors.dart';
@@ -15,6 +16,7 @@ class ContactsScreen extends StatefulWidget {
 
 class _ContactsScreenState extends State<ContactsScreen> {
   String searchText = '';
+  bool searchToggle = false;
   final TextEditingController _controller = TextEditingController();
   @override
   void initState() {
@@ -70,7 +72,11 @@ class _ContactsScreenState extends State<ContactsScreen> {
         centerTitle: false,
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              setState(() {
+                searchToggle = !searchToggle;
+              });
+            },
             icon: Image.asset(
               "assets/icons/search.png",
               fit: BoxFit.cover,
@@ -80,7 +86,46 @@ class _ContactsScreenState extends State<ContactsScreen> {
           ),
           IconButton(
             onPressed: () {},
-            icon: const Icon(Icons.more_vert),
+            icon: GestureDetector(
+              child: PopupMenuButton<int>(
+                elevation: 2,
+                color: Color.fromARGB(173, 251, 251, 251),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(25),
+                ),
+                itemBuilder: (context) => [
+                  const PopupMenuItem(
+                    value: 1,
+                    child: Center(
+                      child: Text(
+                        "Sign Out",
+                        style: TextStyle(
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(255, 248, 74, 74),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+                initialValue: 0,
+                onSelected: (value) {
+                  print("clik shod");
+                  switch (value) {
+                    case 1:
+                      {
+                        FirebaseAuth.instance.signOut();
+                        break;
+                      }
+                  }
+                },
+                child: const Icon(
+                  Icons.more_vert,
+                  color: Colors.white,
+                  size: 26,
+                ),
+              ),
+            ),
           ),
         ],
       ),
@@ -96,18 +141,20 @@ class _ContactsScreenState extends State<ContactsScreen> {
           children: [
             Container(
               margin: const EdgeInsets.fromLTRB(16, 16, 16, 16),
-              child: TextField(
-                controller: _controller,
-                decoration: InputDecoration(
-                    prefixIcon: const Icon(
-                      Icons.search,
-                    ),
-                    hintText: 'Search Contact',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(40),
-                      borderSide: const BorderSide(color: pinkL1),
-                    )),
-              ),
+              child: searchToggle
+                  ? TextField(
+                      controller: _controller,
+                      decoration: InputDecoration(
+                          prefixIcon: const Icon(
+                            Icons.search,
+                          ),
+                          hintText: 'Search Contact',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(40),
+                            borderSide: const BorderSide(color: pinkL1),
+                          )),
+                    )
+                  : Container(),
             ),
             Expanded(
               child: ContactsList(searchText),

@@ -9,7 +9,9 @@ import 'package:rvchat/features/auth/controller/auth_controller.dart';
 
 class UserInformationScreen extends ConsumerStatefulWidget {
   static const String routeName = '/user-information';
-  const UserInformationScreen({Key? key}) : super(key: key);
+  final String country;
+  const UserInformationScreen({Key? key, required this.country})
+      : super(key: key);
 
   @override
   ConsumerState<UserInformationScreen> createState() =>
@@ -42,12 +44,9 @@ class _UserInformationScreenState extends ConsumerState<UserInformationScreen> {
     String defPic =
         'https://firebasestorage.googleapis.com/v0/b/mainrvchat.appspot.com/o/avatar.png?alt=media&token=6ac19ca3-c79d-4d64-9ee0-53c673440cbc';
     if (name.isNotEmpty) {
-      ref.read(authControllerProvider).saveUserDataToFirebase(
-            context,
-            name,
-            image,
-            defPic,
-          );
+      ref
+          .read(authControllerProvider)
+          .saveUserDataToFirebase(context, name, image, defPic, widget.country);
     }
   }
 
