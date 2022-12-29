@@ -35,8 +35,6 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
 
   @override
   void initState() {
-    tempFollowing = widget.following;
-
     super.initState();
   }
 

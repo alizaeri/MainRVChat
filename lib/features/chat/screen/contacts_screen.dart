@@ -116,7 +116,12 @@ class _ContactsScreenState extends State<ContactsScreen> {
                     case 1:
                       {
                         FirebaseAuth.instance.signOut();
-                        Navigator.pushNamed(context, LoginScreen.routeName);
+
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => LoginScreen()),
+                            (route) => false);
 
                         break;
                       }

@@ -129,7 +129,7 @@ class AuthRepository {
         .map((event) {
       List<UserModel> users = [];
       for (var document in event.docs) {
-        if (document['isOnline'] == true) {
+        if (document['rVChat'] == true) {
           print('online find ++++++++++++++');
           users.add(UserModel.fromMap(document.data()));
         }
@@ -147,7 +147,6 @@ class AuthRepository {
       List<UserModel> users = [];
       for (var document in event.docs) {
         if (document['rVChat'] == true) {
-          print('live find ++++++++++++++');
           users.add(UserModel.fromMap(document.data()));
         }
       }
