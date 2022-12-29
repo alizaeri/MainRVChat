@@ -36,20 +36,21 @@ class _RandomeVideoChatState extends ConsumerState<RandomeVideoChat>
 
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    allLiveUsers();
   }
 
   @override
   void dispose() async {
     rVChat = false;
+    // ref.read(authControllerProvider).setUserRandomState(false);
+
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
     await FirebaseFirestore.instance
         .collection('users')
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .update({
       'rVChat': rVChat,
     });
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
   }
 
   @override
@@ -67,55 +68,6 @@ class _RandomeVideoChatState extends ConsumerState<RandomeVideoChat>
         ref.read(authControllerProvider).setUserRandomState(false);
         break;
     }
-  }
-
-//   Future<UserModel?> getRandomUserData() async {
-//     var list = await FirebaseFirestore.instance.collection('users').get();
-//     UserModel? user;
-
-//     if (list != null) {
-//       var alldata = list.docs.map((e) => e.fromMap()).toList();
-//       final _random = new Random();
-
-// // generate a random index based on the list length
-// // and use it to retrieve the element
-//     final _random = new Random();
-
-//     }
-//     return user;
-//   }
-  // Stream<List<UserModel>> getAllUserStream() {
-  //   List<UserModel> allUser = [];
-  //   return FirebaseFirestore.instance
-  //       .collection('users')
-  //       .snapshots()
-  //       .map((event) {
-  //     // List<UserModel> allUser = [];
-  //     for (var document in event.docs) {
-  //       allUser.add(UserModel.fromMap(document.data()));
-  //     }
-  //     print(allUser.length);
-  //     return allUser;
-  //   });
-  // }
-
-  Future allLiveUsers() async {
-    return FirebaseFirestore.instance
-        .collection('users')
-        .snapshots()
-        .map((event) {
-      List<UserModel> users = [];
-      for (var document in event.docs) {
-        if (document['rVChat'] == true) {
-          print('live find ++++++++++++++');
-          users.add(UserModel.fromMap(document.data()));
-        }
-      }
-      setState(() {
-        liveNumbers = users.length;
-      });
-      print('!!!!!!!!!!!!!$liveNumbers');
-    });
   }
 
   void getAllData() async {
