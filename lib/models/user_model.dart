@@ -5,6 +5,8 @@ class UserModel {
   final bool isOnline;
   final bool rVChat;
   final String phoneNumber;
+  final int following;
+  final int followers;
   final List<String> groupId;
   UserModel({
     required this.name,
@@ -13,6 +15,8 @@ class UserModel {
     required this.isOnline,
     required this.rVChat,
     required this.phoneNumber,
+    required this.following,
+    required this.followers,
     required this.groupId,
   });
 
@@ -24,6 +28,8 @@ class UserModel {
       'isOnline': isOnline,
       'rVChat': rVChat,
       'phoneNumber': phoneNumber,
+      'following': following,
+      'followers': followers,
       'groupId': groupId,
     };
   }
@@ -36,6 +42,8 @@ class UserModel {
       isOnline: map['isOnline'] ?? false,
       rVChat: map['rVChat'] ?? false,
       phoneNumber: map['phoneNumber'] ?? '',
+      following: map['following'] ?? 0,
+      followers: map['followers'] ?? 0,
       groupId: List<String>.from(map['groupId']),
     );
   }

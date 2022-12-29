@@ -16,6 +16,33 @@ class FollowPage extends StatefulWidget {
 }
 
 class _FollowPageState extends State<FollowPage> {
+  List<UserModel> onlineList = [];
+  List<UserModel> man = [];
+
+  @override
+  void initState() {
+    getfollowingUser();
+
+    super.initState();
+  }
+
+  Stream<List<UserModel>> getUsersStream() {
+    return FirebaseFirestore.instance
+        .collection('users')
+        .snapshots()
+        .map((event) {
+      List<UserModel> allUser = [];
+
+      for (var document in event.docs) {
+        if (document['isOnline'] == true) {
+          allUser.add(UserModel.fromMap(document.data()));
+        }
+      }
+
+      return allUser;
+    });
+  }
+
   Stream<List<UserModel>> getfollowingUser() {
     return FirebaseFirestore.instance
         .collection('users')
@@ -24,9 +51,9 @@ class _FollowPageState extends State<FollowPage> {
         .snapshots()
         .map((event) {
       List<UserModel> followingList = [];
-
       for (var doc in event.docs) {
         followingList.add(UserModel.fromMap(doc.data()));
+        print(doc['uid']);
       }
 
       return followingList;
@@ -72,49 +99,64 @@ class _FollowPageState extends State<FollowPage> {
             return const LoaderT();
           }
           List<UserModel> users = snapshot.data!;
-
           users.removeWhere(
               (item) => item.uid == FirebaseAuth.instance.currentUser!.uid);
-
           var size = MediaQuery.of(context).size;
           final double itemHeight = (size.height - kToolbarHeight - 10) / 3;
           final double itemWidth = size.width / 2;
-
           if (users.isNotEmpty) {
             return Column(
               children: [
                 SizedBox(
                   height: 90,
-                  child: ListView.builder(
-                      padding: const EdgeInsets.only(left: 10),
-                      scrollDirection: Axis.horizontal,
-                      itemCount: users.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Padding(
-                          padding: const EdgeInsets.fromLTRB(5, 0, 5, 5),
-                          child: Column(
-                            children: [
-                              CircleAvatar(
-                                radius: 32,
-                                backgroundColor: white,
-                                child: CircleAvatar(
-                                  radius: 30,
-                                  backgroundImage:
-                                      NetworkImage(users[index].profilePic),
+                  child: StreamBuilder<List<UserModel>>(
+                      stream: getUsersStream(),
+                      builder: (context, snapshot2) {
+                        if (snapshot2.connectionState ==
+                            ConnectionState.waiting) {
+                          return const LoaderT();
+                        }
+                        List<UserModel> usersOnlines = snapshot2.data!;
+                        List<UserModel> finallist = [];
+                        for (var document in usersOnlines) {
+                          for (var item in users) {
+                            if (document.uid == item.uid &&
+                                item.isOnline == true) {
+                              finallist.add(document);
+                            }
+                          }
+                        }
+
+                        return ListView.builder(
+                            padding: const EdgeInsets.only(left: 10),
+                            scrollDirection: Axis.horizontal,
+                            itemCount: finallist.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(5.0, 0, 5.0, 5.0),
+                                child: Column(
+                                  children: [
+                                    CircleAvatar(
+                                      radius: 32,
+                                      backgroundColor: white,
+                                      child: CircleAvatar(
+                                        radius: 30,
+                                        backgroundImage: NetworkImage(
+                                            finallist[index].profilePic),
+                                      ),
+                                    ),
+                                    Text(
+                                      finallist[index].name,
+                                      style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w300),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                              const SizedBox(height: 5),
-                              const Text(
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontFamily: "yknir",
-                                      fontWeight: FontWeight.w300,
-                                      fontSize: 15,
-                                      color: white),
-                                  "Fr Kalani"),
-                            ],
-                          ),
-                        );
+                              );
+                            });
                       }),
                 ),
                 Expanded(
@@ -130,12 +172,12 @@ class _FollowPageState extends State<FollowPage> {
                       children: [
                         const SizedBox(height: 10),
                         Padding(
-                          padding: EdgeInsets.all(10),
+                          padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                           child: GridView(
                             gridDelegate:
                                 SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              childAspectRatio: 0.5,
+                              crossAxisCount: 3,
+                              childAspectRatio: ((itemWidth / 2) / itemHeight),
                               crossAxisSpacing: 8,
                               mainAxisSpacing: 8,
                             ),
@@ -151,7 +193,7 @@ class _FollowPageState extends State<FollowPage> {
                               //gridViewTile(recipesList, index);
                             }),
                           ),
-                        )
+                        ),
                       ],
                     ),
                   ),
@@ -212,7 +254,7 @@ class _MyCardState extends State<MyCard> {
       child: Column(
         children: [
           Container(
-            width: (size.width / 2),
+            width: (size.width / 1),
             height: (size.width / 2),
             decoration: BoxDecoration(
               borderRadius: const BorderRadius.all(Radius.circular(10.0)),

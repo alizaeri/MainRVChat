@@ -40,24 +40,6 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
     super.initState();
   }
 
-  // void calculateFollow() async {
-  //   QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-  //       .collection('users')
-  //       .doc(FirebaseAuth.instance.currentUser!.uid)
-  //       .collection('following')
-  //       .get();
-
-  //   following = querySnapshot.docs.length;
-  //   tempFollowers = following;
-  //   QuerySnapshot querySnapshot2 = await FirebaseFirestore.instance
-  //       .collection('users')
-  //       .doc(FirebaseAuth.instance.currentUser!.uid)
-  //       .collection('following')
-  //       .get();
-  //   followers = querySnapshot2.docs.length;
-  //   tempFollowing = followers;
-  // }
-
   Stream<UserModel> checkIfLikedOrNot() {
     print('!!!!! ejra shod');
     return FirebaseFirestore.instance
@@ -85,13 +67,43 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
   }
 
   void addUserToFavorit() async {
+    int following = 0;
+    int followers = 0;
+    void calculate() async {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(widget.selectUser.uid)
+          .collection('followers')
+          .get();
+
+      followers = querySnapshot.docs.length;
+      QuerySnapshot querySnapshot2 = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .collection('following')
+          .get();
+      following = querySnapshot2.docs.length;
+    }
+
     if (!isLiked) {
       if (tempFollowing < widget.following + 1) {
         setState(() {
           tempFollowing++;
         });
       }
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(widget.selectUser.uid)
+          .collection('followers')
+          .get();
 
+      followers = querySnapshot.docs.length;
+      QuerySnapshot querySnapshot2 = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .collection('following')
+          .get();
+      following = querySnapshot2.docs.length;
       await FirebaseFirestore.instance
           .collection('users')
           .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -100,6 +112,7 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
           .set(
             widget.selectUser.toMap(),
           );
+
       await FirebaseFirestore.instance
           .collection('users')
           .doc(widget.selectUser.uid)
@@ -108,6 +121,15 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
           .set(
             widget.selectUser.toMap(),
           );
+
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .update({'following': following + 1});
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(widget.selectUser.uid)
+          .update({'followers': followers + 1});
     } else {
       if (tempFollowing == widget.following ||
           tempFollowing == widget.following + 1) {
@@ -117,6 +139,19 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
       }
 
       // });
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(widget.selectUser.uid)
+          .collection('followers')
+          .get();
+
+      followers = querySnapshot.docs.length;
+      QuerySnapshot querySnapshot2 = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .collection('following')
+          .get();
+      following = querySnapshot2.docs.length;
 
       await FirebaseFirestore.instance
           .collection('users')
@@ -124,32 +159,23 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
           .collection('following')
           .doc(widget.selectUser.uid)
           .delete();
+
       await FirebaseFirestore.instance
           .collection('users')
           .doc(widget.selectUser.uid)
           .collection('followers')
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .delete();
+
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(widget.selectUser.uid)
+          .update({'followers': followers - 1});
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .update({'following': following - 1});
     }
-    // QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-    //     .collection('users')
-    //     .doc(widget.selectUser.uid)
-    //     .collection('following')
-    //     .get();
-
-    // setState(() {
-    //   following = querySnapshot.docs.length;
-    // });
-
-    // QuerySnapshot querySnapshot2 = await FirebaseFirestore.instance
-    //     .collection('users')
-    //     .doc(widget.selectUser.uid)
-    //     .collection('followers')
-    //     .get();
-
-    // setState(() {
-    //   followers = querySnapshot2.docs.length;
-    // });
   }
 
   @override
