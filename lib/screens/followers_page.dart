@@ -300,7 +300,7 @@ class _MyCardState extends State<MyCard> {
                               ),
                             ),
                             const SizedBox(width: 2),
-                            const Padding(
+                            Padding(
                               padding: EdgeInsets.only(top: 5),
                               child: Text(
                                   textAlign: TextAlign.center,
@@ -309,7 +309,7 @@ class _MyCardState extends State<MyCard> {
                                       fontWeight: FontWeight.w300,
                                       fontSize: 15,
                                       color: white),
-                                  "25k"),
+                                  widget.user.following.toString()),
                             ),
                             Expanded(child: Container()),
                             CircleAvatar(
@@ -323,7 +323,7 @@ class _MyCardState extends State<MyCard> {
                               ),
                             ),
                             const SizedBox(width: 2),
-                            const Padding(
+                            Padding(
                               padding: EdgeInsets.only(top: 5),
                               child: Text(
                                   textAlign: TextAlign.center,
@@ -332,7 +332,7 @@ class _MyCardState extends State<MyCard> {
                                       fontWeight: FontWeight.w300,
                                       fontSize: 15,
                                       color: white),
-                                  "25k"),
+                                  widget.user.followers.toString()),
                             ),
                           ],
                         ),
