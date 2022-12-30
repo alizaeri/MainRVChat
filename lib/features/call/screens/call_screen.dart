@@ -1,11 +1,6 @@
 import 'package:agora_uikit/agora_uikit.dart';
 import 'package:agora_rtc_engine/src/binding_forward_export.dart';
 import 'package:agora_uikit/controllers/rtc_buttons.dart';
-
-import 'package:agora_uikit/controllers/session_controller.dart';
-import 'package:agora_uikit/models/agora_settings.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rvchat/colors.dart';
@@ -32,7 +27,9 @@ class CallScreen extends ConsumerStatefulWidget {
 class _CallScreenState extends ConsumerState<CallScreen> {
   // AgoraSettings settings = ;
   AgoraClient? client;
-  String baseUrl = 'https://agora-token-service-production-fc02.up.railway.app';
+  String baseUrl =
+      'https://flutter-twitch-server-production-f453.up.railway.app/';
+
   bool localUserJoined = false;
   int uid = 0;
 
@@ -103,103 +100,101 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                     showAVState: true,
                   ),
                   Container(
-                    child: Container(
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                            //=> Background Linear Gradient
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [
-                              grayL1.withOpacity(0),
-                              grayL1.withOpacity(0.8)
-                            ]),
-                      ),
-                      height: 250,
-                      child: Stack(alignment: Alignment.center, children: [
-                        AgoraVideoButtons(
-                          client: client!,
-                          muteButtonChild: RawMaterialButton(
-                            onPressed: () {
-                              toggleMute(
-                                sessionController: client!.sessionController,
-                              );
-                            },
-                            shape: const CircleBorder(),
-                            elevation: 2.0,
-                            fillColor: grayL1,
-                            padding: const EdgeInsets.all(14),
-                            //padding: const EdgeInsets.all(0),
-                            child: Image.asset(
-                              "assets/icons/mic_i.png",
-                              fit: BoxFit.cover,
-                              color: white,
-                              scale: 7,
-                            ),
-                          ),
-                          switchCameraButtonChild: RawMaterialButton(
-                            onPressed: () {
-                              switchCamera(
-                                sessionController: client!.sessionController,
-                              );
-                            },
-                            shape: const CircleBorder(),
-                            elevation: 2.0,
-                            fillColor: grayL1,
-                            padding: const EdgeInsets.all(14),
-                            //padding: const EdgeInsets.all(0),
-                            child: Image.asset(
-                              "assets/icons/camera-sw.png",
-                              fit: BoxFit.cover,
-                              color: white,
-                              scale: 7,
-                            ),
-                          ),
-                          disconnectButtonChild: RawMaterialButton(
-                            onPressed: () async {
-                              await client!.engine.leaveChannel();
-                              ref.read(callControllerProvider).endCall(
-                                    widget.call.callerId,
-                                    widget.call.receiverId,
-                                    context,
-                                  );
-                              Navigator.pop(context);
-                            },
-                            shape: const CircleBorder(),
-                            elevation: 2.0,
-                            fillColor: pink,
-                            padding: const EdgeInsets.all(14),
-                            child: Image.asset(
-                              "assets/icons/call_end.png",
-                              fit: BoxFit.cover,
-                              color: white,
-                              scale: 5,
-                            ),
-                          ),
-                          disableVideoButtonChild: RawMaterialButton(
-                            onPressed: () async {
-                              await toggleCamera(
-                                sessionController: client!.sessionController,
-                              );
-                              toggleVisible(
-                                sessionController: client!.sessionController,
-                              );
-                            },
-                            shape: const CircleBorder(),
-                            elevation: 2.0,
-                            fillColor: grayL1,
-                            padding: const EdgeInsets.all(14),
-                            //padding: const EdgeInsets.all(0),
-                            child: Image.asset(
-                              "assets/icons/camera_off.png",
-                              fit: BoxFit.cover,
-                              color: white,
-                              scale: 7,
-                            ),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                          //=> Background Linear Gradient
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            grayL1.withOpacity(0),
+                            grayL1.withOpacity(0.8)
+                          ]),
+                    ),
+                    height: 250,
+                    child: Stack(alignment: Alignment.center, children: [
+                      AgoraVideoButtons(
+                        client: client!,
+                        muteButtonChild: RawMaterialButton(
+                          onPressed: () {
+                            toggleMute(
+                              sessionController: client!.sessionController,
+                            );
+                          },
+                          shape: const CircleBorder(),
+                          elevation: 2.0,
+                          fillColor: grayL1,
+                          padding: const EdgeInsets.all(14),
+                          //padding: const EdgeInsets.all(0),
+                          child: Image.asset(
+                            "assets/icons/mic_i.png",
+                            fit: BoxFit.cover,
+                            color: white,
+                            scale: 7,
                           ),
                         ),
-                      ]),
-                    ),
+                        switchCameraButtonChild: RawMaterialButton(
+                          onPressed: () {
+                            switchCamera(
+                              sessionController: client!.sessionController,
+                            );
+                          },
+                          shape: const CircleBorder(),
+                          elevation: 2.0,
+                          fillColor: grayL1,
+                          padding: const EdgeInsets.all(14),
+                          //padding: const EdgeInsets.all(0),
+                          child: Image.asset(
+                            "assets/icons/camera-sw.png",
+                            fit: BoxFit.cover,
+                            color: white,
+                            scale: 7,
+                          ),
+                        ),
+                        disconnectButtonChild: RawMaterialButton(
+                          onPressed: () async {
+                            await client!.engine.leaveChannel();
+                            ref.read(callControllerProvider).endCall(
+                                  widget.call.callerId,
+                                  widget.call.receiverId,
+                                  context,
+                                );
+                            Navigator.pop(context);
+                          },
+                          shape: const CircleBorder(),
+                          elevation: 2.0,
+                          fillColor: pink,
+                          padding: const EdgeInsets.all(14),
+                          child: Image.asset(
+                            "assets/icons/call_end.png",
+                            fit: BoxFit.cover,
+                            color: white,
+                            scale: 5,
+                          ),
+                        ),
+                        disableVideoButtonChild: RawMaterialButton(
+                          onPressed: () async {
+                            await toggleCamera(
+                              sessionController: client!.sessionController,
+                            );
+                            toggleVisible(
+                              sessionController: client!.sessionController,
+                            );
+                          },
+                          shape: const CircleBorder(),
+                          elevation: 2.0,
+                          fillColor: grayL1,
+                          padding: const EdgeInsets.all(14),
+                          //padding: const EdgeInsets.all(0),
+                          child: Image.asset(
+                            "assets/icons/camera_off.png",
+                            fit: BoxFit.cover,
+                            color: white,
+                            scale: 7,
+                          ),
+                        ),
+                      ),
+                    ]),
                   ),
                 ],
               ),

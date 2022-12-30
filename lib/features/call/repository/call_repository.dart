@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rvchat/common/utils/utils.dart';
 import 'package:rvchat/common/widgets/loader.dart';
+import 'package:rvchat/features/auth/screens/user_information_screen.dart';
 import 'package:rvchat/features/call/screens/call_screen.dart';
+import 'package:rvchat/features/select_contacts/screens/select_contact_screen.dart';
 import 'package:rvchat/models/call.dart';
 
 final callRepositoryProvider = Provider(
@@ -39,6 +41,7 @@ class CallRepository {
           .then((doc) {
         exist = doc.exists;
       });
+
       if (exist) {
         Navigator.push(
           context,
@@ -60,7 +63,7 @@ class CallRepository {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => CallScreen(
+            builder: (Context) => CallScreen(
               channelId: senderCallData.callId,
               call: senderCallData,
               isGroupChat: false,
@@ -69,7 +72,7 @@ class CallRepository {
         );
       }
     } catch (e) {
-      showSnackBar(context: context, content: e.toString());
+      // showSnackBar(context: context, content: e.toString());
     }
   }
 

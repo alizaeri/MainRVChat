@@ -14,7 +14,6 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'Intro_screens/onboarding_screen.dart';
 import 'firebase_options.dart';
 import 'screens/mobile_layout_screen.dart';
-import 'utils/manage_camera.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

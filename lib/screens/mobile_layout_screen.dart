@@ -60,21 +60,22 @@ class _MobileLayoutScreenState extends ConsumerState<MobileLayoutScreen>
     }
   }
 
-  int selectedPage = 0;
+  int selectedPage = 2;
 
   @override
   Widget build(BuildContext context) {
     return CallPickupScreen(scaffold: scaffold());
   }
 
+  final _pageNo = [
+    const OnlineUsersScreen(),
+    const FollowPage(),
+    const RandomeVideoChat(),
+    const ContactsScreen(),
+    const ProfilePage(),
+  ];
+
   Scaffold scaffold() {
-    final _pageNo = [
-      const OnlineUsersScreen(),
-      const FollowPage(),
-      const RandomeVideoChat(),
-      const ContactsScreen(),
-      const ProfilePage(),
-    ];
     return Scaffold(
       body: _pageNo[selectedPage],
       bottomNavigationBar: ConvexAppBar.badge(
