@@ -18,6 +18,7 @@ class FollowPage extends StatefulWidget {
 class _FollowPageState extends State<FollowPage> {
   List<UserModel> onlineList = [];
   List<UserModel> man = [];
+  bool online_null = false;
 
   @override
   void initState() {
@@ -63,6 +64,7 @@ class _FollowPageState extends State<FollowPage> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+
     return Scaffold(
       backgroundColor: const Color(0xff6c5dd2),
       appBar: AppBar(
@@ -123,39 +125,41 @@ class _FollowPageState extends State<FollowPage> {
                         }
                       }
                     }
-                    return SizedBox(
-                      height: 90,
-                      child: ListView.builder(
-                          padding: const EdgeInsets.only(left: 10),
-                          scrollDirection: Axis.horizontal,
-                          itemCount: finallist.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Padding(
-                              padding:
-                                  const EdgeInsets.fromLTRB(5.0, 0, 5.0, 5.0),
-                              child: Column(
-                                children: [
-                                  CircleAvatar(
-                                    radius: 32,
-                                    backgroundColor: white,
-                                    child: CircleAvatar(
-                                      radius: 30,
-                                      backgroundImage: NetworkImage(
-                                          finallist[index].profilePic),
+                    return finallist.isEmpty
+                        ? Container()
+                        : SizedBox(
+                            height: 90,
+                            child: ListView.builder(
+                                padding: const EdgeInsets.only(left: 10),
+                                scrollDirection: Axis.horizontal,
+                                itemCount: finallist.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return Padding(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        5.0, 0, 5.0, 5.0),
+                                    child: Column(
+                                      children: [
+                                        CircleAvatar(
+                                          radius: 32,
+                                          backgroundColor: white,
+                                          child: CircleAvatar(
+                                            radius: 30,
+                                            backgroundImage: NetworkImage(
+                                                finallist[index].profilePic),
+                                          ),
+                                        ),
+                                        Text(
+                                          finallist[index].name,
+                                          style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w300),
+                                        ),
+                                      ],
                                     ),
-                                  ),
-                                  Text(
-                                    finallist[index].name,
-                                    style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w300),
-                                  ),
-                                ],
-                              ),
-                            );
-                          }),
-                    );
+                                  );
+                                }),
+                          );
                   },
                 ),
                 Expanded(

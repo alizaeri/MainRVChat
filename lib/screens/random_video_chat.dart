@@ -1,9 +1,11 @@
+import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rvchat/common/widgets/loaderT.dart';
 import 'package:rvchat/models/user_model.dart';
+import 'package:rvchat/utils/manage_camera.dart';
 import "dart:math";
 
 import '../colors.dart';
@@ -21,6 +23,8 @@ class RandomeVideoChat extends ConsumerStatefulWidget {
 
 class _RandomeVideoChatState extends ConsumerState<RandomeVideoChat>
     with WidgetsBindingObserver {
+  late CameraController cameraController;
+  late Future<void> initializeController;
   bool rVChat = false;
   UserModel? selectRandomUser;
   int liveNumbers = 0;
@@ -36,6 +40,11 @@ class _RandomeVideoChatState extends ConsumerState<RandomeVideoChat>
 
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    cameraController = CameraController(
+      CameraManager.instance.cameras[1],
+      ResolutionPreset.veryHigh,
+    );
+    initializeController = cameraController.initialize();
   }
 
   @override
@@ -122,7 +131,6 @@ class _RandomeVideoChatState extends ConsumerState<RandomeVideoChat>
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const LoaderT();
               }
-
               return StreamBuilder(
                   stream: ref.read(authControllerProvider).allLiveUsers(),
                   builder: (BuildContext context, AsyncSnapshot snapshot2) {
@@ -136,167 +144,189 @@ class _RandomeVideoChatState extends ConsumerState<RandomeVideoChat>
                     onlineUsersNumbers = onlineUsers.length;
                     // liveOnlineNumbers = liveUsers.length;
 
-                    return Container(
-                      decoration: const BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage("assets/images/pic.jpg"),
-                          fit: BoxFit.cover,
+                    return Stack(
+                      children: [
+                        FutureBuilder<void>(
+                          future: initializeController,
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.done) {
+                              // If the Future is complete, display the preview.
+                              return Column(
+                                children: [
+                                  CameraPreview(cameraController),
+                                ],
+                              );
+                            } else {
+                              // Otherwise, display a loading indicator.
+                              return const Center(
+                                  child: CircularProgressIndicator());
+                            }
+                          },
                         ),
-                      ),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                              //=> Background Linear Gradient
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              colors: [
-                                grayL1,
-                                grayL1.withOpacity(0),
-                                grayL1.withOpacity(0),
-                                grayL1
-                              ]),
-                        ),
-                        child: Column(
-                          children: [
-                            const SizedBox(height: 50),
-                            const CircleAvatar(
-                              backgroundColor: white,
-                              radius: 42,
-                              child: CircleAvatar(
-                                backgroundImage: AssetImage(
-                                  "assets/icons/avatar.png",
-                                ),
-                                radius: 40,
-                              ),
+                        Container(
+                          decoration: const BoxDecoration(),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                  //=> Background Linear Gradient
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                  colors: [
+                                    grayL1,
+                                    grayL1.withOpacity(0),
+                                    grayL1.withOpacity(0),
+                                    grayL1
+                                  ]),
                             ),
-                            const SizedBox(height: 10),
-                            const Text(
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontFamily: "yknir",
-                                    fontWeight: FontWeight.w300,
-                                    fontSize: 18,
-                                    color: white),
-                                "Elena Johanson"),
-                            Expanded(
-                                child: Container(
-                              alignment: Alignment.bottomRight,
-                              child: Padding(
-                                padding: const EdgeInsets.only(right: 15),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    CircleAvatar(
-                                      backgroundColor: white.withOpacity(0.3),
-                                      radius: 20,
-                                      child: Image.asset(
-                                        "assets/icons/user_chat.png",
-                                        fit: BoxFit.cover,
-                                        color: white,
-                                        scale: 4,
-                                      ),
+                            child: Column(
+                              children: [
+                                const SizedBox(height: 50),
+                                const CircleAvatar(
+                                  backgroundColor: white,
+                                  radius: 42,
+                                  child: CircleAvatar(
+                                    backgroundImage: AssetImage(
+                                      "assets/icons/avatar.png",
                                     ),
-                                    const SizedBox(height: 5),
-                                    Text(
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            fontFamily: "yknir",
-                                            fontWeight: FontWeight.w300,
-                                            fontSize: 20,
-                                            color: white),
-                                        onlineUsersNumbers.toString()),
-                                    const SizedBox(height: 10),
-                                    CircleAvatar(
-                                      backgroundColor: white.withOpacity(0.3),
-                                      radius: 20,
-                                      child: Stack(children: [
-                                        Image.asset(
-                                          "assets/icons/like_icon2.png",
-                                          fit: BoxFit.cover,
-                                          color: white,
-                                          scale: 4,
-                                        ),
-                                        const Positioned(
-                                          left: 20,
-                                          top: 3,
-                                          child: CircleAvatar(
-                                            backgroundColor: pink,
-                                            radius: 3,
+                                    radius: 40,
+                                  ),
+                                ),
+                                const SizedBox(height: 10),
+                                const Text(
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontFamily: "yknir",
+                                        fontWeight: FontWeight.w300,
+                                        fontSize: 18,
+                                        color: white),
+                                    "Elena Johanson"),
+                                Expanded(
+                                    child: Container(
+                                  alignment: Alignment.bottomRight,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(right: 15),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        CircleAvatar(
+                                          backgroundColor:
+                                              white.withOpacity(0.3),
+                                          radius: 20,
+                                          child: Image.asset(
+                                            "assets/icons/user_chat.png",
+                                            fit: BoxFit.cover,
+                                            color: white,
+                                            scale: 4,
                                           ),
                                         ),
-                                      ]),
-                                    ),
-                                    const SizedBox(height: 5),
-                                    Text(
-                                        textAlign: TextAlign.center,
-                                        style: const TextStyle(
-                                            fontFamily: "yknir",
-                                            fontWeight: FontWeight.w300,
-                                            fontSize: 20,
-                                            color: white),
-                                        liveUsers.length.toString()),
-                                    const SizedBox(height: 10),
-                                  ],
-                                ),
-                              ),
-                            )),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(35, 0, 35, 0),
-                              child: SizedBox(
-                                child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: pinkL1,
-                                    elevation: 0,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(15.0)),
-                                    minimumSize: const Size.fromHeight(60),
-                                    padding: EdgeInsets.all(0),
-                                    //////// HERE
-                                  ),
-                                  onPressed: () async {
-                                    getAllData();
-                                    if (selectRandomUser != null) {
-                                      makeCall(ref, context, selectRandomUser!);
-                                    }
-                                  },
-                                  child: Row(
-                                    children: [
-                                      const Expanded(
-                                        child: Text(
+                                        const SizedBox(height: 5),
+                                        Text(
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
-                                              fontFamily: "yknir",
-                                              fontWeight: FontWeight.w300,
-                                              fontSize: 25,
+                                                fontFamily: "yknir",
+                                                fontWeight: FontWeight.w300,
+                                                fontSize: 20,
+                                                color: white),
+                                            onlineUsersNumbers.toString()),
+                                        const SizedBox(height: 10),
+                                        CircleAvatar(
+                                          backgroundColor:
+                                              white.withOpacity(0.3),
+                                          radius: 20,
+                                          child: Stack(children: [
+                                            Image.asset(
+                                              "assets/icons/like_icon2.png",
+                                              fit: BoxFit.cover,
+                                              color: white,
+                                              scale: 4,
                                             ),
-                                            "Randomize"),
+                                            const Positioned(
+                                              left: 20,
+                                              top: 3,
+                                              child: CircleAvatar(
+                                                backgroundColor: pink,
+                                                radius: 3,
+                                              ),
+                                            ),
+                                          ]),
+                                        ),
+                                        const SizedBox(height: 5),
+                                        Text(
+                                            textAlign: TextAlign.center,
+                                            style: const TextStyle(
+                                                fontFamily: "yknir",
+                                                fontWeight: FontWeight.w300,
+                                                fontSize: 20,
+                                                color: white),
+                                            liveUsers.length.toString()),
+                                        const SizedBox(height: 10),
+                                      ],
+                                    ),
+                                  ),
+                                )),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(35, 0, 35, 0),
+                                  child: SizedBox(
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: pinkL1,
+                                        elevation: 0,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(15.0)),
+                                        minimumSize: const Size.fromHeight(60),
+                                        padding: EdgeInsets.all(0),
+                                        //////// HERE
                                       ),
-                                      Container(
-                                        decoration: const BoxDecoration(
-                                          borderRadius: BorderRadius.only(
-                                            bottomRight: Radius.circular(15.0),
-                                            topRight: Radius.circular(15.0),
+                                      onPressed: () async {
+                                        getAllData();
+                                        if (selectRandomUser != null) {
+                                          makeCall(
+                                              ref, context, selectRandomUser!);
+                                        }
+                                      },
+                                      child: Row(
+                                        children: [
+                                          const Expanded(
+                                            child: Text(
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  fontFamily: "yknir",
+                                                  fontWeight: FontWeight.w300,
+                                                  fontSize: 25,
+                                                ),
+                                                "Randomize"),
                                           ),
-                                          color: pinkL2,
-                                        ),
-                                        height: 60,
-                                        width: 80,
-                                        child: Image.asset(
-                                          "assets/icons/random.png",
-                                          color: white,
-                                          scale: 5,
-                                        ),
-                                      )
-                                    ],
+                                          Container(
+                                            decoration: const BoxDecoration(
+                                              borderRadius: BorderRadius.only(
+                                                bottomRight:
+                                                    Radius.circular(15.0),
+                                                topRight: Radius.circular(15.0),
+                                              ),
+                                              color: pinkL2,
+                                            ),
+                                            height: 60,
+                                            width: 80,
+                                            child: Image.asset(
+                                              "assets/icons/random.png",
+                                              color: white,
+                                              scale: 5,
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
+                                const SizedBox(height: 40),
+                              ],
                             ),
-                            const SizedBox(height: 40),
-                          ],
+                          ),
                         ),
-                      ),
+                      ],
                     );
                   });
             })
