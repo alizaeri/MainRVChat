@@ -29,6 +29,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  camera:
+  
+  path:
   convex_bottom_bar: 
   flutter_lints: ^2.0.0
   flutter_native_splash: ^2.2.16

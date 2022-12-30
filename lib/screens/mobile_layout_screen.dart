@@ -1,3 +1,4 @@
+import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -29,6 +30,7 @@ class _MobileLayoutScreenState extends ConsumerState<MobileLayoutScreen>
     ref.read(authControllerProvider).setUserState(true);
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+
     //didChangeAppLifecycleState();
   }
 
@@ -60,19 +62,19 @@ class _MobileLayoutScreenState extends ConsumerState<MobileLayoutScreen>
 
   int selectedPage = 0;
 
-  final _pageNo = [
-    const OnlineUsersScreen(),
-    const FollowPage(),
-    const RandomeVideoChat(),
-    const ContactsScreen(),
-    const ProfilePage(),
-  ];
   @override
   Widget build(BuildContext context) {
     return CallPickupScreen(scaffold: scaffold());
   }
 
   Scaffold scaffold() {
+    final _pageNo = [
+      const OnlineUsersScreen(),
+      const FollowPage(),
+      const RandomeVideoChat(),
+      const ContactsScreen(),
+      const ProfilePage(),
+    ];
     return Scaffold(
       body: _pageNo[selectedPage],
       bottomNavigationBar: ConvexAppBar.badge(
