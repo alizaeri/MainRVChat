@@ -1,3 +1,4 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:is_first_run/is_first_run.dart';
@@ -7,12 +8,12 @@ import 'package:rvchat/features/auth/controller/auth_controller.dart';
 import 'package:rvchat/features/landing/screens/landing_screen.dart';
 import 'package:rvchat/router.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:rvchat/utils/manage_camera.dart';
 import 'package:rvchat/widgets/error.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'Intro_screens/onboarding_screen.dart';
 import 'firebase_options.dart';
 import 'screens/mobile_layout_screen.dart';
-import 'utils/manage_camera.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -53,7 +54,7 @@ class _MyApp extends ConsumerState<MyApp> {
       onGenerateRoute: (settings) => generateRoute(settings),
       theme: ThemeData(scaffoldBackgroundColor: whiteW1),
       home: _isFirstRun == true
-          ? OnBoardingScreen()
+          ? const OnBoardingScreen()
           : ref.watch(userDataAuthProvider).when(
               data: (user) {
                 if (user == null) {

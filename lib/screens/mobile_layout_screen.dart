@@ -1,3 +1,4 @@
+import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -29,6 +30,7 @@ class _MobileLayoutScreenState extends ConsumerState<MobileLayoutScreen>
     ref.read(authControllerProvider).setUserState(true);
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+
     //didChangeAppLifecycleState();
   }
 
@@ -58,7 +60,12 @@ class _MobileLayoutScreenState extends ConsumerState<MobileLayoutScreen>
     }
   }
 
-  int selectedPage = 0;
+  int selectedPage = 2;
+
+  @override
+  Widget build(BuildContext context) {
+    return CallPickupScreen(scaffold: scaffold());
+  }
 
   final _pageNo = [
     const OnlineUsersScreen(),
@@ -67,10 +74,6 @@ class _MobileLayoutScreenState extends ConsumerState<MobileLayoutScreen>
     const ContactsScreen(),
     const ProfilePage(),
   ];
-  @override
-  Widget build(BuildContext context) {
-    return CallPickupScreen(scaffold: scaffold());
-  }
 
   Scaffold scaffold() {
     return Scaffold(
