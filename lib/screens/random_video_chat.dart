@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_new
+
 import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -124,6 +126,8 @@ class _RandomeVideoChatState extends ConsumerState<RandomeVideoChat>
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final deviceRatio = size.height / size.width;
     return Scaffold(
         body: StreamBuilder(
             stream: ref.read(authControllerProvider).allOnlineUsers(),
@@ -154,7 +158,8 @@ class _RandomeVideoChatState extends ConsumerState<RandomeVideoChat>
                               // If the Future is complete, display the preview.
                               return Column(
                                 children: [
-                                  CameraPreview(cameraController),
+                                  Expanded(child: Container())
+                                  //child: CameraPreview(cameraController)),
                                 ],
                               );
                             } else {
