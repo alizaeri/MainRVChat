@@ -9,6 +9,7 @@ import 'package:rvchat/features/call/screens/call_screen.dart';
 import 'package:rvchat/features/landing/screens/landing_screen.dart';
 import 'package:rvchat/models/call.dart';
 import 'package:rvchat/widgets/error.dart';
+import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 
 class CallPickupScreen extends ConsumerWidget {
   final Widget scaffold;
@@ -19,20 +20,36 @@ class CallPickupScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return localWidget(scaffold: scaffold);
+    return LocalWidget(scaffold: scaffold);
   }
 }
 
-class localWidget extends ConsumerWidget {
-  const localWidget({
+class LocalWidget extends ConsumerStatefulWidget {
+  const LocalWidget({
     Key? key,
     required this.scaffold,
   }) : super(key: key);
 
   final Widget scaffold;
+  @override
+  ConsumerState<LocalWidget> createState() => _LocalWidgetState();
+}
+
+class _LocalWidgetState extends ConsumerState<LocalWidget> {
+  @override
+  void initState() {
+    // FlutterRingtonePlayer.playNotification();
+
+    super.initState();
+  }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return StreamBuilder<DocumentSnapshot>(
       stream: ref.watch(callControllerProvider).callStream,
       builder: (context, snapshot) {
@@ -41,6 +58,12 @@ class localWidget extends ConsumerWidget {
               Call.fromMap(snapshot.data!.data() as Map<String, dynamic>);
 
           if (!call.hasDialled) {
+            FlutterRingtonePlayer.play(
+              android: AndroidSounds.ringtone,
+              ios: const IosSound(1023),
+              looping: true,
+              volume: 0.1,
+            );
             return Scaffold(
               body: Container(
                 decoration: const BoxDecoration(
@@ -93,6 +116,7 @@ class localWidget extends ConsumerWidget {
                           backgroundColor: pink,
                           child: IconButton(
                             onPressed: () {
+                              FlutterRingtonePlayer.stop();
                               ref.read(callControllerProvider).endCall(
                                     call.callerId,
                                     call.receiverId,
@@ -115,6 +139,7 @@ class localWidget extends ConsumerWidget {
                           backgroundColor: Colors.green,
                           child: IconButton(
                             onPressed: () {
+                              FlutterRingtonePlayer.stop();
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -145,7 +170,7 @@ class localWidget extends ConsumerWidget {
             );
           }
         }
-        return scaffold;
+        return widget.scaffold;
       },
     );
   }

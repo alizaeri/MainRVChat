@@ -124,15 +124,15 @@ class _bottomChatFieldState extends ConsumerState<BottomChatField> {
   void showKeyboard() => focusNode.requestFocus();
   void hideKeyboard() => focusNode.unfocus();
 
-  void toggleEmojiKeyboardContainer() {
-    if (isShowEmojiContainer) {
-      showKeyboard();
-      hideEmojiContainer();
-    } else {
-      hideKeyboard();
-      showEmojiContainer();
-    }
-  }
+  // void toggleEmojiKeyboardContainer() {
+  //   if (isShowEmojiContainer) {
+  //     showKeyboard();
+  //     hideEmojiContainer();
+  //   } else {
+  //     hideKeyboard();
+  //     showEmojiContainer();
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -157,6 +157,7 @@ class _bottomChatFieldState extends ConsumerState<BottomChatField> {
                       style: TextStyle(color: textMyMessage),
                       controller: _messageContoller,
                       onChanged: (val) {
+                        setState(() {});
                         if (val.isNotEmpty) {
                           setState(() {
                             isShowSendButton = true;
@@ -208,23 +209,32 @@ class _bottomChatFieldState extends ConsumerState<BottomChatField> {
                                         ),
                                       ),
                                     ),
-                                    const PopupMenuDivider(),
-                                    const PopupMenuItem(
-                                      value: 3,
-                                      child: Center(
-                                        child: Text(
-                                          "Emoji",
-                                          style: TextStyle(
-                                            fontSize: 16.0,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
+                                    // const PopupMenuDivider(),
+                                    // const PopupMenuItem(
+                                    //   value: 3,
+                                    //   child: Center(
+                                    //     child: Text(
+                                    //       "Emoji",
+                                    //       style: TextStyle(
+                                    //         fontSize: 16.0,
+                                    //         color: Colors.white,
+                                    //       ),
+                                    //     ),
+                                    //   ),
+                                    // ),
                                   ],
                                   initialValue: 0,
                                   onSelected: (value) {
+                                    setState(() {});
+
                                     switch (value) {
+                                      case 0:
+                                        {
+                                          focusNode.requestFocus();
+
+                                          // pickImage(ImageSource.gallery);
+                                          break;
+                                        }
                                       case 1:
                                         {
                                           selectImage();
@@ -237,15 +247,21 @@ class _bottomChatFieldState extends ConsumerState<BottomChatField> {
                                           // pickImage(ImageSource.camera);
                                           break;
                                         }
-                                      case 3:
-                                        {
-                                          toggleEmojiKeyboardContainer();
-                                          // pickImage(ImageSource.camera);
-                                          break;
-                                        }
+                                      // case 3:
+                                      //   {
+                                      //     setState(() {
+                                      //       isShowEmojiContainer = true;
+                                      //     });
+
+                                      //     focusNode.unfocus();
+
+                                      //     // toggleEmojiKeyboardContainer();
+                                      //     // pickImage(ImageSource.camera);
+                                      //     break;
+                                      //   }
                                     }
                                   },
-                                  offset: const Offset(0, -90),
+                                  offset: const Offset(0, 400),
                                   child: const Padding(
                                     padding: EdgeInsets.only(left: 10),
                                     child: ImageIcon(
@@ -280,6 +296,11 @@ class _bottomChatFieldState extends ConsumerState<BottomChatField> {
                     radius: 25,
                     child: GestureDetector(
                       onTap: () {
+                        showKeyboard();
+                        setState(() {
+                          isShowEmojiContainer = false;
+                        });
+
                         sendTextMesseage();
                       },
                       child: ImageIcon(
@@ -295,24 +316,27 @@ class _bottomChatFieldState extends ConsumerState<BottomChatField> {
                   ),
                 ],
               ),
-              isShowEmojiContainer
-                  ? SizedBox(
-                      height: 310,
-                      child: EmojiPicker(
-                        onEmojiSelected: (category, emoji) {
-                          setState(() {
-                            _messageContoller.text =
-                                _messageContoller.text + emoji.emoji;
-                          });
-                          if (!isShowSendButton) {
-                            setState(() {
-                              isShowSendButton = true;
-                            });
-                          }
-                        },
-                      ),
-                    )
-                  : const SizedBox(),
+              // isShowEmojiContainer
+              //     ? SizedBox(
+              //         height: 310,
+              //         child: EmojiPicker(
+              //           onEmojiSelected: (category, emoji) {
+              //             setState(() {
+              //               _messageContoller.text =
+              //                   _messageContoller.text + emoji.emoji;
+              //               setState(() {
+              //                 isShowEmojiContainer = true;
+              //               });
+              //             });
+              //             if (!isShowSendButton) {
+              //               setState(() {
+              //                 isShowSendButton = true;
+              //               });
+              //             }
+              //           },
+              //         ),
+              //       )
+              //     : const SizedBox(),
             ],
           ),
         ),
