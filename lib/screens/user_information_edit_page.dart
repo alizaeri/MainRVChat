@@ -40,10 +40,16 @@ class _UserInformationEditPageState
 
   void storeUserData(String defName, String defPic) async {
     String name = nameController.text.trim();
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => LoaderT(),
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(
+    //     builder: (context) => LoaderT(),
+    //   ),
+    // );
+    Navigator.of(context).push(
+      PageRouteBuilder(
+        opaque: false, // set to false
+        pageBuilder: (_, __, ___) => LoaderT(),
       ),
     );
 
