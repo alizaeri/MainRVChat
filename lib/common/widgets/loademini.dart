@@ -4,8 +4,8 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:rvchat/colors.dart';
 
-class Loader extends StatelessWidget {
-  const Loader({Key? key}) : super(key: key);
+class Loadermini extends StatelessWidget {
+  const Loadermini({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,12 +18,12 @@ class Loader extends StatelessWidget {
           children: <Widget>[
             Center(
               child: Container(
-                height: 50,
-                width: 50,
+                height: 35,
+                width: 35,
                 margin: const EdgeInsets.all(5),
                 child: const CircularProgressIndicator(
                   strokeWidth: 4.0,
-                  valueColor: AlwaysStoppedAnimation(pinkL2),
+                  valueColor: AlwaysStoppedAnimation(white),
                 ),
               ),
             ),
