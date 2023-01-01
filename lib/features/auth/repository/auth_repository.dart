@@ -105,10 +105,10 @@ class AuthRepository {
           groupId: []);
       await firestore.collection('users').doc(uid).set(user.toMap());
       Navigator.pop(context);
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => const MobileLayoutScreen()),
-          (route) => false);
+      // Navigator.pushAndRemoveUntil(
+      //     context,
+      //     MaterialPageRoute(builder: (context) => const MobileLayoutScreen()),
+      //     (route) => false);
     } catch (e) {
       showSnackBar(context: context, content: e.toString());
     }

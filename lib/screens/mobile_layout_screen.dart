@@ -2,6 +2,8 @@ import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:path/path.dart';
+import 'package:path/path.dart';
 import 'package:rvchat/colors.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:rvchat/common/widgets/loaderW.dart';
@@ -25,6 +27,7 @@ class MobileLayoutScreen extends ConsumerStatefulWidget {
 
 class _MobileLayoutScreenState extends ConsumerState<MobileLayoutScreen>
     with WidgetsBindingObserver {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   void initState() {
     ref.read(authControllerProvider).setUserState(true);
@@ -35,8 +38,6 @@ class _MobileLayoutScreenState extends ConsumerState<MobileLayoutScreen>
   }
 
   @override
-  @mustCallSuper
-  @protected
   void dispose() {
     super.dispose();
     ref.read(authControllerProvider).setUserState(false);
@@ -77,6 +78,7 @@ class _MobileLayoutScreenState extends ConsumerState<MobileLayoutScreen>
 
   Scaffold scaffold() {
     return Scaffold(
+      key: _scaffoldKey,
       body: _pageNo[selectedPage],
       bottomNavigationBar: ConvexAppBar.badge(
         const {3: '99+'},

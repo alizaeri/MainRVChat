@@ -39,13 +39,13 @@ class _UserInformationEditPageState
   }
 
   void storeUserData(String defName, String defPic) async {
+    String name = nameController.text.trim();
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => Loader(),
+        builder: (context) => LoaderT(),
       ),
     );
-    String name = nameController.text.trim();
 
     if (name.isNotEmpty) {
       ref
@@ -305,7 +305,7 @@ class _UserInformationEditPageState
                     ),
                   ),
                 ),
-                fisClick ? const Loader() : const Center(),
+                fisClick ? const LoaderT() : const Center(),
               ],
             );
           }),

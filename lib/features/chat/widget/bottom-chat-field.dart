@@ -292,7 +292,7 @@ class _bottomChatFieldState extends ConsumerState<BottomChatField> {
                     ),
                   ),
                   CircleAvatar(
-                    backgroundColor: pinkL1,
+                    backgroundColor: isRecording ? Colors.pink : pinkL1,
                     radius: 25,
                     child: GestureDetector(
                       onTap: () {
@@ -306,10 +306,7 @@ class _bottomChatFieldState extends ConsumerState<BottomChatField> {
                       child: ImageIcon(
                         isShowSendButton
                             ? const AssetImage("assets/icons/sent_icon.png")
-                            : isRecording
-                                ? const AssetImage(
-                                    "assets/icons/att_iconng.png")
-                                : const AssetImage("assets/icons/mic_icon.png"),
+                            : const AssetImage("assets/icons/mic_icon.png"),
                         color: Colors.white,
                       ),
                     ),

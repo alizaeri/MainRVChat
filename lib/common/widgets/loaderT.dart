@@ -11,7 +11,7 @@ class LoaderT extends StatelessWidget {
   Widget build(BuildContext context) {
     return IgnorePointer(
       child: Container(
-        color: whiteW1.withOpacity(0),
+        color: whiteW1.withOpacity(0.5),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,

@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rvchat/colors.dart';
 import 'package:rvchat/common/utils/utils.dart';
 import 'package:rvchat/common/widgets/loader.dart';
+import 'package:rvchat/common/widgets/loaderT.dart';
 import 'package:rvchat/features/auth/controller/auth_controller.dart';
 
 class UserInformationScreen extends ConsumerStatefulWidget {
@@ -37,7 +38,7 @@ class _UserInformationScreenState extends ConsumerState<UserInformationScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => Loader(),
+        builder: (context) => LoaderT(),
       ),
     );
     String name = nameController.text.trim();
