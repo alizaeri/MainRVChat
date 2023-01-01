@@ -1,18 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rvchat/common/widgets/loaderW.dart';
+import 'package:rvchat/features/auth/controller/auth_controller.dart';
+import 'package:rvchat/features/landing/screens/landing_screen.dart';
 import 'package:rvchat/main.dart';
+import 'package:rvchat/screens/mobile_layout_screen.dart';
+import 'package:rvchat/widgets/error.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import 'intro_page1.dart';
 import 'intro_page2.dart';
 import 'intro_page4.dart';
 
-class OnBoardingScreen extends StatefulWidget {
+class OnBoardingScreen extends ConsumerStatefulWidget {
   const OnBoardingScreen({Key? key}) : super(key: key);
   @override
-  _OnBoardingScreenState createState() => _OnBoardingScreenState();
+  ConsumerState<OnBoardingScreen> createState() => _OnBoardingScreenState();
 }
 
-class _OnBoardingScreenState extends State<OnBoardingScreen> {
+class _OnBoardingScreenState extends ConsumerState<OnBoardingScreen> {
   PageController _controller = PageController();
   bool onlastPage = false;
   @override
@@ -64,10 +70,34 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                           ),
                         );
                       },
-                      child: const Text(
-                        "Start",
-                        style:
-                            TextStyle(color: Color(0xccffffff), fontSize: 18),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return ref.watch(userDataAuthProvider).when(
+                                    data: (user) {
+                                      if (user == null) {
+                                        return const LandingScreen();
+                                      }
+                                      return const MobileLayoutScreen();
+                                    },
+                                    error: (err, trace) {
+                                      return ErrorScreen(
+                                        error: err.toString(),
+                                      );
+                                    },
+                                    loading: () => const LoaderW());
+                              },
+                            ),
+                          );
+                        },
+                        child: const Text(
+                          "Start",
+                          style:
+                              TextStyle(color: Color(0xccffffff), fontSize: 18),
+                        ),
                       ),
                     )
                   : GestureDetector(

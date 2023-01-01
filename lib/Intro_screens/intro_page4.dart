@@ -1,12 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rvchat/common/widgets/loaderW.dart';
+import 'package:rvchat/features/auth/controller/auth_controller.dart';
+import 'package:rvchat/features/landing/screens/landing_screen.dart';
 import 'package:rvchat/main.dart';
+import 'package:rvchat/widgets/error.dart';
 
-class IntroPage4 extends StatefulWidget {
+import '../screens/mobile_layout_screen.dart';
+
+class IntroPage4 extends ConsumerStatefulWidget {
+  const IntroPage4({Key? key}) : super(key: key);
+
   @override
-  _OBScreenState4 createState() => _OBScreenState4();
+  ConsumerState<IntroPage4> createState() => _OBScreenState4();
 }
 
-class _OBScreenState4 extends State<IntroPage4> {
+class _OBScreenState4 extends ConsumerState<IntroPage4> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,7 +43,19 @@ class _OBScreenState4 extends State<IntroPage4> {
                     context,
                     MaterialPageRoute(
                       builder: (context) {
-                        return const MyApp();
+                        return ref.watch(userDataAuthProvider).when(
+                            data: (user) {
+                              if (user == null) {
+                                return const LandingScreen();
+                              }
+                              return const MobileLayoutScreen();
+                            },
+                            error: (err, trace) {
+                              return ErrorScreen(
+                                error: err.toString(),
+                              );
+                            },
+                            loading: () => const LoaderW());
                       },
                     ),
                   );

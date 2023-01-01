@@ -39,6 +39,13 @@ class MyApp extends ConsumerStatefulWidget {
 
 class _MyApp extends ConsumerState<MyApp> {
   bool? _isFirstRun;
+  @override
+  void initState() {
+    _checkFirstRun();
+    // TODO: implement initState
+    super.initState();
+  }
+
   void _checkFirstRun() async {
     bool ifr = await IsFirstRun.isFirstRun();
     setState(() {
