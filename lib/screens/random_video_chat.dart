@@ -30,6 +30,7 @@ class _RandomeVideoChatState extends ConsumerState<RandomeVideoChat>
   bool rVChat = false;
   UserModel? selectRandomUser;
   int liveNumbers = 0;
+  final String uid = FirebaseAuth.instance.currentUser!.uid;
 
   @override
   void initState() {
@@ -146,44 +147,34 @@ class _RandomeVideoChatState extends ConsumerState<RandomeVideoChat>
           }
         },
       ),
-      StreamBuilder(
-          stream: ref.read(authControllerProvider).allOnlineUsers(),
-          builder: (BuildContext context, AsyncSnapshot snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const LoaderT();
-            }
-            return StreamBuilder(
-                stream: ref.read(authControllerProvider).allLiveUsers(),
-                builder: (BuildContext context, AsyncSnapshot snapshot2) {
-                  if (snapshot2.connectionState == ConnectionState.waiting) {
-                    return const LoaderT();
-                  }
-                  List<UserModel> onlineUsers = snapshot.data;
-                  List<UserModel> liveUsers = snapshot2.data;
-                  int onlineUsersNumbers = 0;
 
-                  onlineUsersNumbers = onlineUsers.length;
-                  // liveOnlineNumbers = liveUsers.length;
+      // liveOnlineNumbers = liveUsers.length;
 
-                  return Container(
-                      decoration: const BoxDecoration(),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                              //=> Background Linear Gradient
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              colors: [
-                                grayL1,
-                                grayL1.withOpacity(0),
-                                grayL1.withOpacity(0),
-                                grayL1
-                              ]),
-                        ),
-                        child: Column(
-                          children: [
-                            const SizedBox(height: 50),
-                            const CircleAvatar(
+      Container(
+          decoration: const BoxDecoration(),
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  //=> Background Linear Gradient
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    grayL1,
+                    grayL1.withOpacity(0),
+                    grayL1.withOpacity(0),
+                    grayL1
+                  ]),
+            ),
+            child: Column(
+              children: [
+                const SizedBox(height: 50),
+                StreamBuilder<UserModel>(
+                    stream: ref.read(authControllerProvider).userDataById(uid),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Column(
+                          children: const [
+                            CircleAvatar(
                               backgroundColor: white,
                               radius: 42,
                               child: CircleAvatar(
@@ -193,126 +184,197 @@ class _RandomeVideoChatState extends ConsumerState<RandomeVideoChat>
                                 radius: 40,
                               ),
                             ),
-                            const SizedBox(height: 10),
-                            const Text(
+                            Text(
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     fontFamily: "yknir",
                                     fontWeight: FontWeight.w300,
                                     fontSize: 18,
                                     color: white),
-                                "Elena Johanson"),
-                            Expanded(
-                                child: Container(
-                              alignment: Alignment.bottomRight,
-                              child: Padding(
-                                padding: const EdgeInsets.only(right: 15),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    CircleAvatar(
-                                      backgroundColor: white.withOpacity(0.3),
-                                      radius: 20,
-                                      child: Image.asset(
-                                        "assets/icons/profs.png",
-                                        fit: BoxFit.cover,
-                                        color: white,
-                                        scale: 8,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 5),
-                                    Text(
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            fontFamily: "yknir",
-                                            fontWeight: FontWeight.w300,
-                                            fontSize: 20,
-                                            color: white),
-                                        onlineUsersNumbers.toString()),
-                                    const SizedBox(height: 10),
-                                    CircleAvatar(
-                                      backgroundColor: white.withOpacity(0.3),
-                                      radius: 20,
-                                      child: Image.asset(
-                                        "assets/icons/discussion.png",
-                                        fit: BoxFit.cover,
-                                        color: white,
-                                        scale: 8,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 5),
-                                    Text(
-                                        textAlign: TextAlign.center,
-                                        style: const TextStyle(
-                                            fontFamily: "yknir",
-                                            fontWeight: FontWeight.w300,
-                                            fontSize: 20,
-                                            color: white),
-                                        liveUsers.length.toString()),
-                                    const SizedBox(height: 10),
-                                  ],
-                                ),
-                              ),
-                            )),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(35, 0, 35, 0),
-                              child: SizedBox(
-                                child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: pinkL1,
-                                    elevation: 0,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(15.0)),
-                                    minimumSize: const Size.fromHeight(60),
-                                    padding: EdgeInsets.all(0),
-                                    //////// HERE
-                                  ),
-                                  onPressed: () async {
-                                    getAllData();
-                                    if (selectRandomUser != null) {
-                                      makeCall(ref, context, selectRandomUser!);
-                                    }
-                                  },
-                                  child: Row(
-                                    children: [
-                                      const Expanded(
-                                        child: Text(
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              fontFamily: "yknir",
-                                              fontWeight: FontWeight.w300,
-                                              fontSize: 25,
-                                            ),
-                                            "Randomize"),
-                                      ),
-                                      Container(
-                                        decoration: const BoxDecoration(
-                                          borderRadius: BorderRadius.only(
-                                            bottomRight: Radius.circular(15.0),
-                                            topRight: Radius.circular(15.0),
-                                          ),
-                                          color: pinkL2,
-                                        ),
-                                        height: 60,
-                                        width: 80,
-                                        child: Image.asset(
-                                          "assets/icons/random.png",
-                                          color: white,
-                                          scale: 5,
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 40),
+                                'User Name'),
                           ],
+                        );
+                      }
+                      UserModel currentUser = snapshot.data!;
+                      return Column(
+                        children: [
+                          CircleAvatar(
+                            backgroundColor: white,
+                            radius: 42,
+                            child: CircleAvatar(
+                              backgroundImage: NetworkImage(
+                                snapshot.data!.profilePic,
+                              ),
+                              radius: 40,
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                  fontFamily: "yknir",
+                                  fontWeight: FontWeight.w300,
+                                  fontSize: 18,
+                                  color: white),
+                              snapshot.data!.name),
+                        ],
+                      );
+                    }),
+                const SizedBox(height: 10),
+                Expanded(
+                    child: Container(
+                  alignment: Alignment.bottomRight,
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 15),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        CircleAvatar(
+                          backgroundColor: white.withOpacity(0.3),
+                          radius: 20,
+                          child: Image.asset(
+                            "assets/icons/profs.png",
+                            fit: BoxFit.cover,
+                            color: white,
+                            scale: 8,
+                          ),
                         ),
-                      ));
-                });
-          })
+                        const SizedBox(height: 5),
+                        StreamBuilder(
+                          stream:
+                              ref.read(authControllerProvider).allOnlineUsers(),
+                          builder:
+                              (BuildContext context, AsyncSnapshot snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              // If the Future is complete, display the preview.
+                              return const Text(
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontFamily: "yknir",
+                                      fontWeight: FontWeight.w300,
+                                      fontSize: 20,
+                                      color: white),
+                                  '+100');
+                            } else {
+                              List<UserModel> onlineUsers = snapshot.data;
+                              return Text(
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                      fontFamily: "yknir",
+                                      fontWeight: FontWeight.w300,
+                                      fontSize: 20,
+                                      color: white),
+                                  onlineUsers.length.toString());
+                            }
+                          },
+                        ),
+                        const SizedBox(height: 10),
+                        CircleAvatar(
+                          backgroundColor: white.withOpacity(0.3),
+                          radius: 20,
+                          child: Image.asset(
+                            "assets/icons/discussion.png",
+                            fit: BoxFit.cover,
+                            color: white,
+                            scale: 8,
+                          ),
+                        ),
+                        const SizedBox(height: 5),
+                        StreamBuilder(
+                          stream:
+                              ref.read(authControllerProvider).allLiveUsers(),
+                          builder:
+                              (BuildContext context, AsyncSnapshot snapshot2) {
+                            if (snapshot2.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Text(
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontFamily: "yknir",
+                                    fontWeight: FontWeight.w300,
+                                    fontSize: 20,
+                                    color: white),
+                                '20k',
+                              );
+                            } else {
+                              List<UserModel> liveUsers = snapshot2.data;
+                              return Text(
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                    fontFamily: "yknir",
+                                    fontWeight: FontWeight.w300,
+                                    fontSize: 20,
+                                    color: white),
+                                liveUsers.length.toString(),
+                              );
+                            }
+
+                            // liveOnlineNumbers = liveUsers.length;
+                          },
+                        ),
+                        const SizedBox(height: 10),
+                      ],
+                    ),
+                  ),
+                )),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(35, 0, 35, 0),
+                  child: SizedBox(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: pinkL1,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0)),
+                        minimumSize: const Size.fromHeight(60),
+                        padding: const EdgeInsets.all(0),
+                        //////// HERE
+                      ),
+                      onPressed: () async {
+                        getAllData();
+                        if (selectRandomUser != null) {
+                          makeCall(ref, context, selectRandomUser!);
+                        }
+                      },
+                      child: Row(
+                        children: [
+                          const Expanded(
+                            child: Text(
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontFamily: "yknir",
+                                  fontWeight: FontWeight.w300,
+                                  fontSize: 25,
+                                ),
+                                "Randomize"),
+                          ),
+                          Container(
+                            decoration: const BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                bottomRight: Radius.circular(15.0),
+                                topRight: Radius.circular(15.0),
+                              ),
+                              color: pinkL2,
+                            ),
+                            height: 60,
+                            width: 80,
+                            child: Image.asset(
+                              "assets/icons/random.png",
+                              color: white,
+                              scale: 5,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 40),
+              ],
+            ),
+          ))
+
       // }),
     ]));
   }
