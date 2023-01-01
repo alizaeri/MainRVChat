@@ -8,6 +8,7 @@ import 'package:rvchat/features/auth/screens/user_information_screen.dart';
 import 'package:rvchat/features/call/screens/call_screen.dart';
 import 'package:rvchat/features/select_contacts/screens/select_contact_screen.dart';
 import 'package:rvchat/models/call.dart';
+import 'package:rvchat/screens/busy.dart';
 
 final callRepositoryProvider = Provider(
   (ref) => CallRepository(
@@ -46,7 +47,7 @@ class CallRepository {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => Loader(),
+            builder: (context) => Busy(),
           ),
         );
         return;

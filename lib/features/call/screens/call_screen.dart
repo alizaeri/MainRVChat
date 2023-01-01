@@ -33,6 +33,7 @@ class _CallScreenState extends ConsumerState<CallScreen> {
 
   bool localUserJoined = false;
   int uid = 0;
+  bool micIcon = false;
 
   @override
   void initState() {
@@ -118,6 +119,7 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                         client: client!,
                         muteButtonChild: RawMaterialButton(
                           onPressed: () {
+                            micIcon = !true;
                             toggleMute(
                               sessionController: client!.sessionController,
                             );
@@ -127,12 +129,19 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                           fillColor: grayL1,
                           padding: const EdgeInsets.all(14),
                           //padding: const EdgeInsets.all(0),
-                          child: Image.asset(
-                            "assets/icons/mic_i.png",
-                            fit: BoxFit.cover,
-                            color: white,
-                            scale: 7,
-                          ),
+                          child: micIcon
+                              ? Image.asset(
+                                  "assets/icons/mic_i.png",
+                                  fit: BoxFit.cover,
+                                  color: white,
+                                  scale: 7,
+                                )
+                              : Image.asset(
+                                  "assets/icons/mic_icon.png",
+                                  fit: BoxFit.cover,
+                                  color: white,
+                                  scale: 7,
+                                ),
                         ),
                         switchCameraButtonChild: RawMaterialButton(
                           onPressed: () {

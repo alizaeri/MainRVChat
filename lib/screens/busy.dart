@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:rvchat/colors.dart';
 import 'package:rvchat/common/widgets/loaderT.dart';
 
-class busy extends StatefulWidget {
+class Busy extends StatefulWidget {
   @override
-  _busy createState() => _busy();
+  _Busy createState() => _Busy();
 }
 
-class _busy extends State<busy> {
+class _Busy extends State<Busy> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,7 +45,9 @@ class _busy extends State<busy> {
                   padding: const EdgeInsets.all(0),
                   //////// HERE
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pop(context);
+                },
                 child: Row(
                   children: [
                     const Expanded(
@@ -68,7 +70,7 @@ class _busy extends State<busy> {
                       ),
                       height: 60,
                       width: 60,
-                      child: Container(), // loaderT
+                      child: LoaderT(), // loaderT
                     )
                   ],
                 ),
