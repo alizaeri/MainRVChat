@@ -62,7 +62,7 @@ class _Busy extends State<Busy> {
                             fontWeight: FontWeight.w400,
                             fontSize: 25,
                           ),
-                          "Disline"),
+                          "decline"),
                     ),
                     Container(
                       decoration: BoxDecoration(

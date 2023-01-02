@@ -35,19 +35,18 @@ class _UserInformationScreenState extends ConsumerState<UserInformationScreen> {
   }
 
   void storeUserData() async {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => LoaderT(),
+    Navigator.of(context).push(
+      PageRouteBuilder(
+        opaque: false, // set to false
+        pageBuilder: (_, __, ___) => LoaderT(),
       ),
     );
     String name = nameController.text.trim();
     String defPic =
         'https://firebasestorage.googleapis.com/v0/b/mainrvchat.appspot.com/o/avatar.png?alt=media&token=8f42e74c-ac50-453e-9731-c51a1a4b0f4f';
     if (name.isNotEmpty) {
-      ref
-          .read(authControllerProvider)
-          .saveUserDataToFirebase(context, name, image, defPic, widget.country);
+      ref.read(authControllerProvider).saveUserDataToFirebase(
+          context, name, image, defPic, widget.country, true);
     }
   }
 

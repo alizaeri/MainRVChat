@@ -1,11 +1,9 @@
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:is_first_run/is_first_run.dart';
 import 'package:rvchat/colors.dart';
 import 'package:rvchat/common/widgets/loaderW.dart';
 import 'package:rvchat/features/auth/controller/auth_controller.dart';
-import 'package:rvchat/features/call/screens/call_screen.dart';
 import 'package:rvchat/features/landing/screens/landing_screen.dart';
 import 'package:rvchat/router.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -14,7 +12,6 @@ import 'package:rvchat/widgets/error.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'Intro_screens/onboarding_screen.dart';
 import 'firebase_options.dart';
-import 'screens/busy.dart';
 import 'screens/mobile_layout_screen.dart';
 
 Future<void> main() async {
@@ -70,7 +67,10 @@ class _MyApp extends ConsumerState<MyApp> {
                   return const LandingScreen();
                 }
                 return const MobileLayoutScreen();
+<<<<<<< HEAD
                 //return const OnBoardingScreen();
+=======
+>>>>>>> ad92d39c71baae6804b2108b4762e261ddfad819
               },
               error: (err, trace) {
                 return ErrorScreen(

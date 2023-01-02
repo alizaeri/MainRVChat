@@ -36,14 +36,15 @@ class AuthController {
   }
 
   void saveUserDataToFirebase(BuildContext context, String name,
-      File? profilePic, String defPic, String country) {
+      File? profilePic, String defPic, String country, bool firstEditPage) {
     authRepository.saveUserDataToFirebase(
         name: name,
         profilePic: profilePic,
         ref: ref,
         context: context,
         defPic: defPic,
-        country: country);
+        country: country,
+        firstEditPage: firstEditPage);
   }
 
   Future<UserModel?> getUserData() async {
