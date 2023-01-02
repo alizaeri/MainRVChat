@@ -77,7 +77,8 @@ class AuthRepository {
       required ProviderRef ref,
       required BuildContext context,
       required defPic,
-      required country}) async {
+      required country,
+      required firstEditPage}) async {
     try {
       String uid = auth.currentUser!.uid;
       String photoUrl =
@@ -105,10 +106,12 @@ class AuthRepository {
           groupId: []);
       await firestore.collection('users').doc(uid).set(user.toMap());
       Navigator.pop(context);
-      // Navigator.pushAndRemoveUntil(
-      //     context,
-      //     MaterialPageRoute(builder: (context) => const MobileLayoutScreen()),
-      //     (route) => false);
+      if (firstEditPage == true) {
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => const MobileLayoutScreen()),
+            (route) => false);
+      }
     } catch (e) {
       showSnackBar(context: context, content: e.toString());
     }

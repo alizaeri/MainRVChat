@@ -54,12 +54,11 @@ class _UserInformationEditPageState
     );
 
     if (name.isNotEmpty) {
-      ref
-          .read(authControllerProvider)
-          .saveUserDataToFirebase(context, name, image, defPic, widget.country);
+      ref.read(authControllerProvider).saveUserDataToFirebase(
+          context, name, image, defPic, widget.country, false);
     } else {
       ref.read(authControllerProvider).saveUserDataToFirebase(
-          context, defName, image, defPic, widget.country);
+          context, defName, image, defPic, widget.country, false);
     }
   }
 

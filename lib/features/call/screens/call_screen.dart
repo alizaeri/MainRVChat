@@ -33,6 +33,7 @@ class _CallScreenState extends ConsumerState<CallScreen> {
 
   bool localUserJoined = false;
   int uid = 0;
+
   bool micIcon = false;
 
   @override
@@ -119,7 +120,16 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                         client: client!,
                         muteButtonChild: RawMaterialButton(
                           onPressed: () {
-                            micIcon = !true;
+                            if (micIcon) {
+                              setState(() {
+                                micIcon = false;
+                              });
+                            } else {
+                              setState(() {
+                                micIcon = true;
+                              });
+                            }
+
                             toggleMute(
                               sessionController: client!.sessionController,
                             );
