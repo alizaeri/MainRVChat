@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rvchat/colors.dart';
 
 class IntroPage1 extends StatefulWidget {
   @override
@@ -15,49 +16,40 @@ class _OBScreenState extends State<IntroPage1> {
             //=> Background Linear Gradient
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [
-              Color(0xffb5e48c),
-              Color(0xff34a0a4),
-              Color(0xff1a759f),
-              Color(0xff184e77),
-            ],
+            colors: [white, whiteW1],
           ),
         ),
         child: Center(
           child: Container(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(0, 0, 0, 130),
+              padding: const EdgeInsets.fromLTRB(30, 0, 30, 130),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  SizedBox(
-                    width: 200,
-                    height: 325,
-                    child: Image(
-                      image: AssetImage("assets/icons/avatar.png"),
-                    ),
+                children: [
+                  Image.asset(
+                    "assets/images/intro1.webp",
+                    fit: BoxFit.cover,
+                    scale: 2,
                   ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    "Player Hasan Yousefi",
+                  const SizedBox(height: 80),
+                  const Text(
+                    "Find new friends",
                     style: TextStyle(
-                      color: Color(0xffffffff),
-                      fontSize: 20,
-                      fontFamily: "seguiBB",
+                      fontFamily: "yknir",
+                      fontWeight: FontWeight.w600,
+                      fontSize: 22,
+                      color: pinkL1,
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(30, 10, 30, 0),
-                    child: Text(
-                      textAlign: TextAlign.center,
-                      "Lorem ipsum dolor sit amet, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel facilisis. ",
-                      style: TextStyle(
-                        fontFamily: "seguiL",
-                        color: Color(0xffffffff),
-                        fontSize: 14,
-                      ),
+                  const SizedBox(height: 10),
+                  Text(
+                    textAlign: TextAlign.center,
+                    "With Random VIdeo Chat (RVC), you can connect to all online users around the world and make a video call with them.",
+                    style: TextStyle(
+                      fontFamily: "yknir",
+                      fontWeight: FontWeight.w400,
+                      fontSize: 16,
+                      color: grayL1.withOpacity(0.6),
                     ),
                   ),
                 ],

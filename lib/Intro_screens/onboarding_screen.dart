@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rvchat/colors.dart';
 import 'package:rvchat/common/widgets/loaderW.dart';
 import 'package:rvchat/features/auth/controller/auth_controller.dart';
 import 'package:rvchat/features/landing/screens/landing_screen.dart';
@@ -44,10 +45,10 @@ class _OnBoardingScreenState extends ConsumerState<OnBoardingScreen> {
             alignment: const Alignment(0, 0.60),
             child: SmoothPageIndicator(
               controller: _controller,
-              effect: const WormEffect(
+              effect: WormEffect(
                 dotHeight: 10,
-                dotColor: Color(0x44ffffff),
-                activeDotColor: Colors.white,
+                dotColor: pinkL1.withOpacity(0.3),
+                activeDotColor: pinkL1,
                 dotWidth: 35,
                 type: WormType.normal,
               ),
@@ -93,10 +94,14 @@ class _OnBoardingScreenState extends ConsumerState<OnBoardingScreen> {
                             ),
                           );
                         },
-                        child: const Text(
+                        child: Text(
                           "Start",
-                          style:
-                              TextStyle(color: Color(0xccffffff), fontSize: 18),
+                          style: TextStyle(
+                            fontFamily: "yknir",
+                            fontWeight: FontWeight.w400,
+                            fontSize: 20,
+                            color: pinkL1,
+                          ),
                         ),
                       ),
                     )
@@ -106,8 +111,12 @@ class _OnBoardingScreenState extends ConsumerState<OnBoardingScreen> {
                       },
                       child: const Text(
                         "Skip",
-                        style:
-                            TextStyle(color: Color(0xccffffff), fontSize: 18),
+                        style: TextStyle(
+                          fontFamily: "yknir",
+                          fontWeight: FontWeight.w400,
+                          fontSize: 20,
+                          color: pinkL1,
+                        ),
                       ),
                     ),
             ),
@@ -128,8 +137,12 @@ class _OnBoardingScreenState extends ConsumerState<OnBoardingScreen> {
                         },
                         child: const Text(
                           "",
-                          style:
-                              TextStyle(color: Color(0xccffffff), fontSize: 18),
+                          style: TextStyle(
+                            fontFamily: "yknir",
+                            fontWeight: FontWeight.w400,
+                            fontSize: 20,
+                            color: pinkL1,
+                          ),
                         ),
                       )
                     : GestureDetector(
@@ -141,8 +154,12 @@ class _OnBoardingScreenState extends ConsumerState<OnBoardingScreen> {
                         },
                         child: const Text(
                           "Next",
-                          style:
-                              TextStyle(color: Color(0xccffffff), fontSize: 18),
+                          style: TextStyle(
+                            fontFamily: "yknir",
+                            fontWeight: FontWeight.w400,
+                            fontSize: 20,
+                            color: pinkL1,
+                          ),
                         ),
                       ),
               ),

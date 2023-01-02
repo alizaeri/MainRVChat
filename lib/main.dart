@@ -5,6 +5,7 @@ import 'package:is_first_run/is_first_run.dart';
 import 'package:rvchat/colors.dart';
 import 'package:rvchat/common/widgets/loaderW.dart';
 import 'package:rvchat/features/auth/controller/auth_controller.dart';
+import 'package:rvchat/features/call/screens/call_screen.dart';
 import 'package:rvchat/features/landing/screens/landing_screen.dart';
 import 'package:rvchat/router.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -69,7 +70,7 @@ class _MyApp extends ConsumerState<MyApp> {
                   return const LandingScreen();
                 }
                 //return const MobileLayoutScreen();
-                return Busy();
+                return const OnBoardingScreen();
               },
               error: (err, trace) {
                 return ErrorScreen(
