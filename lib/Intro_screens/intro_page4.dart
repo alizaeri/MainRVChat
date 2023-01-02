@@ -6,6 +6,7 @@ import 'package:rvchat/features/landing/screens/landing_screen.dart';
 import 'package:rvchat/main.dart';
 import 'package:rvchat/widgets/error.dart';
 
+import '../colors.dart';
 import '../screens/mobile_layout_screen.dart';
 
 class IntroPage4 extends ConsumerStatefulWidget {
@@ -26,17 +27,48 @@ class _OBScreenState4 extends ConsumerState<IntroPage4> {
               //=> Background Linear Gradient
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              colors: [
-                Color(0xffb5e48c),
-                Color(0xff34a0a4),
-                Color(0xff1a759f),
-                Color(0xff184e77),
-              ],
+              colors: [white, whiteW1],
             ),
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
+              Expanded(
+                  child: Padding(
+                padding: const EdgeInsets.fromLTRB(30, 0, 30, 130),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      "assets/images/intro3.webp",
+                      fit: BoxFit.cover,
+                      scale: 2,
+                    ),
+                    const SizedBox(height: 80),
+                    const Text(
+                      "Real Time Massaging",
+                      style: TextStyle(
+                        fontFamily: "yknir",
+                        fontWeight: FontWeight.w600,
+                        fontSize: 22,
+                        color: pinkL1,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      textAlign: TextAlign.center,
+                      "Real-time chat with the ability to send photos, audio and video files",
+                      style: TextStyle(
+                        fontFamily: "yknir",
+                        fontWeight: FontWeight.w400,
+                        fontSize: 16,
+                        color: grayL1.withOpacity(0.6),
+                      ),
+                    ),
+                  ],
+                ),
+              )),
               GestureDetector(
                 onTap: () {
                   Navigator.push(
@@ -63,12 +95,12 @@ class _OBScreenState4 extends ConsumerState<IntroPage4> {
                 child: Container(
                   height: 100,
                   width: double.infinity,
-                  color: const Color(0xffffffff),
+                  color: pinkL1,
                   child: const Center(
                     child: Text(
                       "Get Started",
                       style: TextStyle(
-                          color: Color(0xff184e77),
+                          color: white,
                           fontSize: 20,
                           fontWeight: FontWeight.bold),
                     ),

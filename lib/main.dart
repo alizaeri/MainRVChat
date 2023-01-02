@@ -1,4 +1,3 @@
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:is_first_run/is_first_run.dart';
@@ -13,7 +12,6 @@ import 'package:rvchat/widgets/error.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'Intro_screens/onboarding_screen.dart';
 import 'firebase_options.dart';
-import 'screens/busy.dart';
 import 'screens/mobile_layout_screen.dart';
 
 Future<void> main() async {
