@@ -61,18 +61,21 @@ class OTPScreen extends ConsumerWidget {
                                   fontSize: 40,
                                   color: white),
                               "Verfing OTP"),
-                          Expanded(
+                          const Expanded(
                             child: Center(
-                              child: ClipOval(
-                                child: Image.asset(
-                                  "assets/icons/avatar.png",
-                                  fit: BoxFit.cover,
-                                  scale: (size.width / size.width) * 2,
+                              child: CircleAvatar(
+                                backgroundColor: white,
+                                radius: 75,
+                                child: CircleAvatar(
+                                  backgroundImage: AssetImage(
+                                    "assets/icons/avatar.png",
+                                  ),
+                                  radius: 70,
                                 ),
                               ),
                             ),
                           ),
-                          SizedBox(height: 10),
+                          const SizedBox(height: 10),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: const [

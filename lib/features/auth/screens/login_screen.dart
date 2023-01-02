@@ -88,13 +88,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                   fontSize: 40,
                                   color: white),
                               "Login"),
-                          Expanded(
+                          const Expanded(
                             child: Center(
-                              child: ClipOval(
-                                child: Image.asset(
-                                  "assets/icons/avatar.png",
-                                  fit: BoxFit.cover,
-                                  scale: (size.width / size.width) * 2.5,
+                              child: CircleAvatar(
+                                backgroundColor: white,
+                                radius: 75,
+                                child: CircleAvatar(
+                                  backgroundImage: AssetImage(
+                                    "assets/icons/avatar.png",
+                                  ),
+                                  radius: 70,
                                 ),
                               ),
                             ),

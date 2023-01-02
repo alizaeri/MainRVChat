@@ -34,7 +34,7 @@ class _OBScreenState2 extends State<IntroPage2> {
                   ),
                   const SizedBox(height: 80),
                   const Text(
-                    "Random Chat",
+                    "Random Person Video Chat",
                     style: TextStyle(
                       fontFamily: "yknir",
                       fontWeight: FontWeight.w600,
@@ -45,7 +45,7 @@ class _OBScreenState2 extends State<IntroPage2> {
                   const SizedBox(height: 10),
                   Text(
                     textAlign: TextAlign.center,
-                    "With Random VIdeo Chat (RVC), you can connect to all online users around the world and make a video call with them.",
+                    "easy to use and fun, get paired with a random person for video chat then just swipe right to connect with someone",
                     style: TextStyle(
                       fontFamily: "yknir",
                       fontWeight: FontWeight.w400,

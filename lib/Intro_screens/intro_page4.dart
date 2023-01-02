@@ -47,7 +47,7 @@ class _OBScreenState4 extends ConsumerState<IntroPage4> {
                     ),
                     const SizedBox(height: 80),
                     const Text(
-                      "Real Time Massaging",
+                      "Person to Person",
                       style: TextStyle(
                         fontFamily: "yknir",
                         fontWeight: FontWeight.w600,
@@ -58,7 +58,7 @@ class _OBScreenState4 extends ConsumerState<IntroPage4> {
                     const SizedBox(height: 10),
                     Text(
                       textAlign: TextAlign.center,
-                      "Real-time chat with the ability to send photos, audio and video files",
+                      " strangers worldwide in voice calls, video calls, and messages in person to person",
                       style: TextStyle(
                         fontFamily: "yknir",
                         fontWeight: FontWeight.w400,

@@ -69,8 +69,8 @@ class _MyApp extends ConsumerState<MyApp> {
                 if (user == null) {
                   return const LandingScreen();
                 }
-                //return const MobileLayoutScreen();
-                return const OnBoardingScreen();
+                return const MobileLayoutScreen();
+                //return const OnBoardingScreen();
               },
               error: (err, trace) {
                 return ErrorScreen(
