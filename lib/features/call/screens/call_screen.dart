@@ -137,7 +137,7 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                                   scale: 7,
                                 )
                               : Image.asset(
-                                  "assets/icons/mic_icon.png",
+                                  "assets/icons/mic_a.png",
                                   fit: BoxFit.cover,
                                   color: white,
                                   scale: 7,
