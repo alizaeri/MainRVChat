@@ -71,6 +71,8 @@ class _CallScreenState extends ConsumerState<CallScreen> {
           }),
         ),
       );
+      client!.engine.setRemoteVideoStreamType(
+          uid: 0, streamType: VideoStreamType.videoStreamLow);
     } catch (e) {
       print(
           "exceotion is**************************************************************************************************************: $e"); // this logs that above error.
