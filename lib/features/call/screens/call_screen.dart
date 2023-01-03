@@ -56,6 +56,7 @@ class _CallScreenState extends ConsumerState<CallScreen> {
   void initAgora() async {
     try {
       await client!.initialize();
+      client!.engine.enableDualStreamMode(enabled: true);
 
       client!.engine.registerEventHandler(
         RtcEngineEventHandler(
@@ -71,7 +72,14 @@ class _CallScreenState extends ConsumerState<CallScreen> {
           }),
         ),
       );
-      client!.engine.setRemoteVideoStreamType(
+      VideoEncoderConfiguration videoConfig = const VideoEncoderConfiguration(
+          mirrorMode: VideoMirrorModeType.videoMirrorModeAuto,
+          frameRate: 10,
+          bitrate: standardBitrate,
+          dimensions: VideoDimensions(width: 640, height: 360),
+          orientationMode: OrientationMode.orientationModeAdaptive,
+          degradationPreference: DegradationPreference.maintainBalanced);
+      await client!.engine.setRemoteVideoStreamType(
           uid: 0, streamType: VideoStreamType.videoStreamLow);
     } catch (e) {
       print(
