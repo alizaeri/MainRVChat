@@ -71,6 +71,8 @@ class _CallScreenState extends ConsumerState<CallScreen> {
           }),
         ),
       );
+      client!.engine.setRemoteVideoStreamType(
+          uid: 0, streamType: VideoStreamType.videoStreamLow);
     } catch (e) {
       print(
           "exceotion is**************************************************************************************************************: $e"); // this logs that above error.
@@ -100,7 +102,7 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                     // floatingLayoutContainerHeight: 200,
                     // floatingLayoutContainerWidth: 200,
                     // showNumberOfUsers: true,
-                    showAVState: true,
+                    // showAVState: true,
                   ),
                   Container(
                     alignment: Alignment.center,
@@ -195,9 +197,6 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                         disableVideoButtonChild: RawMaterialButton(
                           onPressed: () async {
                             await toggleCamera(
-                              sessionController: client!.sessionController,
-                            );
-                            toggleVisible(
                               sessionController: client!.sessionController,
                             );
                           },
