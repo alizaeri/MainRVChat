@@ -46,6 +46,7 @@ class _LocalWidgetState extends ConsumerState<LocalWidget> {
   @override
   void dispose() {
     super.dispose();
+    FlutterRingtonePlayer.stop();
   }
 
   @override
