@@ -1,4 +1,5 @@
 import 'package:agora_rtc_engine/src/binding_forward_export.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 // import 'package:agora_uikit/agora_uikit.dart';
 
 // import 'package:agora_uikit/controllers/rtc_buttons.dart';
@@ -49,6 +50,7 @@ class _CallScreenState extends ConsumerState<CallScreen> {
   bool _isJoined = false;
   int? _remoteUid;
   late String token;
+  bool toggleVideo = false;
 
   bool micIcon = false;
   final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
@@ -204,7 +206,18 @@ class _CallScreenState extends ConsumerState<CallScreen> {
   @override
   void dispose() async {
     super.dispose();
-    await agoraEngine.leaveChannel();
+    // await agoraEngine.leaveChannel();
+    await agoraEngine.release();
+    await FirebaseFirestore.instance
+        .collection('call')
+        .doc(
+          widget.call.callerId,
+        )
+        .delete();
+    await FirebaseFirestore.instance
+        .collection('call')
+        .doc(widget.call.receiverId)
+        .delete();
 
     // client!.engine.release();
   }
@@ -226,12 +239,12 @@ class _CallScreenState extends ConsumerState<CallScreen> {
             // ),
 
             Container(
-              height: 240,
+              height: 350,
               decoration: BoxDecoration(border: Border.all()),
               child: Center(child: _localPreview()),
             ),
             Container(
-              height: 240,
+              height: 350,
               decoration: BoxDecoration(border: Border.all()),
               child: Center(child: _remoteVideo()),
             ),
@@ -241,13 +254,14 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                   onPressed: () {
                     if (micIcon) {
                       setState(() {
-                        agoraEngine.disableAudio();
+                        agoraEngine.enableAudio();
+
                         micIcon = false;
                       });
                     } else {
                       setState(() {
                         micIcon = true;
-                        agoraEngine.enableAudio();
+                        agoraEngine.disableAudio();
                       });
                     }
                   },
@@ -271,10 +285,8 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                         ),
                 ),
                 const SizedBox(width: 10),
-                ElevatedButton(
+                RawMaterialButton(
                   onPressed: () {
-                    print(
-                        '44444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444');
                     leave();
                     ref.read(callControllerProvider).endCall(
                           widget.call.callerId,
@@ -284,6 +296,10 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                     Navigator.pop(context);
                     agoraEngine.leaveChannel();
                   },
+                  shape: const CircleBorder(),
+                  elevation: 2.0,
+                  fillColor: pink,
+                  padding: const EdgeInsets.all(14),
                   child: Image.asset(
                     "assets/icons/call_end.png",
                     fit: BoxFit.cover,
@@ -292,7 +308,9 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                   ),
                 ),
                 RawMaterialButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    agoraEngine.switchCamera();
+                  },
                   shape: const CircleBorder(),
                   elevation: 2.0,
                   fillColor: grayL1,
@@ -307,7 +325,19 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                 ),
                 RawMaterialButton(
                   onPressed: () async {
-                    agoraEngine.enableLocalVideo(false);
+                    if (toggleVideo) {
+                      setState(() {
+                        agoraEngine.muteLocalVideoStream(false);
+
+                        toggleVideo = false;
+                      });
+                    } else {
+                      setState(() {
+                        toggleVideo = true;
+
+                        agoraEngine.muteLocalVideoStream(true);
+                      });
+                    }
                   },
                   shape: const CircleBorder(),
                   elevation: 2.0,
