@@ -1,8 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:rvchat/Mycolors.dart';
 import 'package:rvchat/colors.dart';
 import 'package:rvchat/colors.dart';
+import 'package:rvchat/features/auth/controller/auth_controller.dart';
 import 'package:rvchat/features/auth/screens/login_screen.dart';
 
 import 'package:rvchat/features/chat/widget/contacts_list.dart';
@@ -110,11 +112,17 @@ class _ContactsScreenState extends State<ContactsScreen> {
                   ),
                 ],
                 initialValue: 0,
-                onSelected: (value) {
+                onSelected: (value) async {
                   print("clik shod");
                   switch (value) {
                     case 1:
                       {
+                        await FirebaseFirestore.instance
+                            .collection('users')
+                            .doc(FirebaseAuth.instance.currentUser!.uid)
+                            .update({
+                          'isOnline': false,
+                        });
                         FirebaseAuth.instance.signOut();
 
                         Navigator.pushAndRemoveUntil(

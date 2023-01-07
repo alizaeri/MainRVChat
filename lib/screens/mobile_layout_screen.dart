@@ -1,5 +1,6 @@
 import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart';
@@ -38,9 +39,18 @@ class _MobileLayoutScreenState extends ConsumerState<MobileLayoutScreen>
   }
 
   @override
-  void dispose() {
+  void dispose() async {
     super.dispose();
-    ref.read(authControllerProvider).setUserState(false);
+    try {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .update({
+        'isOnline': false,
+      });
+    } catch (e) {
+      print('user sign out befor $e');
+    }
 
     WidgetsBinding.instance.removeObserver(this);
   }
