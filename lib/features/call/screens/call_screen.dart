@@ -371,6 +371,31 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                                     ],
                                   ),
                                 ),
+                                const PopupMenuDivider(),
+                                PopupMenuItem(
+                                  value: 3,
+                                  child: Row(
+                                    children: const [
+                                      Image(
+                                        width: 25,
+                                        image:
+                                            Svg('assets/icons/invisible.svg'),
+                                        fit: BoxFit.cover,
+                                        color: white,
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Text(
+                                        "Hide Button",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w300,
+                                          color: white,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ],
                               initialValue: 0,
                               onSelected: (value) async {},
