@@ -22,6 +22,7 @@ import 'package:rvchat/config/agora_config.dart';
 import 'package:rvchat/features/call/controller/call_controller.dart';
 import 'package:rvchat/models/call.dart';
 import 'package:wakelock/wakelock.dart';
+import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 
 class CallScreen extends ConsumerStatefulWidget {
   final String channelId;
@@ -226,230 +227,353 @@ class _CallScreenState extends ConsumerState<CallScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       //  client == null &&
-      body: SafeArea(
-        child: ListView(
-          children: [
-            // AgoraVideoViewer(
-            //   client: client!,
-            //   layoutType: Layout.floating,
-            //   // floatingLayoutContainerHeight: 200,
-            //   // floatingLayoutContainerWidth: 200,
-            //   // showNumberOfUsers: true,
-            //   // showAVState: true,
-            // ),
-
-            Container(
-              height: 350,
-              decoration: BoxDecoration(border: Border.all()),
-              child: Center(child: _localPreview()),
+      body: Stack(
+        children: [
+          _localPreview(),
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  //=> Background Linear Gradient
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    grayL1,
+                    grayL1.withOpacity(0),
+                    grayL1.withOpacity(0),
+                    grayL1.withOpacity(0),
+                    grayL1
+                  ]),
             ),
-            Container(
-              height: 350,
-              decoration: BoxDecoration(border: Border.all()),
-              child: Center(child: _remoteVideo()),
-            ),
-            Row(
-              children: <Widget>[
-                RawMaterialButton(
-                  onPressed: () {
-                    if (micIcon) {
-                      setState(() {
-                        agoraEngine.enableAudio();
-
-                        micIcon = false;
-                      });
-                    } else {
-                      setState(() {
-                        micIcon = true;
-                        agoraEngine.disableAudio();
-                      });
-                    }
-                  },
-                  shape: const CircleBorder(),
-                  elevation: 2.0,
-                  fillColor: grayL1,
-                  padding: const EdgeInsets.all(14),
-                  //padding: const EdgeInsets.all(0),
-                  child: micIcon
-                      ? Image.asset(
-                          "assets/icons/mic_i.png",
-                          fit: BoxFit.cover,
+            child: Column(
+              children: [
+                const SizedBox(height: 60),
+                Row(
+                  children: [
+                    Expanded(child: Container()),
+                    const Text(
+                      'Appeks Alphadron',
+                      style: TextStyle(
+                        fontSize: 25,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w200,
+                      ),
+                    ),
+                    Expanded(
+                        child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        IconButton(
+                          onPressed: () {},
+                          icon: GestureDetector(
+                            child: PopupMenuButton<int>(
+                              elevation: 2,
+                              color: grayL1.withOpacity(0.8),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(25),
+                              ),
+                              itemBuilder: (context) => [
+                                PopupMenuItem(
+                                  value: 1,
+                                  child: Row(
+                                    children: const [
+                                      SizedBox(
+                                        width: 7,
+                                      ),
+                                      Icon(
+                                        Icons.circle,
+                                        color: pink,
+                                        size: 15,
+                                      ),
+                                      SizedBox(
+                                        width: 13,
+                                      ),
+                                      Text(
+                                        "Screen Recorder",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w300,
+                                          color: white,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const PopupMenuDivider(),
+                                PopupMenuItem(
+                                  value: 2,
+                                  child: Row(
+                                    children: const [
+                                      Image(
+                                        width: 25,
+                                        image: Svg(
+                                            'assets/icons/swich_camera.svg'),
+                                        fit: BoxFit.cover,
+                                        color: white,
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Text(
+                                        "Swich Camera",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w300,
+                                          color: white,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const PopupMenuDivider(),
+                                PopupMenuItem(
+                                  value: 3,
+                                  child: Row(
+                                    children: const [
+                                      Image(
+                                        width: 25,
+                                        image:
+                                            Svg('assets/icons/camera_off.svg'),
+                                        fit: BoxFit.cover,
+                                        color: white,
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Text(
+                                        "Turn Off Camera",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w300,
+                                          color: white,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const PopupMenuDivider(),
+                                PopupMenuItem(
+                                  value: 3,
+                                  child: Row(
+                                    children: const [
+                                      Image(
+                                        width: 25,
+                                        image: Svg('assets/icons/layout.svg'),
+                                        fit: BoxFit.cover,
+                                        color: white,
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Text(
+                                        "Change Layout",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w300,
+                                          color: white,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                              initialValue: 0,
+                              onSelected: (value) async {},
+                              child: const Icon(
+                                Icons.more_vert,
+                                color: Colors.white,
+                                size: 26,
+                              ),
+                            ),
+                          ),
                           color: white,
-                          scale: 7,
-                        )
-                      : Image.asset(
-                          "assets/icons/mic_a.png",
-                          fit: BoxFit.cover,
-                          color: white,
-                          scale: 7,
                         ),
+                      ],
+                    )),
+                  ],
                 ),
-                const SizedBox(width: 10),
-                RawMaterialButton(
-                  onPressed: () {
-                    leave();
-                    ref.read(callControllerProvider).endCall(
-                          widget.call.callerId,
-                          widget.call.receiverId,
-                          context,
-                        );
-                    Navigator.pop(context);
-                    agoraEngine.leaveChannel();
-                  },
-                  shape: const CircleBorder(),
-                  elevation: 2.0,
-                  fillColor: pink,
-                  padding: const EdgeInsets.all(14),
-                  child: Image.asset(
-                    "assets/icons/call_end.png",
-                    fit: BoxFit.cover,
-                    color: white,
-                    scale: 5,
-                  ),
+                Expanded(child: Container()),
+                Row(
+                  children: [
+                    Expanded(child: Container()),
+                    CircleAvatar(
+                      radius: 57,
+                      backgroundColor: white,
+                      child: CircleAvatar(
+                        radius: 55,
+                        child: _remoteVideo(),
+                      ),
+                    ),
+                    const SizedBox(width: 20)
+                  ],
                 ),
-                RawMaterialButton(
-                  onPressed: () {
-                    agoraEngine.switchCamera();
-                  },
-                  shape: const CircleBorder(),
-                  elevation: 2.0,
-                  fillColor: grayL1,
-                  padding: const EdgeInsets.all(14),
-                  //padding: const EdgeInsets.all(0),
-                  child: Image.asset(
-                    "assets/icons/camera-sw.png",
-                    fit: BoxFit.cover,
-                    color: white,
-                    scale: 7,
-                  ),
-                ),
-                RawMaterialButton(
-                  onPressed: () async {
-                    if (toggleVideo) {
-                      setState(() {
-                        agoraEngine.muteLocalVideoStream(false);
+                const SizedBox(height: 20),
+                Row(
+                  children: [
+                    Expanded(child: Container()),
+                    Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Image(
+                          width: 300,
+                          height: 87,
+                          image: Svg('assets/images/bg_nav.svg'),
+                          fit: BoxFit.cover,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: Row(
+                            children: [
+                              RawMaterialButton(
+                                onPressed: () {
+                                  if (micIcon) {
+                                    setState(() {
+                                      agoraEngine.enableAudio();
+                                      micIcon = false;
+                                    });
+                                  } else {
+                                    setState(() {
+                                      micIcon = true;
+                                      agoraEngine.disableAudio();
+                                    });
+                                  }
+                                },
+                                shape: const CircleBorder(),
+                                elevation: 0,
+                                fillColor: white.withOpacity(0.2),
+                                padding: const EdgeInsets.all(5),
+                                //padding: const EdgeInsets.all(0),
+                                child: micIcon
+                                    ? Image(
+                                        image: Svg('assets/icons/sp_n.svg'),
+                                        fit: BoxFit.cover,
+                                        color: white,
+                                        width: 35,
+                                      )
+                                    : Image(
+                                        image: Svg('assets/icons/sp_off.svg'),
+                                        fit: BoxFit.cover,
+                                        color: white.withOpacity(0.5),
+                                        width: 35,
+                                      ),
+                              ),
+                              const SizedBox(width: 16),
+                              RawMaterialButton(
+                                onPressed: () {
+                                  leave();
+                                  ref.read(callControllerProvider).endCall(
+                                        widget.call.callerId,
+                                        widget.call.receiverId,
+                                        context,
+                                      );
+                                  Navigator.pop(context);
+                                  agoraEngine.leaveChannel();
+                                },
+                                shape: const CircleBorder(),
+                                elevation: 0,
+                                fillColor: white,
+                                padding: const EdgeInsets.all(2),
+                                child: Image(
+                                  image: Svg('assets/icons/call_end.svg'),
+                                  fit: BoxFit.cover,
+                                  color: pink,
+                                  width: 60,
+                                ),
+                              ),
+                              const SizedBox(width: 16),
+                              RawMaterialButton(
+                                onPressed: () {
+                                  if (micIcon) {
+                                    setState(() {
+                                      agoraEngine.enableAudio();
 
-                        toggleVideo = false;
-                      });
-                    } else {
-                      setState(() {
-                        toggleVideo = true;
-
-                        agoraEngine.muteLocalVideoStream(true);
-                      });
-                    }
-                  },
-                  shape: const CircleBorder(),
-                  elevation: 2.0,
-                  fillColor: grayL1,
-                  padding: const EdgeInsets.all(14),
-                  //padding: const EdgeInsets.all(0),
-                  child: Image.asset(
-                    "assets/icons/camera_off.png",
-                    fit: BoxFit.cover,
-                    color: white,
-                    scale: 7,
-                  ),
+                                      micIcon = false;
+                                    });
+                                  } else {
+                                    setState(() {
+                                      micIcon = true;
+                                      agoraEngine.disableAudio();
+                                    });
+                                  }
+                                },
+                                shape: const CircleBorder(),
+                                elevation: 0,
+                                fillColor: white.withOpacity(0.2),
+                                padding: const EdgeInsets.all(5),
+                                //padding: const EdgeInsets.all(0),
+                                child: micIcon
+                                    ? Image(
+                                        image: Svg('assets/icons/mic_n.svg'),
+                                        fit: BoxFit.cover,
+                                        color: white,
+                                        width: 35,
+                                      )
+                                    : Image(
+                                        image: Svg('assets/icons/mic_off.svg'),
+                                        fit: BoxFit.cover,
+                                        color: white.withOpacity(0.5),
+                                        width: 35,
+                                      ),
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                    Expanded(child: Container()),
+                  ],
                 ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: <Widget>[
+                //     const SizedBox(width: 10),
+                //     RawMaterialButton(
+                //       onPressed: () {
+                //         agoraEngine.switchCamera();
+                //       },
+                //       shape: const CircleBorder(),
+                //       elevation: 2.0,
+                //       fillColor: grayL1,
+                //       padding: const EdgeInsets.all(14),
+                //       //padding: const EdgeInsets.all(0),
+                //       child: Image.asset(
+                //         "assets/icons/camera-sw.png",
+                //         fit: BoxFit.cover,
+                //         color: white,
+                //         scale: 7,
+                //       ),
+                //     ),
+                //     RawMaterialButton(
+                //       onPressed: () async {
+                //         if (toggleVideo) {
+                //           setState(() {
+                //             agoraEngine.muteLocalVideoStream(false);
+
+                //             toggleVideo = false;
+                //           });
+                //         } else {
+                //           setState(() {
+                //             toggleVideo = true;
+
+                //             agoraEngine.muteLocalVideoStream(true);
+                //           });
+                //         }
+                //       },
+                //       shape: const CircleBorder(),
+                //       elevation: 2.0,
+                //       fillColor: grayL1,
+                //       padding: const EdgeInsets.all(14),
+                //       //padding: const EdgeInsets.all(0),
+                //       child: Image.asset(
+                //         "assets/icons/camera_off.png",
+                //         fit: BoxFit.cover,
+                //         color: white,
+                //         scale: 7,
+                //       ),
+                //     ),
+                //   ],
+                // ),
+                const SizedBox(height: 30)
               ],
             ),
-            // AgoraVideoButtons(
-            //   client: client!,
-            //   muteButtonChild: RawMaterialButton(
-            //     onPressed: () {
-            //       if (micIcon) {
-            //         setState(() {
-            //           micIcon = false;
-            //         });
-            //       } else {
-            //         setState(() {
-            //           micIcon = true;
-            //         });
-            //       }
-
-            //       // toggleMute(
-            //       //   sessionController: client!.sessionController,
-            //       // );
-            //     },
-            //     shape: const CircleBorder(),
-            //     elevation: 2.0,
-            //     fillColor: grayL1,
-            //     padding: const EdgeInsets.all(14),
-            //     //padding: const EdgeInsets.all(0),
-            //     child: micIcon
-            //         ? Image.asset(
-            //             "assets/icons/mic_i.png",
-            //             fit: BoxFit.cover,
-            //             color: white,
-            //             scale: 7,
-            //           )
-            //         : Image.asset(
-            //             "assets/icons/mic_a.png",
-            //             fit: BoxFit.cover,
-            //             color: white,
-            //             scale: 7,
-            //           ),
-            //   ),
-            //   switchCameraButtonChild: RawMaterialButton(
-            //     onPressed: () {
-            //       // switchCamera(
-            //       //   sessionController: client!.sessionController,
-            //       // );
-            //     },
-            //     shape: const CircleBorder(),
-            //     elevation: 2.0,
-            //     fillColor: grayL1,
-            //     padding: const EdgeInsets.all(14),
-            //     //padding: const EdgeInsets.all(0),
-            //     child: Image.asset(
-            //       "assets/icons/camera-sw.png",
-            //       fit: BoxFit.cover,
-            //       color: white,
-            //       scale: 7,
-            //     ),
-            //   ),
-            //   disconnectButtonChild: RawMaterialButton(
-            //     onPressed: () async {
-            //       // await client!.engine.leaveChannel();
-            //       ref.read(callControllerProvider).endCall(
-            //             widget.call.callerId,
-            //             widget.call.receiverId,
-            //             context,
-            //           );
-            //       Navigator.pop(context);
-            //     },
-            //     shape: const CircleBorder(),
-            //     elevation: 2.0,
-            //     fillColor: pink,
-            //     padding: const EdgeInsets.all(14),
-            //     child: Image.asset(
-            //       "assets/icons/call_end.png",
-            //       fit: BoxFit.cover,
-            //       color: white,
-            //       scale: 5,
-            //     ),
-            //   ),
-            //   disableVideoButtonChild: RawMaterialButton(
-            //     onPressed: () async {
-            //       // await toggleCamera(
-            //       //   sessionController: client!.sessionController,
-            //       // );
-            //     },
-            //     shape: const CircleBorder(),
-            //     elevation: 2.0,
-            //     fillColor: grayL1,
-            //     padding: const EdgeInsets.all(14),
-            //     //padding: const EdgeInsets.all(0),
-            //     child: Image.asset(
-            //       "assets/icons/camera_off.png",
-            //       fit: BoxFit.cover,
-            //       color: white,
-            //       scale: 7,
-            //     ),
-            //   ),
-            // ),
-          ],
-        ),
+          ),
+          const SizedBox(height: 50)
+        ],
       ),
     );
   }

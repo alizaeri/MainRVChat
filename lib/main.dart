@@ -61,7 +61,12 @@ class _MyApp extends ConsumerState<MyApp> {
       debugShowCheckedModeBanner: false,
       title: 'Rvchat UI',
       onGenerateRoute: (settings) => generateRoute(settings),
-      theme: ThemeData(scaffoldBackgroundColor: whiteW1),
+      theme: ThemeData(
+          scaffoldBackgroundColor: whiteW1,
+          dividerTheme: DividerThemeData(
+              color:
+                  whiteW1.withOpacity(0.3) //  <--- change the divider's color
+              )),
       home: _isFirstRun == true
           ? const OnBoardingScreen()
           : ref.watch(userDataAuthProvider).when(
