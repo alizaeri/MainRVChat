@@ -103,6 +103,7 @@ class AuthRepository {
           following: 0,
           followers: 0,
           country: country,
+          email: 'auth.currentUser!.email',
           groupId: []);
       await firestore.collection('users').doc(uid).set(user.toMap());
       Navigator.pop(context);
