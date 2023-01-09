@@ -229,7 +229,7 @@ class _CallScreenState extends ConsumerState<CallScreen> {
       //  client == null &&
       body: Stack(
         children: [
-          _localPreview(),
+          _remoteVideo(),
           Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -417,11 +417,14 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                   children: [
                     Expanded(child: Container()),
                     CircleAvatar(
-                      radius: 57,
+                      radius: 80,
                       backgroundColor: white,
-                      child: CircleAvatar(
-                        radius: 55,
-                        child: _remoteVideo(),
+                      child: Padding(
+                        padding: const EdgeInsets.all(3),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(77),
+                          child: _localPreview(),
+                        ),
                       ),
                     ),
                     const SizedBox(width: 20)
@@ -434,7 +437,7 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                     Stack(
                       alignment: Alignment.center,
                       children: [
-                        Image(
+                        const Image(
                           width: 300,
                           height: 87,
                           image: Svg('assets/images/bg_nav.svg'),
@@ -464,14 +467,15 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                                 padding: const EdgeInsets.all(5),
                                 //padding: const EdgeInsets.all(0),
                                 child: micIcon
-                                    ? Image(
+                                    ? const Image(
                                         image: Svg('assets/icons/sp_n.svg'),
                                         fit: BoxFit.cover,
                                         color: white,
                                         width: 35,
                                       )
                                     : Image(
-                                        image: Svg('assets/icons/sp_off.svg'),
+                                        image: const Svg(
+                                            'assets/icons/sp_off.svg'),
                                         fit: BoxFit.cover,
                                         color: white.withOpacity(0.5),
                                         width: 35,
@@ -493,7 +497,7 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                                 elevation: 0,
                                 fillColor: white,
                                 padding: const EdgeInsets.all(2),
-                                child: Image(
+                                child: const Image(
                                   image: Svg('assets/icons/call_end.svg'),
                                   fit: BoxFit.cover,
                                   color: pink,
@@ -522,14 +526,15 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                                 padding: const EdgeInsets.all(5),
                                 //padding: const EdgeInsets.all(0),
                                 child: micIcon
-                                    ? Image(
+                                    ? const Image(
                                         image: Svg('assets/icons/mic_n.svg'),
                                         fit: BoxFit.cover,
                                         color: white,
                                         width: 35,
                                       )
                                     : Image(
-                                        image: Svg('assets/icons/mic_off.svg'),
+                                        image: const Svg(
+                                            'assets/icons/mic_off.svg'),
                                         fit: BoxFit.cover,
                                         color: white.withOpacity(0.5),
                                         width: 35,

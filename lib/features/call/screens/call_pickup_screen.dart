@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -51,6 +53,7 @@ class _LocalWidgetState extends ConsumerState<LocalWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return StreamBuilder<DocumentSnapshot>(
       stream: ref.watch(callControllerProvider).callStream,
       builder: (context, snapshot) {
@@ -66,107 +69,121 @@ class _LocalWidgetState extends ConsumerState<LocalWidget> {
               volume: 0.1,
             );
             return Scaffold(
-              body: Container(
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage('assets/images/bg_call.png'),
-                    fit: BoxFit.fill,
+              body: Stack(
+                children: [
+                  ConstrainedBox(
+                    constraints: const BoxConstraints.expand(),
+                    child: Image.network(
+                      call.callerPic,
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                ),
-                alignment: Alignment.center,
-                padding: const EdgeInsets.symmetric(vertical: 20),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CircleAvatar(
-                      radius: 100,
-                      backgroundColor: white,
-                      child: CircleAvatar(
-                        backgroundImage: NetworkImage(call.callerPic),
-                        radius: 90,
-                      ),
-                    ),
-                    const SizedBox(height: 15),
-                    const Text(
-                      'Incoming Call',
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w900,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      call.callerName,
-                      style: const TextStyle(
-                        fontFamily: "yknir",
-                        fontSize: 45,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w200,
-                      ),
-                    ),
-                    const SizedBox(height: 80),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: Container(),
-                        ),
-                        CircleAvatar(
-                          radius: 30,
-                          backgroundColor: pink,
-                          child: IconButton(
-                            onPressed: () {
-                              FlutterRingtonePlayer.stop();
-                              ref.read(callControllerProvider).endCall(
-                                    call.callerId,
-                                    call.receiverId,
-                                    context,
-                                  );
-                            },
-                            icon: Image.asset(
-                              "assets/icons/endcall.png",
-                              fit: BoxFit.cover,
-                              color: white,
-                              scale: 7,
+                  Center(
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 20.0, sigmaY: 20.0),
+                      child: Container(
+                        width: size.width * 0.8,
+                        height: size.height * 0.6,
+                        decoration: new BoxDecoration(
+                            color: grayL1.withOpacity(0.4),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(40))),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CircleAvatar(
+                              radius: 94,
+                              backgroundColor: white,
+                              child: CircleAvatar(
+                                backgroundImage: NetworkImage(call.callerPic),
+                                radius: 90,
+                              ),
                             ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Container(),
-                        ),
-                        CircleAvatar(
-                          radius: 30,
-                          backgroundColor: Colors.green,
-                          child: IconButton(
-                            onPressed: () {
-                              FlutterRingtonePlayer.stop();
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => CallScreen(
-                                    channelId: call.callId,
-                                    call: call,
-                                    isGroupChat: false,
+                            const SizedBox(height: 15),
+                            const Text(
+                              'Incoming Call',
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w900,
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            Text(
+                              call.callerName,
+                              style: const TextStyle(
+                                fontFamily: "yknir",
+                                fontSize: 45,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w200,
+                              ),
+                            ),
+                            const SizedBox(height: 80),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Expanded(
+                                  child: Container(),
+                                ),
+                                CircleAvatar(
+                                  radius: 30,
+                                  backgroundColor: pink,
+                                  child: IconButton(
+                                    onPressed: () {
+                                      FlutterRingtonePlayer.stop();
+                                      ref.read(callControllerProvider).endCall(
+                                            call.callerId,
+                                            call.receiverId,
+                                            context,
+                                          );
+                                    },
+                                    icon: Image.asset(
+                                      "assets/icons/endcall.png",
+                                      fit: BoxFit.cover,
+                                      color: white,
+                                      scale: 7,
+                                    ),
                                   ),
                                 ),
-                              );
-                            },
-                            icon: Image.asset(
-                              "assets/icons/call.png",
-                              fit: BoxFit.cover,
-                              color: white,
-                              scale: 7,
+                                Expanded(
+                                  child: Container(),
+                                ),
+                                CircleAvatar(
+                                  radius: 30,
+                                  backgroundColor: Colors.green,
+                                  child: IconButton(
+                                    onPressed: () {
+                                      FlutterRingtonePlayer.stop();
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => CallScreen(
+                                            channelId: call.callId,
+                                            call: call,
+                                            isGroupChat: false,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    icon: Image.asset(
+                                      "assets/icons/call.png",
+                                      fit: BoxFit.cover,
+                                      color: white,
+                                      scale: 7,
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Container(),
+                                ),
+                              ],
                             ),
-                          ),
+                          ],
                         ),
-                        Expanded(
-                          child: Container(),
-                        ),
-                      ],
+                      ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             );
           }

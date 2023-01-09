@@ -89,58 +89,10 @@ class _ContactsScreenState extends State<ContactsScreen> {
           ),
           IconButton(
             onPressed: () {},
-            icon: GestureDetector(
-              child: PopupMenuButton<int>(
-                elevation: 2,
-                color: Color.fromARGB(173, 251, 251, 251),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(25),
-                ),
-                itemBuilder: (context) => [
-                  const PopupMenuItem(
-                    value: 1,
-                    child: Center(
-                      child: Text(
-                        "Sign Out",
-                        style: TextStyle(
-                          fontSize: 14.0,
-                          fontWeight: FontWeight.bold,
-                          color: Color.fromARGB(255, 248, 74, 74),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-                initialValue: 0,
-                onSelected: (value) async {
-                  print("clik shod");
-                  switch (value) {
-                    case 1:
-                      {
-                        await FirebaseFirestore.instance
-                            .collection('users')
-                            .doc(FirebaseAuth.instance.currentUser!.uid)
-                            .update({
-                          'isOnline': false,
-                        });
-                        FirebaseAuth.instance.signOut();
-
-                        Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => LoginScreen()),
-                            (route) => false);
-
-                        break;
-                      }
-                  }
-                },
-                child: const Icon(
-                  Icons.more_vert,
-                  color: Colors.white,
-                  size: 26,
-                ),
-              ),
+            icon: const Icon(
+              Icons.more_vert,
+              color: Colors.white,
+              size: 26,
             ),
           ),
         ],

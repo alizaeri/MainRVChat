@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -5,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rvchat/colors.dart';
 import 'package:rvchat/features/auth/controller/auth_controller.dart';
+import 'package:rvchat/features/auth/screens/login_screen.dart';
 import 'package:rvchat/features/call/screens/call_screen.dart';
 import 'package:rvchat/models/user_model.dart';
 import 'package:rvchat/screens/user_information_edit_page.dart';
@@ -42,7 +44,70 @@ class ProfilePage extends ConsumerWidget {
                       const SizedBox(height: 50),
                       Row(
                         children: [
-                          Expanded(child: Container()),
+                          Expanded(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                IconButton(
+                                  onPressed: () {},
+                                  icon: GestureDetector(
+                                    child: PopupMenuButton<int>(
+                                      elevation: 2,
+                                      color: grayL1.withOpacity(0.8),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(25),
+                                      ),
+                                      itemBuilder: (context) => [
+                                        const PopupMenuItem(
+                                          value: 1,
+                                          child: Center(
+                                            child: Text(
+                                              "Sign Out",
+                                              style: TextStyle(
+                                                  fontSize: 14.0,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: white),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                      initialValue: 0,
+                                      onSelected: (value) async {
+                                        print("clik shod");
+                                        switch (value) {
+                                          case 1:
+                                            {
+                                              await FirebaseFirestore.instance
+                                                  .collection('users')
+                                                  .doc(FirebaseAuth.instance
+                                                      .currentUser!.uid)
+                                                  .update({
+                                                'isOnline': false,
+                                              });
+                                              FirebaseAuth.instance.signOut();
+
+                                              Navigator.pushAndRemoveUntil(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          const LoginScreen()),
+                                                  (route) => false);
+
+                                              break;
+                                            }
+                                        }
+                                      },
+                                      child: const Icon(
+                                        Icons.more_vert,
+                                        color: Colors.white,
+                                        size: 26,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                           const Text(
                               textAlign: TextAlign.center,
                               style: TextStyle(
@@ -52,25 +117,26 @@ class ProfilePage extends ConsumerWidget {
                                   color: white),
                               "Profile"),
                           Expanded(
-                              child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              IconButton(
-                                onPressed: () {
-                                  Navigator.pushNamed(context,
-                                      UserInformationEditPage.routeName,
-                                      arguments: snapshot.data!.country);
-                                },
-                                icon: Image.asset(
-                                  "assets/icons/edit.png",
-                                  fit: BoxFit.cover,
-                                  color: white,
-                                  scale: 8,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                IconButton(
+                                  onPressed: () {
+                                    Navigator.pushNamed(context,
+                                        UserInformationEditPage.routeName,
+                                        arguments: snapshot.data!.country);
+                                  },
+                                  icon: Image.asset(
+                                    "assets/icons/edit.png",
+                                    fit: BoxFit.cover,
+                                    color: white,
+                                    scale: 8,
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(width: 20)
-                            ],
-                          ))
+                                const SizedBox(width: 20)
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                       SizedBox(height: size.height * 0.02),
@@ -147,50 +213,65 @@ class ProfilePage extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text(
+                        Text(
                             style: TextStyle(
                                 fontFamily: "yknir",
                                 fontWeight: FontWeight.w400,
-                                fontSize: 18,
+                                fontSize: size.width * 0.035,
                                 color: pinkL1),
                             "Full Name"),
                         Text(
                             style: TextStyle(
                                 fontFamily: "yknir",
                                 fontWeight: FontWeight.w100,
-                                fontSize: size.width * 0.1,
+                                fontSize: size.width * 0.08,
                                 color: grayL1),
                             snapshot.data!.name),
-                        const Divider(),
-                        const Text(
+                        Divider(color: grayL1.withOpacity(0.5)),
+                        Text(
                             style: TextStyle(
                                 fontFamily: "yknir",
                                 fontWeight: FontWeight.w400,
-                                fontSize: 18,
+                                fontSize: size.width * 0.035,
                                 color: pinkL1),
                             "Country"),
                         Text(
                             style: TextStyle(
                                 fontFamily: "yknir",
                                 fontWeight: FontWeight.w100,
-                                fontSize: size.width * 0.1,
+                                fontSize: size.width * 0.08,
                                 color: grayL1),
                             snapshot.data!.country),
-                        const Divider(),
-                        const Text(
+                        Divider(color: grayL1.withOpacity(0.5)),
+                        Text(
                             style: TextStyle(
                                 fontFamily: "yknir",
                                 fontWeight: FontWeight.w400,
-                                fontSize: 18,
+                                fontSize: size.width * 0.035,
                                 color: pinkL1),
                             "Phone Number"),
                         Text(
                             style: TextStyle(
                                 fontFamily: "yknir",
                                 fontWeight: FontWeight.w100,
-                                fontSize: size.width * 0.1,
+                                fontSize: size.width * 0.08,
                                 color: grayL1),
                             snapshot.data!.phoneNumber),
+                        Divider(color: grayL1.withOpacity(0.5)),
+                        Text(
+                            style: TextStyle(
+                                fontFamily: "yknir",
+                                fontWeight: FontWeight.w400,
+                                fontSize: size.width * 0.035,
+                                color: pinkL1),
+                            "Email Address"),
+                        Text(
+                            style: TextStyle(
+                                fontFamily: "yknir",
+                                fontWeight: FontWeight.w100,
+                                fontSize: size.width * 0.08,
+                                color: grayL1),
+                            "abhslhei@gmail.com"),
                         const SizedBox(
                           height: 20,
                         )
