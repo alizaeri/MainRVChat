@@ -10,6 +10,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
@@ -79,7 +80,7 @@ class _CallScreenState extends ConsumerState<CallScreen> {
     //       rtmEnabled: false),
     //   enabledPermission: [Permission.camera, Permission.microphone],
     setupVideoSDKEngine();
-
+    WidgetsBinding.instance.addPostFrameCallback((_) => showOverlay(context));
     // );
 
     // initAgora();
@@ -176,6 +177,8 @@ class _CallScreenState extends ConsumerState<CallScreen> {
   void dispose() async {
     super.dispose();
     // await agoraEngine.leaveChannel();
+    entry?.remove();
+    entry = null;
     await agoraEngine.release();
     await FirebaseFirestore.instance
         .collection('call')
@@ -191,6 +194,8 @@ class _CallScreenState extends ConsumerState<CallScreen> {
     // client!.engine.release();
   }
 
+  OverlayEntry? entry;
+  Offset offset = const Offset(-20, 40);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -394,23 +399,6 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                   ],
                 ),
                 Expanded(child: Container()),
-                Row(
-                  children: [
-                    Expanded(child: Container()),
-                    CircleAvatar(
-                      radius: 80,
-                      backgroundColor: white,
-                      child: Padding(
-                        padding: const EdgeInsets.all(3),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(77),
-                          child: _localPreview(),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 20)
-                  ],
-                ),
                 const SizedBox(height: 20),
                 Row(
                   children: [
@@ -533,7 +521,7 @@ class _CallScreenState extends ConsumerState<CallScreen> {
               ],
             ),
           ),
-          const SizedBox(height: 50)
+          const SizedBox(height: 50),
         ],
       ),
     );
@@ -553,6 +541,37 @@ class _CallScreenState extends ConsumerState<CallScreen> {
         fit: BoxFit.cover,
       );
     }
+  }
+
+  void showOverlay(context) {
+    entry = OverlayEntry(
+      builder: (context) => Positioned(
+        top: offset.dy,
+        left: offset.dx,
+        child: GestureDetector(
+          onPanUpdate: (details) {
+            offset += details.delta;
+            entry!.markNeedsBuild();
+          },
+          child: ElevatedButton(
+            onPressed: () {},
+            child: CircleAvatar(
+              radius: 80,
+              backgroundColor: white,
+              child: Padding(
+                padding: const EdgeInsets.all(3),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(77),
+                  child: _localPreview(),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    final overlay = Overlay.of(context)!;
+    overlay.insert(entry!);
   }
 
 // Display remote user's video
