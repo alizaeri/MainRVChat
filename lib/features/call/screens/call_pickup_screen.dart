@@ -85,9 +85,11 @@ class _LocalWidgetState extends ConsumerState<LocalWidget> {
                         width: size.width * 0.8,
                         height: size.height * 0.6,
                         decoration: new BoxDecoration(
-                            color: grayL1.withOpacity(0.4),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(40))),
+                          color: grayL1.withOpacity(0.4),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(40),
+                          ),
+                        ),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [

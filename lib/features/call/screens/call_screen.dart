@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:agora_rtc_engine/src/binding_forward_export.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 // import 'package:agora_uikit/agora_uikit.dart';
@@ -17,7 +19,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:rvchat/colors.dart';
+import 'package:rvchat/common/widgets/loademini.dart';
 import 'package:rvchat/common/widgets/loader.dart';
+import 'package:rvchat/common/widgets/loaderW.dart';
 import 'package:rvchat/config/agora_config.dart';
 import 'package:rvchat/features/call/controller/call_controller.dart';
 import 'package:rvchat/models/call.dart';
@@ -169,41 +173,6 @@ class _CallScreenState extends ConsumerState<CallScreen> {
     }
   }
 
-  // void initAgora() async {
-  //   try {
-  //     await client!.initialize();
-  //     await client!.engine.enableDualStreamMode(enabled: true);
-
-  //     client!.engine.registerEventHandler(
-  //       RtcEngineEventHandler(
-  //         onJoinChannelSuccess: (connection, elapsed) => setState(() async {
-  //           await toggleCamera(
-  //             sessionController: client!.sessionController,
-  //           );
-
-  //           localUserJoined = true;
-  //           await toggleCamera(
-  //             sessionController: client!.sessionController,
-  //           );
-  //         }),
-  //       ),
-  //     );
-  //     VideoEncoderConfiguration videoConfig = const VideoEncoderConfiguration(
-  //         mirrorMode: VideoMirrorModeType.videoMirrorModeAuto,
-  //         frameRate: 5,
-  //         bitrate: standardBitrate,
-  //         dimensions: VideoDimensions(width: 320, height: 240),
-  //         orientationMode: OrientationMode.orientationModeAdaptive,
-  //         degradationPreference: DegradationPreference.maintainBalanced);
-  //     await client!.engine.setVideoEncoderConfiguration(videoConfig);
-  //     await client!.engine.setRemoteVideoStreamType(
-  //         uid: 0, streamType: VideoStreamType.videoStreamLow);
-  //   } catch (e) {
-  //     // this logs that above error.
-  //     await client!.initialize();
-  //   }
-  // }
-
   @override
   void dispose() async {
     super.dispose();
@@ -229,7 +198,20 @@ class _CallScreenState extends ConsumerState<CallScreen> {
       //  client == null &&
       body: Stack(
         children: [
-          _remoteVideo(),
+          ConstrainedBox(
+            constraints: const BoxConstraints.expand(),
+            child: Image.network(
+              widget.call.callerPic,
+              fit: BoxFit.cover,
+            ),
+          ),
+          Center(
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 20.0, sigmaY: 20.0),
+              child: Container(
+                  color: grayL1.withOpacity(0.3), child: _remoteVideo()),
+            ),
+          ),
           Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -548,56 +530,6 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                     Expanded(child: Container()),
                   ],
                 ),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.center,
-                //   children: <Widget>[
-                //     const SizedBox(width: 10),
-                //     RawMaterialButton(
-                //       onPressed: () {
-                //         agoraEngine.switchCamera();
-                //       },
-                //       shape: const CircleBorder(),
-                //       elevation: 2.0,
-                //       fillColor: grayL1,
-                //       padding: const EdgeInsets.all(14),
-                //       //padding: const EdgeInsets.all(0),
-                //       child: Image.asset(
-                //         "assets/icons/camera-sw.png",
-                //         fit: BoxFit.cover,
-                //         color: white,
-                //         scale: 7,
-                //       ),
-                //     ),
-                //     RawMaterialButton(
-                //       onPressed: () async {
-                //         if (toggleVideo) {
-                //           setState(() {
-                //             agoraEngine.muteLocalVideoStream(false);
-
-                //             toggleVideo = false;
-                //           });
-                //         } else {
-                //           setState(() {
-                //             toggleVideo = true;
-
-                //             agoraEngine.muteLocalVideoStream(true);
-                //           });
-                //         }
-                //       },
-                //       shape: const CircleBorder(),
-                //       elevation: 2.0,
-                //       fillColor: grayL1,
-                //       padding: const EdgeInsets.all(14),
-                //       //padding: const EdgeInsets.all(0),
-                //       child: Image.asset(
-                //         "assets/icons/camera_off.png",
-                //         fit: BoxFit.cover,
-                //         color: white,
-                //         scale: 7,
-                //       ),
-                //     ),
-                //   ],
-                // ),
                 const SizedBox(height: 30)
               ],
             ),
@@ -636,10 +568,25 @@ class _CallScreenState extends ConsumerState<CallScreen> {
       );
     } else {
       String msg = '';
-      if (_isJoined) msg = 'Waiting for a remote user to join';
-      return Text(
-        msg,
-        textAlign: TextAlign.center,
+      if (_isJoined) msg = 'Connecting...';
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Loadermini(),
+            const SizedBox(width: 50),
+            Text(
+              msg,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                  fontFamily: "yknir",
+                  fontWeight: FontWeight.w300,
+                  fontSize: 30,
+                  color: white),
+            ),
+          ],
+        ),
       );
     }
   }
