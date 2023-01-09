@@ -637,9 +637,12 @@ class _CallScreenState extends ConsumerState<CallScreen> {
     } else {
       String msg = '';
       if (_isJoined) msg = 'Waiting for a remote user to join';
-      return Text(
-        msg,
-        textAlign: TextAlign.center,
+      return Center(
+        child: Text(
+          msg,
+          textAlign: TextAlign.center,
+          style: const TextStyle(color: Colors.black),
+        ),
       );
     }
   }
