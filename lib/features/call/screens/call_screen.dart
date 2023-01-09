@@ -1,28 +1,14 @@
 import 'dart:ui';
-
 import 'package:agora_rtc_engine/src/binding_forward_export.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:agora_uikit/agora_uikit.dart';
-
-// import 'package:agora_uikit/controllers/rtc_buttons.dart';
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:flutter/material.dart';
-import 'package:path/path.dart';
 import 'package:permission_handler/permission_handler.dart';
-
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:http/http.dart' as http;
-
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:rvchat/colors.dart';
 import 'package:rvchat/common/widgets/loademini.dart';
-import 'package:rvchat/common/widgets/loader.dart';
-import 'package:rvchat/common/widgets/loaderW.dart';
 import 'package:rvchat/config/agora_config.dart';
 import 'package:rvchat/features/call/controller/call_controller.dart';
 import 'package:rvchat/models/call.dart';
@@ -80,7 +66,8 @@ class _CallScreenState extends ConsumerState<CallScreen> {
     //       rtmEnabled: false),
     //   enabledPermission: [Permission.camera, Permission.microphone],
     setupVideoSDKEngine();
-    WidgetsBinding.instance.addPostFrameCallback((_) => showOverlay(context));
+    WidgetsBinding.instance.addPostFrameCallback((_) => showOverlay());
+
     // );
 
     // initAgora();
@@ -195,7 +182,8 @@ class _CallScreenState extends ConsumerState<CallScreen> {
   }
 
   OverlayEntry? entry;
-  Offset offset = const Offset(-20, 40);
+
+  Offset offset = const Offset(20, 200);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -236,8 +224,8 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                 Row(
                   children: [
                     Expanded(child: Container()),
-                    const Text(
-                      'Appeks Alphadron',
+                    Text(
+                      widget.call.receiverName,
                       style: TextStyle(
                         fontSize: 25,
                         color: Colors.white,
@@ -517,7 +505,7 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                     Expanded(child: Container()),
                   ],
                 ),
-                const SizedBox(height: 30)
+                const SizedBox(height: 30),
               ],
             ),
           ),
@@ -541,37 +529,6 @@ class _CallScreenState extends ConsumerState<CallScreen> {
         fit: BoxFit.cover,
       );
     }
-  }
-
-  void showOverlay(context) {
-    entry = OverlayEntry(
-      builder: (context) => Positioned(
-        top: offset.dy,
-        left: offset.dx,
-        child: GestureDetector(
-          onPanUpdate: (details) {
-            offset += details.delta;
-            entry!.markNeedsBuild();
-          },
-          child: ElevatedButton(
-            onPressed: () {},
-            child: CircleAvatar(
-              radius: 80,
-              backgroundColor: white,
-              child: Padding(
-                padding: const EdgeInsets.all(3),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(77),
-                  child: _localPreview(),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-    final overlay = Overlay.of(context)!;
-    overlay.insert(entry!);
   }
 
 // Display remote user's video
@@ -607,5 +564,67 @@ class _CallScreenState extends ConsumerState<CallScreen> {
         ),
       );
     }
+  }
+
+  void showOverlay() {
+    entry = OverlayEntry(
+      builder: (context) => Positioned(
+        top: offset.dy,
+        left: offset.dx,
+        child: GestureDetector(
+          onPanUpdate: (details) {
+            offset += details.delta;
+            entry!.markNeedsBuild();
+          },
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: white.withOpacity(0),
+              elevation: 0,
+              padding: const EdgeInsets.all(0),
+            ),
+            onPressed: () {},
+            child: Column(
+              children: [
+                CircleAvatar(
+                  radius: 80,
+                  backgroundColor: white,
+                  child: Padding(
+                    padding: const EdgeInsets.all(3),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(77),
+                      child: _localPreview(),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Container(
+                  constraints: BoxConstraints(maxWidth: 200),
+                  decoration: BoxDecoration(
+                    color: grayL1.withOpacity(0.3),
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(15),
+                    ),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(15, 6, 15, 4),
+                    child: Text(
+                      widget.call.callerName,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                          fontFamily: "yknir",
+                          fontWeight: FontWeight.w300,
+                          fontSize: 18,
+                          color: white),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+    final overlay = Overlay.of(context)!;
+    overlay.insert(entry!);
   }
 }
