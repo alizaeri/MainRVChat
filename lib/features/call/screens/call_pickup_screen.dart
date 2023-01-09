@@ -80,7 +80,7 @@ class _LocalWidgetState extends ConsumerState<LocalWidget> {
                   ),
                   Center(
                     child: BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: 20.0, sigmaY: 20.0),
+                      filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
                       child: Container(
                         width: size.width * 0.8,
                         height: size.height * 0.6,

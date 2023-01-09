@@ -56,7 +56,6 @@ class _CallScreenState extends ConsumerState<CallScreen> {
   int? _remoteUid;
   late String token;
   bool toggleVideo = false;
-
   bool micIcon = false;
   final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
       GlobalKey<ScaffoldMessengerState>();
@@ -207,7 +206,7 @@ class _CallScreenState extends ConsumerState<CallScreen> {
           ),
           Center(
             child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 20.0, sigmaY: 20.0),
+              filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
               child: Container(
                   color: grayL1.withOpacity(0.3), child: _remoteVideo()),
             ),
@@ -549,9 +548,9 @@ class _CallScreenState extends ConsumerState<CallScreen> {
         ),
       );
     } else {
-      return const Text(
-        'Join a channel',
-        textAlign: TextAlign.center,
+      return Image.network(
+        widget.call.receiverPic,
+        fit: BoxFit.cover,
       );
     }
   }
