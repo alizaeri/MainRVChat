@@ -200,7 +200,7 @@ class _CallScreenState extends ConsumerState<CallScreen> {
           ConstrainedBox(
             constraints: const BoxConstraints.expand(),
             child: Image.network(
-              widget.call.callerPic,
+              widget.call.receiverPic,
               fit: BoxFit.cover,
             ),
           ),
@@ -549,7 +549,7 @@ class _CallScreenState extends ConsumerState<CallScreen> {
       );
     } else {
       return Image.network(
-        widget.call.receiverPic,
+        widget.call.callerPic,
         fit: BoxFit.cover,
       );
     }
