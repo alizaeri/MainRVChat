@@ -297,20 +297,25 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                                   PopupMenuItem(
                                     value: 3,
                                     child: Row(
-                                      children: const [
+                                      children: [
                                         Image(
                                           width: 25,
-                                          image: Svg(
-                                              'assets/icons/camera_off.svg'),
+                                          image: toggleVideo
+                                              ? const Svg(
+                                                  'assets/icons/camera_off.svg')
+                                              : const Svg(
+                                                  'assets/icons/camera_on.svg'),
                                           fit: BoxFit.cover,
                                           color: white,
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           width: 10,
                                         ),
                                         Text(
-                                          "Turn Off Camera",
-                                          style: TextStyle(
+                                          !toggleVideo
+                                              ? "Turn Off Camera"
+                                              : "Turn On Camera",
+                                          style: const TextStyle(
                                             fontWeight: FontWeight.w300,
                                             color: white,
                                           ),
@@ -346,20 +351,22 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                                   PopupMenuItem(
                                     value: 5,
                                     child: Row(
-                                      children: const [
-                                        Image(
+                                      children: [
+                                        const Image(
                                           width: 25,
                                           image:
                                               Svg('assets/icons/invisible.svg'),
                                           fit: BoxFit.cover,
                                           color: white,
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           width: 10,
                                         ),
                                         Text(
-                                          "Hide Button",
-                                          style: TextStyle(
+                                          !showButtons
+                                              ? "Hide Buttons"
+                                              : "Show Buttons",
+                                          style: const TextStyle(
                                             fontWeight: FontWeight.w300,
                                             color: white,
                                           ),
@@ -386,12 +393,14 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                                           setState(() {
                                             agoraEngine
                                                 .muteLocalVideoStream(false);
+                                            _value.value = true;
 
                                             toggleVideo = false;
                                           });
                                         } else {
                                           setState(() {
                                             toggleVideo = true;
+                                            _value.value = false;
 
                                             agoraEngine
                                                 .muteLocalVideoStream(true);
