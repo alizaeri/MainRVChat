@@ -1,8 +1,6 @@
 import 'dart:ui';
 import 'package:agora_rtc_engine/src/binding_forward_export.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:permission_handler/permission_handler.dart';
@@ -45,7 +43,7 @@ class _CallScreenState extends ConsumerState<CallScreen> {
   late String token;
   bool toggleVideo = false;
   bool micIcon = false;
-  var _value = ValueNotifier<bool>(false);
+  final _value = ValueNotifier<bool>(false);
   final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
       GlobalKey<ScaffoldMessengerState>();
 
@@ -131,11 +129,7 @@ class _CallScreenState extends ConsumerState<CallScreen> {
 
   Future<void> getToken() async {
     final response = await http.get(
-      Uri.parse(baseUrl +
-              'rtc/' +
-              widget.channelId +
-              '/publisher/uid/' +
-              uid.toString()
+      Uri.parse('${baseUrl}rtc/${widget.channelId}/publisher/uid/$uid'
           // To add expiry time uncomment the below given line with the time in seconds
           // + '?expiry=45'
           ),
