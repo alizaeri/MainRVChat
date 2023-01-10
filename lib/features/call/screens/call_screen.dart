@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:agora_rtc_engine/src/binding_forward_export.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:permission_handler/permission_handler.dart';
@@ -37,15 +38,14 @@ class _CallScreenState extends ConsumerState<CallScreen> {
       'https://flutter-twitch-server-production-f453.up.railway.app/';
 
   bool localUserJoined = false;
+
   int uid = 0;
   bool _isJoined = false;
   int? _remoteUid;
   late String token;
   bool toggleVideo = false;
   bool micIcon = false;
-
-  String currentUserId = FirebaseAuth.instance.currentUser!.uid;
-
+  var _value = ValueNotifier<bool>(false);
   final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
       GlobalKey<ScaffoldMessengerState>();
 
@@ -109,6 +109,7 @@ class _CallScreenState extends ConsumerState<CallScreen> {
           setState(() {
             _isJoined = true;
             localUserJoined = false;
+            _value.value = true;
           });
         },
         onUserJoined: (RtcConnection connection, int remoteUid, int elapsed) {
@@ -510,7 +511,7 @@ class _CallScreenState extends ConsumerState<CallScreen> {
   }
 
   Widget _localPreview() {
-    if (_isJoined) {
+    if (_value.value) {
       return AgoraVideoView(
         controller: VideoViewController(
           rtcEngine: agoraEngine,
@@ -588,7 +589,13 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                     padding: const EdgeInsets.all(3),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(77),
-                      child: _localPreview(),
+                      child: ValueListenableBuilder<bool>(
+                        valueListenable: _value,
+                        builder: (context, value, child) {
+                          return _localPreview();
+                        },
+                      ),
+                      //_localPreview(),
                     ),
                   ),
                 ),
