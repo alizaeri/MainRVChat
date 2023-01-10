@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:agora_rtc_engine/src/binding_forward_export.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:permission_handler/permission_handler.dart';
@@ -31,8 +32,6 @@ class CallScreen extends ConsumerStatefulWidget {
 }
 
 class _CallScreenState extends ConsumerState<CallScreen> {
-  // AgoraSettings settings = ;
-  // AgoraClient? client;
   late RtcEngine agoraEngine;
   String baseUrl =
       'https://flutter-twitch-server-production-f453.up.railway.app/';
@@ -44,6 +43,9 @@ class _CallScreenState extends ConsumerState<CallScreen> {
   late String token;
   bool toggleVideo = false;
   bool micIcon = false;
+
+  String currentUserId = FirebaseAuth.instance.currentUser!.uid;
+
   final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
       GlobalKey<ScaffoldMessengerState>();
 
@@ -57,20 +59,8 @@ class _CallScreenState extends ConsumerState<CallScreen> {
   void initState() {
     super.initState();
     Wakelock.enable();
-    // client = AgoraClient(
-    //   agoraConnectionData: AgoraConnectionData(
-    //       appId: AgoraConfig.appId,
-    //       channelName: widget.channelId,
-    //       tokenUrl: baseUrl,
-    //       uid: uid,
-    //       rtmEnabled: false),
-    //   enabledPermission: [Permission.camera, Permission.microphone],
     setupVideoSDKEngine();
     WidgetsBinding.instance.addPostFrameCallback((_) => showOverlay());
-
-    // );
-
-    // initAgora();
   }
 
   void leave() {
@@ -193,7 +183,9 @@ class _CallScreenState extends ConsumerState<CallScreen> {
           ConstrainedBox(
             constraints: const BoxConstraints.expand(),
             child: Image.network(
-              widget.call.receiverPic,
+              widget.call.hasDialled
+                  ? widget.call.receiverPic
+                  : widget.call.callerPic,
               fit: BoxFit.cover,
             ),
           ),
@@ -225,165 +217,168 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                   children: [
                     Expanded(child: Container()),
                     Text(
-                      widget.call.receiverName,
-                      style: TextStyle(
+                      widget.call.hasDialled
+                          ? widget.call.receiverName
+                          : widget.call.callerName,
+                      style: const TextStyle(
                         fontSize: 25,
                         color: Colors.white,
                         fontWeight: FontWeight.w200,
                       ),
                     ),
                     Expanded(
-                        child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        IconButton(
-                          onPressed: () {},
-                          icon: GestureDetector(
-                            child: PopupMenuButton<int>(
-                              elevation: 2,
-                              color: grayL1.withOpacity(0.8),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(25),
-                              ),
-                              itemBuilder: (context) => [
-                                PopupMenuItem(
-                                  value: 1,
-                                  child: Row(
-                                    children: const [
-                                      SizedBox(
-                                        width: 7,
-                                      ),
-                                      Icon(
-                                        Icons.circle,
-                                        color: pink,
-                                        size: 15,
-                                      ),
-                                      SizedBox(
-                                        width: 13,
-                                      ),
-                                      Text(
-                                        "Screen Recorder",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w300,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          IconButton(
+                            onPressed: () {},
+                            icon: GestureDetector(
+                              child: PopupMenuButton<int>(
+                                elevation: 2,
+                                color: grayL1.withOpacity(0.8),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(25),
+                                ),
+                                itemBuilder: (context) => [
+                                  PopupMenuItem(
+                                    value: 1,
+                                    child: Row(
+                                      children: const [
+                                        SizedBox(
+                                          width: 7,
+                                        ),
+                                        Icon(
+                                          Icons.circle,
+                                          color: pink,
+                                          size: 15,
+                                        ),
+                                        SizedBox(
+                                          width: 13,
+                                        ),
+                                        Text(
+                                          "Screen Recorder",
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w300,
+                                            color: white,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const PopupMenuDivider(),
+                                  PopupMenuItem(
+                                    value: 2,
+                                    child: Row(
+                                      children: const [
+                                        Image(
+                                          width: 25,
+                                          image: Svg(
+                                              'assets/icons/swich_camera.svg'),
+                                          fit: BoxFit.cover,
                                           color: white,
                                         ),
-                                      ),
-                                    ],
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        Text(
+                                          "Swich Camera",
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w300,
+                                            color: white,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                const PopupMenuDivider(),
-                                PopupMenuItem(
-                                  value: 2,
-                                  child: Row(
-                                    children: const [
-                                      Image(
-                                        width: 25,
-                                        image: Svg(
-                                            'assets/icons/swich_camera.svg'),
-                                        fit: BoxFit.cover,
-                                        color: white,
-                                      ),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      Text(
-                                        "Swich Camera",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w300,
+                                  const PopupMenuDivider(),
+                                  PopupMenuItem(
+                                    value: 3,
+                                    child: Row(
+                                      children: const [
+                                        Image(
+                                          width: 25,
+                                          image: Svg(
+                                              'assets/icons/camera_off.svg'),
+                                          fit: BoxFit.cover,
                                           color: white,
                                         ),
-                                      ),
-                                    ],
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        Text(
+                                          "Turn Off Camera",
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w300,
+                                            color: white,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                const PopupMenuDivider(),
-                                PopupMenuItem(
-                                  value: 3,
-                                  child: Row(
-                                    children: const [
-                                      Image(
-                                        width: 25,
-                                        image:
-                                            Svg('assets/icons/camera_off.svg'),
-                                        fit: BoxFit.cover,
-                                        color: white,
-                                      ),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      Text(
-                                        "Turn Off Camera",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w300,
+                                  const PopupMenuDivider(),
+                                  PopupMenuItem(
+                                    value: 3,
+                                    child: Row(
+                                      children: const [
+                                        Image(
+                                          width: 25,
+                                          image: Svg('assets/icons/layout.svg'),
+                                          fit: BoxFit.cover,
                                           color: white,
                                         ),
-                                      ),
-                                    ],
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        Text(
+                                          "Change Layout",
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w300,
+                                            color: white,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                const PopupMenuDivider(),
-                                PopupMenuItem(
-                                  value: 3,
-                                  child: Row(
-                                    children: const [
-                                      Image(
-                                        width: 25,
-                                        image: Svg('assets/icons/layout.svg'),
-                                        fit: BoxFit.cover,
-                                        color: white,
-                                      ),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      Text(
-                                        "Change Layout",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w300,
+                                  const PopupMenuDivider(),
+                                  PopupMenuItem(
+                                    value: 3,
+                                    child: Row(
+                                      children: const [
+                                        Image(
+                                          width: 25,
+                                          image:
+                                              Svg('assets/icons/invisible.svg'),
+                                          fit: BoxFit.cover,
                                           color: white,
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                const PopupMenuDivider(),
-                                PopupMenuItem(
-                                  value: 3,
-                                  child: Row(
-                                    children: const [
-                                      Image(
-                                        width: 25,
-                                        image:
-                                            Svg('assets/icons/invisible.svg'),
-                                        fit: BoxFit.cover,
-                                        color: white,
-                                      ),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      Text(
-                                        "Hide Button",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w300,
-                                          color: white,
+                                        SizedBox(
+                                          width: 10,
                                         ),
-                                      ),
-                                    ],
+                                        Text(
+                                          "Hide Button",
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w300,
+                                            color: white,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
+                                ],
+                                initialValue: 0,
+                                onSelected: (value) async {},
+                                child: const Icon(
+                                  Icons.more_vert,
+                                  color: Colors.white,
+                                  size: 26,
                                 ),
-                              ],
-                              initialValue: 0,
-                              onSelected: (value) async {},
-                              child: const Icon(
-                                Icons.more_vert,
-                                color: Colors.white,
-                                size: 26,
                               ),
                             ),
+                            color: white,
                           ),
-                          color: white,
-                        ),
-                      ],
-                    )),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
                 Expanded(child: Container()),
@@ -422,7 +417,6 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                                 elevation: 0,
                                 fillColor: white.withOpacity(0.2),
                                 padding: const EdgeInsets.all(5),
-                                //padding: const EdgeInsets.all(0),
                                 child: micIcon
                                     ? const Image(
                                         image: Svg('assets/icons/sp_n.svg'),
@@ -525,7 +519,9 @@ class _CallScreenState extends ConsumerState<CallScreen> {
       );
     } else {
       return Image.network(
-        widget.call.callerPic,
+        widget.call.hasDialled
+            ? widget.call.callerPic
+            : widget.call.receiverPic,
         fit: BoxFit.cover,
       );
     }
@@ -598,7 +594,7 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                 ),
                 const SizedBox(height: 10),
                 Container(
-                  constraints: BoxConstraints(maxWidth: 200),
+                  constraints: const BoxConstraints(maxWidth: 200),
                   decoration: BoxDecoration(
                     color: grayL1.withOpacity(0.3),
                     borderRadius: const BorderRadius.all(
@@ -606,11 +602,13 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                     ),
                   ),
                   child: Padding(
-                    padding: EdgeInsets.fromLTRB(15, 6, 15, 4),
+                    padding: const EdgeInsets.fromLTRB(15, 6, 15, 4),
                     child: Text(
-                      widget.call.callerName,
+                      widget.call.hasDialled
+                          ? widget.call.callerName
+                          : widget.call.receiverName,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontFamily: "yknir",
                           fontWeight: FontWeight.w300,
                           fontSize: 18,
