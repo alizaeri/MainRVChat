@@ -107,7 +107,7 @@ class _FollowPageState extends State<FollowPage> {
               (item) => item.uid == FirebaseAuth.instance.currentUser!.uid);
           var size = MediaQuery.of(context).size;
           final double itemHeight =
-              (size.width - kToolbarHeight - 10) / 2; /////////////
+              (size.width - kToolbarHeight - 10) / 3; /////////////
           final double itemWidth = size.width / 3;
           if (users.isNotEmpty) {
             return Column(
@@ -172,34 +172,27 @@ class _FollowPageState extends State<FollowPage> {
                           topRight: Radius.circular(30.0),
                         ),
                         color: whiteW1),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const SizedBox(height: 10),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                          child: GridView(
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3,
-                              childAspectRatio: ((itemWidth / 2) / itemHeight),
-                              crossAxisSpacing: 8,
-                              mainAxisSpacing: 8,
-                            ),
-                            primary: false,
-                            shrinkWrap: true,
-                            children: List<Widget>.generate(
-                                users.length, // same length as the data
-                                (index) {
-                              return MyCard(
-                                user: users[index],
-                              );
-
-                              //gridViewTile(recipesList, index);
-                            }),
-                          ),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 15, 10, 0),
+                      child: GridView(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          childAspectRatio: ((itemWidth / 2) / itemHeight),
+                          crossAxisSpacing: 8,
+                          mainAxisSpacing: 8,
                         ),
-                      ],
+                        primary: false,
+                        shrinkWrap: true,
+                        children: List<Widget>.generate(
+                            users.length, // same length as the data
+                            (index) {
+                          return MyCard(
+                            user: users[index],
+                          );
+
+                          //gridViewTile(recipesList, index);
+                        }),
+                      ),
                     ),
                   ),
                 ),
@@ -273,114 +266,105 @@ class _MyCardState extends State<MyCard> {
       onTap: () {
         calculateFollow();
       },
-      child: Container(
-        color: grayL1,
-        width: (size.width / 3),
-        height: (size.width / 2),
-        child: Column(
-          children: [
-            Container(
-              //height: (size.width / 2) - 20,
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-                image: DecorationImage(
-                    image: NetworkImage(
-                      widget.user.profilePic,
-                      // info[index]['profilePic'].toString(),
-                    ),
-                    fit: BoxFit.cover),
-              ),
-              child: Stack(
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(0),
-                            topRight: Radius.circular(0),
-                            bottomRight: Radius.circular(10.0),
-                            bottomLeft: Radius.circular(10.0),
-                          ),
-                          gradient: LinearGradient(
-                              //=> Background Linear Gradient
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              colors: [grayL1.withOpacity(0), grayL1]),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(5, 15, 5, 5),
-                          child: Row(
-                            children: [
-                              CircleAvatar(
-                                backgroundColor: white.withOpacity(0.3),
-                                radius: 12,
-                                child: const Image(
-                                  image: Svg('assets/svg/flow_icon.svg'),
-                                  //fit: BoxFit.cover,
-                                  color: white,
-                                  width: 13,
-                                  height: 13,
-                                ),
-                              ),
-                              const SizedBox(width: 2),
-                              Padding(
-                                padding: EdgeInsets.only(top: 5),
-                                child: Text(
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontFamily: "yknir",
-                                        fontWeight: FontWeight.w300,
-                                        fontSize: 15,
-                                        color: white),
-                                    widget.user.following.toString()),
-                              ),
-                              Expanded(child: Container()),
-                              CircleAvatar(
-                                backgroundColor: white.withOpacity(0.3),
-                                radius: 12,
-                                child: const Image(
-                                  image: Svg('assets/svg/heart_b.svg'),
-                                  fit: BoxFit.cover,
-                                  color: white,
-                                  width: 12,
-                                ),
-                              ),
-                              const SizedBox(width: 2),
-                              Padding(
-                                padding: EdgeInsets.only(top: 5),
-                                child: Text(
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontFamily: "yknir",
-                                        fontWeight: FontWeight.w300,
-                                        fontSize: 15,
-                                        color: white),
-                                    widget.user.followers.toString()),
-                              ),
-                            ],
-                          ),
-                        ),
-                      )
-                    ],
+      child: Column(
+        children: [
+          Container(
+            height: size.width / 2.35,
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+              image: DecorationImage(
+                  image: NetworkImage(
+                    widget.user.profilePic,
+                    // info[index]['profilePic'].toString(),
                   ),
-                ],
-              ), // Use the fullName property of each item
+                  fit: BoxFit.cover),
             ),
-            const SizedBox(height: 5),
-            Text(
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                  fontFamily: "yknir",
-                  fontWeight: FontWeight.w300,
-                  fontSize: 15,
-                  color: grayL1),
-              widget.user.name,
-            ),
-            const SizedBox(height: 10)
-          ],
-        ),
+            child: Column(
+              children: [
+                Expanded(child: Container()),
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(0),
+                      topRight: Radius.circular(0),
+                      bottomRight: Radius.circular(10.0),
+                      bottomLeft: Radius.circular(10.0),
+                    ),
+                    gradient: LinearGradient(
+                        //=> Background Linear Gradient
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [grayL1.withOpacity(0), grayL1]),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(5, 15, 5, 5),
+                    child: Row(
+                      children: [
+                        CircleAvatar(
+                          backgroundColor: white.withOpacity(0.3),
+                          radius: 10,
+                          child: Image(
+                            image: Svg('assets/svg/flow_icon.svg'),
+                            //fit: BoxFit.cover,
+                            color: white,
+                            width: 13,
+                            height: 13,
+                          ),
+                        ),
+                        const SizedBox(width: 2),
+                        Padding(
+                          padding: EdgeInsets.only(top: 5),
+                          child: Text(
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontFamily: "yknir",
+                                  fontWeight: FontWeight.w300,
+                                  fontSize: 15,
+                                  color: white),
+                              widget.user.following.toString()),
+                        ),
+                        Expanded(flex: 2, child: Container()),
+                        CircleAvatar(
+                          backgroundColor: white.withOpacity(0.3),
+                          radius: 10,
+                          child: Image(
+                            image: Svg('assets/svg/heart_b.svg'),
+                            fit: BoxFit.cover,
+                            color: white,
+                            width: 12,
+                          ),
+                        ),
+                        const SizedBox(width: 2),
+                        Padding(
+                          padding: EdgeInsets.only(top: 5),
+                          child: Text(
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontFamily: "yknir",
+                                  fontWeight: FontWeight.w300,
+                                  fontSize: 15,
+                                  color: white),
+                              widget.user.followers.toString()),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            ), // Use the fullName property of each item
+          ),
+          const SizedBox(height: 5),
+          Text(
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+                fontFamily: "yknir",
+                fontWeight: FontWeight.w300,
+                fontSize: 15,
+                color: grayL1),
+            widget.user.name,
+          ),
+          const SizedBox(height: 10)
+        ],
       ),
     );
   }

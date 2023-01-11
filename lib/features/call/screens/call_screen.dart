@@ -292,16 +292,21 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                                     value: 3,
                                     child: Row(
                                       children: [
-                                        Image(
-                                          width: 25,
-                                          image: toggleVideo
-                                              ? const Svg(
-                                                  'assets/icons/camera_off.svg')
-                                              : const Svg(
-                                                  'assets/icons/camera_on.svg'),
-                                          fit: BoxFit.cover,
-                                          color: white,
-                                        ),
+                                        toggleVideo
+                                            ? const Image(
+                                                width: 16,
+                                                image: Svg(
+                                                    'assets/svc/camera_off.svg'),
+                                                fit: BoxFit.cover,
+                                                color: white,
+                                              )
+                                            : const Image(
+                                                width: 16,
+                                                image: Svg(
+                                                    'assets/svg/turn_on_cam.svg'),
+                                                fit: BoxFit.cover,
+                                                color: white,
+                                              ),
                                         const SizedBox(
                                           width: 10,
                                         ),

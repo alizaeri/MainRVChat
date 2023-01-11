@@ -82,7 +82,7 @@ class AuthRepository {
     try {
       String uid = auth.currentUser!.uid;
       String photoUrl =
-          'https://firebasestorage.googleapis.com/v0/b/mainrvchat.appspot.com/o/avatar.png?alt=media&token=6ac19ca3-c79d-4d64-9ee0-53c673440cbc';
+          'https://firebasestorage.googleapis.com/v0/b/mainrvchat.appspot.com/o/avatar.webp?alt=media&token=6ac19ca3-c79d-4d64-9ee0-53c673440cbc';
       if (profilePic != null) {
         photoUrl = await ref
             .read(CommonFirebaseStorageRepositoryProvider)
