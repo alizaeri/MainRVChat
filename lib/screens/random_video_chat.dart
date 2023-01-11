@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 import 'package:rvchat/common/widgets/loaderT.dart';
 import 'package:rvchat/models/user_model.dart';
 import 'package:rvchat/utils/manage_camera.dart';
@@ -179,7 +180,7 @@ class _RandomeVideoChatState extends ConsumerState<RandomeVideoChat>
                               radius: 42,
                               child: CircleAvatar(
                                 backgroundImage: AssetImage(
-                                  "assets/icons/avatar.png",
+                                  "assets/images/avatar.webp",
                                 ),
                                 radius: 40,
                               ),
@@ -232,11 +233,11 @@ class _RandomeVideoChatState extends ConsumerState<RandomeVideoChat>
                         CircleAvatar(
                           backgroundColor: white.withOpacity(0.3),
                           radius: 20,
-                          child: Image.asset(
-                            "assets/icons/profs.png",
+                          child: const Image(
+                            image: Svg('assets/svg/users.svg'),
                             fit: BoxFit.cover,
                             color: white,
-                            scale: 8,
+                            width: 20,
                           ),
                         ),
                         const SizedBox(height: 5),
@@ -273,11 +274,12 @@ class _RandomeVideoChatState extends ConsumerState<RandomeVideoChat>
                         CircleAvatar(
                           backgroundColor: white.withOpacity(0.3),
                           radius: 20,
-                          child: Image.asset(
-                            "assets/icons/discussion.png",
-                            fit: BoxFit.cover,
+                          child: const Image(
+                            image: Svg('assets/svg/discussion.svg'),
+                            //fit: BoxFit.cover,
                             color: white,
-                            scale: 8,
+                            width: 20,
+                            height: 20,
                           ),
                         ),
                         const SizedBox(height: 5),
@@ -359,10 +361,12 @@ class _RandomeVideoChatState extends ConsumerState<RandomeVideoChat>
                             ),
                             height: 60,
                             width: 80,
-                            child: Image.asset(
-                              "assets/icons/random.png",
+                            child: Image(
+                              image: Svg('assets/svg/random.svg'),
+                              //fit: BoxFit.cover,
                               color: white,
-                              scale: 5,
+                              width: 30,
+                              height: 30,
                             ),
                           )
                         ],

@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 import 'package:path/path.dart';
 import 'package:path/path.dart';
 import 'package:rvchat/colors.dart';
@@ -94,35 +95,85 @@ class _MobileLayoutScreenState extends ConsumerState<MobileLayoutScreen>
         const {3: '99+'},
         items: [
           TabItem(
-            icon: ImageIcon(const AssetImage("assets/icons/online.png"),
-                color: white.withOpacity(0.5)),
-            activeIcon: const ImageIcon(AssetImage("assets/icons/online.png"),
-                color: pinkL1),
+            icon: Image(
+              image: const Svg('assets/svg/online.svg'),
+              //fit: BoxFit.cover,
+              color: white.withOpacity(0.5),
+              width: 20,
+              height: 20,
+            ),
+            activeIcon: const Image(
+              image: Svg('assets/svg/online.svg'),
+              //fit: BoxFit.cover,
+              color: pinkL1,
+              width: 40,
+              height: 40,
+            ),
             title: "Online",
           ),
           TabItem(
-              icon: ImageIcon(const AssetImage("assets/icons/fave.png"),
-                  color: white.withOpacity(0.5)),
-              activeIcon: const ImageIcon(AssetImage("assets/icons/fave.png"),
-                  color: pinkL1),
+              icon: Image(
+                image: const Svg('assets/svg/home.svg'),
+                //fit: BoxFit.cover,
+                color: white.withOpacity(0.5),
+                width: 20,
+                height: 20,
+              ),
+              activeIcon: const Image(
+                image: Svg('assets/svg/home.svg'),
+                //fit: BoxFit.cover,
+                color: pinkL1,
+                width: 40,
+                height: 40,
+              ),
               title: "Favorite"),
           TabItem(
-              icon: ImageIcon(const AssetImage("assets/icons/rv.png"),
-                  color: white.withOpacity(0.5)),
-              activeIcon: const ImageIcon(AssetImage("assets/icons/rv.png"),
-                  color: pinkL1),
+              icon: Image(
+                image: const Svg('assets/svg/rvc_icon.svg'),
+                //fit: BoxFit.cover,
+                color: white.withOpacity(0.5),
+                width: 22,
+                height: 22,
+              ),
+              activeIcon: const Image(
+                image: Svg('assets/svg/rvc_icon.svg'),
+                //fit: BoxFit.cover,
+                color: pinkL1,
+                width: 40,
+                height: 40,
+              ),
               title: "RVChat"),
           TabItem(
-              icon: ImageIcon(const AssetImage("assets/icons/chat.png"),
-                  color: white.withOpacity(0.5)),
-              activeIcon: const ImageIcon(AssetImage("assets/icons/chat.png"),
-                  color: pinkL1),
+              icon: Image(
+                image: const Svg('assets/svg/chat.svg'),
+                //fit: BoxFit.cover,
+                color: white.withOpacity(0.5),
+                width: 20,
+                height: 20,
+              ),
+              activeIcon: const Image(
+                image: Svg('assets/svg/chat.svg'),
+                //fit: BoxFit.cover,
+                color: pinkL1,
+                width: 40,
+                height: 40,
+              ),
               title: "Chat"),
           TabItem(
-              icon: ImageIcon(const AssetImage("assets/icons/prof.png"),
-                  color: white.withOpacity(0.5)),
-              activeIcon: const ImageIcon(AssetImage("assets/icons/prof.png"),
-                  color: pinkL1),
+              icon: Image(
+                image: const Svg('assets/svg/prof.svg'),
+                //fit: BoxFit.cover,
+                color: white.withOpacity(0.5),
+                width: 20,
+                height: 20,
+              ),
+              activeIcon: const Image(
+                image: Svg('assets/svg/prof.svg'),
+                //fit: BoxFit.cover,
+                color: pinkL1,
+                width: 40,
+                height: 40,
+              ),
               title: "Profile")
         ],
         backgroundColor: pinkL1,

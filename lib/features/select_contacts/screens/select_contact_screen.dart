@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 import 'package:rvchat/colors.dart';
 import 'package:rvchat/common/widgets/loader.dart';
 import 'package:rvchat/features/select_contacts/controller/select_contact_controller.dart';
@@ -59,15 +60,16 @@ class _SelectContactsScreenState extends ConsumerState<SelectContactsScreen> {
         titleSpacing: 0,
         backgroundColor: pinkL1,
         leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: Image.asset(
-              "assets/icons/back_icon.png",
-              fit: BoxFit.cover,
-              color: white,
-              scale: 7,
-            )),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Image(
+            image: Svg('assets/svg/back.svg'),
+            fit: BoxFit.cover,
+            color: white,
+            width: 18,
+          ),
+        ),
         title: Row(
           children: const [
             SizedBox(
@@ -91,11 +93,12 @@ class _SelectContactsScreenState extends ConsumerState<SelectContactsScreen> {
                 searchToggle = !searchToggle;
               });
             },
-            icon: Image.asset(
-              "assets/icons/search.png",
-              fit: BoxFit.cover,
+            icon: Image(
+              image: Svg('assets/svg/search.svg'),
+              //fit: BoxFit.cover,
               color: white,
-              scale: 8,
+              width: 20,
+              height: 20,
             ),
           ),
           IconButton(

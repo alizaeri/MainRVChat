@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 import 'package:rvchat/colors.dart';
 import 'package:rvchat/common/widgets/loaderT.dart';
 import 'package:rvchat/models/user_model.dart';
@@ -105,8 +106,9 @@ class _FollowPageState extends State<FollowPage> {
           users.removeWhere(
               (item) => item.uid == FirebaseAuth.instance.currentUser!.uid);
           var size = MediaQuery.of(context).size;
-          final double itemHeight = (size.height - kToolbarHeight - 10) / 3;
-          final double itemWidth = size.width / 2;
+          final double itemHeight =
+              (size.width - kToolbarHeight - 10) / 2; /////////////
+          final double itemWidth = size.width / 3;
           if (users.isNotEmpty) {
             return Column(
               children: [
@@ -271,110 +273,114 @@ class _MyCardState extends State<MyCard> {
       onTap: () {
         calculateFollow();
       },
-      child: Column(
-        children: [
-          Container(
-            width: (size.width / 1),
-            height: (size.width / 2),
-            decoration: BoxDecoration(
-              borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-              image: DecorationImage(
-                  image: NetworkImage(
-                    widget.user.profilePic,
-                    // info[index]['profilePic'].toString(),
+      child: Container(
+        color: grayL1,
+        width: (size.width / 3),
+        height: (size.width / 2),
+        child: Column(
+          children: [
+            Container(
+              //height: (size.width / 2) - 20,
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                image: DecorationImage(
+                    image: NetworkImage(
+                      widget.user.profilePic,
+                      // info[index]['profilePic'].toString(),
+                    ),
+                    fit: BoxFit.cover),
+              ),
+              child: Stack(
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(0),
+                            topRight: Radius.circular(0),
+                            bottomRight: Radius.circular(10.0),
+                            bottomLeft: Radius.circular(10.0),
+                          ),
+                          gradient: LinearGradient(
+                              //=> Background Linear Gradient
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [grayL1.withOpacity(0), grayL1]),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(5, 15, 5, 5),
+                          child: Row(
+                            children: [
+                              CircleAvatar(
+                                backgroundColor: white.withOpacity(0.3),
+                                radius: 12,
+                                child: const Image(
+                                  image: Svg('assets/svg/flow_icon.svg'),
+                                  //fit: BoxFit.cover,
+                                  color: white,
+                                  width: 13,
+                                  height: 13,
+                                ),
+                              ),
+                              const SizedBox(width: 2),
+                              Padding(
+                                padding: EdgeInsets.only(top: 5),
+                                child: Text(
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontFamily: "yknir",
+                                        fontWeight: FontWeight.w300,
+                                        fontSize: 15,
+                                        color: white),
+                                    widget.user.following.toString()),
+                              ),
+                              Expanded(child: Container()),
+                              CircleAvatar(
+                                backgroundColor: white.withOpacity(0.3),
+                                radius: 12,
+                                child: const Image(
+                                  image: Svg('assets/svg/heart_b.svg'),
+                                  fit: BoxFit.cover,
+                                  color: white,
+                                  width: 12,
+                                ),
+                              ),
+                              const SizedBox(width: 2),
+                              Padding(
+                                padding: EdgeInsets.only(top: 5),
+                                child: Text(
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontFamily: "yknir",
+                                        fontWeight: FontWeight.w300,
+                                        fontSize: 15,
+                                        color: white),
+                                    widget.user.followers.toString()),
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                    ],
                   ),
-                  fit: BoxFit.cover),
+                ],
+              ), // Use the fullName property of each item
             ),
-            child: Stack(
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Expanded(child: Container()),
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(0),
-                          topRight: Radius.circular(0),
-                          bottomRight: Radius.circular(10.0),
-                          bottomLeft: Radius.circular(10.0),
-                        ),
-                        gradient: LinearGradient(
-                            //=> Background Linear Gradient
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [grayL1.withOpacity(0), grayL1]),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(5, 15, 5, 5),
-                        child: Row(
-                          children: [
-                            CircleAvatar(
-                              backgroundColor: white.withOpacity(0.3),
-                              radius: 10,
-                              child: Image.asset(
-                                "assets/icons/user_chat.png",
-                                fit: BoxFit.cover,
-                                color: white,
-                                scale: 8,
-                              ),
-                            ),
-                            const SizedBox(width: 2),
-                            Padding(
-                              padding: EdgeInsets.only(top: 5),
-                              child: Text(
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontFamily: "yknir",
-                                      fontWeight: FontWeight.w300,
-                                      fontSize: 15,
-                                      color: white),
-                                  widget.user.following.toString()),
-                            ),
-                            Expanded(child: Container()),
-                            CircleAvatar(
-                              backgroundColor: white.withOpacity(0.3),
-                              radius: 10,
-                              child: Image.asset(
-                                "assets/icons/like_icon2.png",
-                                fit: BoxFit.cover,
-                                color: white,
-                                scale: 8,
-                              ),
-                            ),
-                            const SizedBox(width: 2),
-                            Padding(
-                              padding: EdgeInsets.only(top: 5),
-                              child: Text(
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontFamily: "yknir",
-                                      fontWeight: FontWeight.w300,
-                                      fontSize: 15,
-                                      color: white),
-                                  widget.user.followers.toString()),
-                            ),
-                          ],
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ],
-            ), // Use the fullName property of each item
-          ),
-          const SizedBox(height: 5),
-          Text(
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-                fontFamily: "yknir",
-                fontWeight: FontWeight.w300,
-                fontSize: 15,
-                color: grayL1),
-            widget.user.name,
-          ),
-          const SizedBox(height: 10)
-        ],
+            const SizedBox(height: 5),
+            Text(
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                  fontFamily: "yknir",
+                  fontWeight: FontWeight.w300,
+                  fontSize: 15,
+                  color: grayL1),
+              widget.user.name,
+            ),
+            const SizedBox(height: 10)
+          ],
+        ),
       ),
     );
   }

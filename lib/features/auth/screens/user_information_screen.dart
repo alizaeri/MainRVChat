@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 import 'package:rvchat/colors.dart';
 import 'package:rvchat/common/utils/utils.dart';
 import 'package:rvchat/common/widgets/loader.dart';
@@ -100,7 +101,7 @@ class _UserInformationScreenState extends ConsumerState<UserInformationScreen> {
                                               radius: 75,
                                               child: CircleAvatar(
                                                 backgroundImage: AssetImage(
-                                                  "assets/icons/avatar.png",
+                                                  "assets/images/avatar.webp",
                                                 ),
                                                 radius: 70,
                                               ),
@@ -125,11 +126,12 @@ class _UserInformationScreenState extends ConsumerState<UserInformationScreen> {
                                             onPressed: () {
                                               selectImage();
                                             },
-                                            icon: const ImageIcon(
-                                              AssetImage(
-                                                "assets/icons/camera.png",
-                                              ),
+                                            icon: const Image(
+                                              image: Svg(
+                                                  'assets/svg/cam_edit.svg'),
+                                              fit: BoxFit.cover,
                                               color: pinkL1,
+                                              width: 23,
                                             ),
                                           ),
                                         ),

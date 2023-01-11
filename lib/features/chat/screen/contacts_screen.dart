@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 import 'package:rvchat/Mycolors.dart';
 import 'package:rvchat/colors.dart';
 import 'package:rvchat/colors.dart';
@@ -80,11 +81,12 @@ class _ContactsScreenState extends State<ContactsScreen> {
                 searchToggle = !searchToggle;
               });
             },
-            icon: Image.asset(
-              "assets/icons/search.png",
-              fit: BoxFit.cover,
+            icon: Image(
+              image: Svg('assets/svg/search.svg'),
+              //fit: BoxFit.cover,
               color: white,
-              scale: 8,
+              width: 20,
+              height: 20,
             ),
           ),
           IconButton(
@@ -135,11 +137,11 @@ class _ContactsScreenState extends State<ContactsScreen> {
           Navigator.pushNamed(context, SelectContactsScreen.routeName);
         },
         backgroundColor: pinkL1,
-        child: const ImageIcon(
-          AssetImage(
-            "assets/icons/contatMassage.png",
-          ),
+        child: const Image(
+          image: Svg('assets/svg/chat.svg'),
+          //fit: BoxFit.cover,
           color: white,
+          width: 25,
         ),
       ),
     );

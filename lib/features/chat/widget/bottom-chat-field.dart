@@ -4,6 +4,7 @@ import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_sound/flutter_sound.dart';
+import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:rvchat/colors.dart';
@@ -264,10 +265,12 @@ class _bottomChatFieldState extends ConsumerState<BottomChatField> {
                                   offset: const Offset(0, 400),
                                   child: const Padding(
                                     padding: EdgeInsets.only(left: 10),
-                                    child: ImageIcon(
-                                        AssetImage(
-                                            "assets/icons/att_iconng.png"),
-                                        color: pinkL1),
+                                    child: Image(
+                                      image: Svg('assets/svg/attachment.svg'),
+                                      fit: BoxFit.cover,
+                                      color: pinkL1,
+                                      width: 25,
+                                    ),
                                   ),
                                 ),
                               )
@@ -303,12 +306,19 @@ class _bottomChatFieldState extends ConsumerState<BottomChatField> {
 
                         sendTextMesseage();
                       },
-                      child: ImageIcon(
-                        isShowSendButton
-                            ? const AssetImage("assets/icons/sent_icon.png")
-                            : const AssetImage("assets/icons/mic_icon.png"),
-                        color: Colors.white,
-                      ),
+                      child: isShowSendButton
+                          ? Image(
+                              image: Svg('assets/svg/send.svg'),
+                              fit: BoxFit.cover,
+                              color: white,
+                              width: 22,
+                            )
+                          : Image(
+                              image: Svg('assets/svg/mic.svg'),
+                              fit: BoxFit.cover,
+                              color: white,
+                              width: 22,
+                            ),
                     ),
                   ),
                 ],

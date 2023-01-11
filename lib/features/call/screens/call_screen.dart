@@ -43,7 +43,9 @@ class _CallScreenState extends ConsumerState<CallScreen> {
   late String token;
   bool toggleVideo = false;
   bool micIcon = false;
-  final _value = ValueNotifier<bool>(false);
+  bool showButtons = false;
+  bool muteAudio = false;
+  var _value = ValueNotifier<bool>(false);
   final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
       GlobalKey<ScaffoldMessengerState>();
 
@@ -265,12 +267,12 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                                     value: 2,
                                     child: Row(
                                       children: const [
-                                        Image(
-                                          width: 25,
+                                        const Image(
                                           image: Svg(
-                                              'assets/icons/swich_camera.svg'),
+                                              'assets/svg/swich_camera.svg'),
                                           fit: BoxFit.cover,
                                           color: white,
+                                          width: 18,
                                         ),
                                         SizedBox(
                                           width: 10,
@@ -291,9 +293,9 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                                     child: Row(
                                       children: const [
                                         Image(
-                                          width: 25,
-                                          image: Svg(
-                                              'assets/icons/camera_off.svg'),
+                                          width: 18,
+                                          image:
+                                              Svg('assets/svg/camera_off.svg'),
                                           fit: BoxFit.cover,
                                           color: white,
                                         ),
@@ -312,12 +314,12 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                                   ),
                                   const PopupMenuDivider(),
                                   PopupMenuItem(
-                                    value: 3,
+                                    value: 4,
                                     child: Row(
                                       children: const [
                                         Image(
                                           width: 25,
-                                          image: Svg('assets/icons/layout.svg'),
+                                          image: Svg('assets/svg/layout.svg'),
                                           fit: BoxFit.cover,
                                           color: white,
                                         ),
@@ -336,13 +338,12 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                                   ),
                                   const PopupMenuDivider(),
                                   PopupMenuItem(
-                                    value: 3,
+                                    value: 5,
                                     child: Row(
                                       children: const [
                                         Image(
-                                          width: 25,
-                                          image:
-                                              Svg('assets/icons/invisible.svg'),
+                                          width: 18,
+                                          image: Svg('assets/svg/hide_btn.svg'),
                                           fit: BoxFit.cover,
                                           color: white,
                                         ),
@@ -361,7 +362,45 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                                   ),
                                 ],
                                 initialValue: 0,
-                                onSelected: (value) async {},
+                                onSelected: (value) async {
+                                  switch (value) {
+                                    case 1:
+                                      {
+                                        break;
+                                      }
+                                    case 2:
+                                      {
+                                        agoraEngine.switchCamera();
+                                        break;
+                                      }
+                                    case 3:
+                                      {
+                                        if (toggleVideo) {
+                                          setState(() {
+                                            agoraEngine
+                                                .muteLocalVideoStream(false);
+
+                                            toggleVideo = false;
+                                          });
+                                        } else {
+                                          setState(() {
+                                            toggleVideo = true;
+
+                                            agoraEngine
+                                                .muteLocalVideoStream(true);
+                                          });
+                                        }
+                                        break;
+                                      }
+                                    case 5:
+                                      {
+                                        setState(() {
+                                          showButtons = !showButtons;
+                                        });
+                                        break;
+                                      }
+                                  }
+                                },
                                 child: const Icon(
                                   Icons.more_vert,
                                   color: Colors.white,
@@ -378,122 +417,128 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                 ),
                 Expanded(child: Container()),
                 const SizedBox(height: 20),
-                Row(
-                  children: [
-                    Expanded(child: Container()),
-                    Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        const Image(
-                          width: 300,
-                          height: 87,
-                          image: Svg('assets/images/bg_nav.svg'),
-                          fit: BoxFit.cover,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 10),
-                          child: Row(
+                !showButtons
+                    ? Row(
+                        children: [
+                          Expanded(child: Container()),
+                          Stack(
+                            alignment: Alignment.center,
                             children: [
-                              RawMaterialButton(
-                                onPressed: () {
-                                  if (micIcon) {
-                                    setState(() {
-                                      agoraEngine.enableAudio();
-                                      micIcon = false;
-                                    });
-                                  } else {
-                                    setState(() {
-                                      micIcon = true;
-                                      agoraEngine.disableAudio();
-                                    });
-                                  }
-                                },
-                                shape: const CircleBorder(),
-                                elevation: 0,
-                                fillColor: white.withOpacity(0.2),
-                                padding: const EdgeInsets.all(5),
-                                child: micIcon
-                                    ? const Image(
-                                        image: Svg('assets/icons/sp_n.svg'),
-                                        fit: BoxFit.cover,
-                                        color: white,
-                                        width: 35,
-                                      )
-                                    : Image(
-                                        image: const Svg(
-                                            'assets/icons/sp_off.svg'),
-                                        fit: BoxFit.cover,
-                                        color: white.withOpacity(0.5),
-                                        width: 35,
-                                      ),
+                              Image(
+                                width: 300,
+                                height: 87,
+                                image: Svg('assets/images/bg_nav.svg',
+                                    color: grayL1.withOpacity(0.1)),
+                                fit: BoxFit.cover,
                               ),
-                              const SizedBox(width: 16),
-                              RawMaterialButton(
-                                onPressed: () {
-                                  leave();
-                                  ref.read(callControllerProvider).endCall(
-                                        widget.call.callerId,
-                                        widget.call.receiverId,
-                                        context,
-                                      );
-                                  Navigator.pop(context);
-                                  agoraEngine.leaveChannel();
-                                },
-                                shape: const CircleBorder(),
-                                elevation: 0,
-                                fillColor: white,
-                                padding: const EdgeInsets.all(2),
-                                child: const Image(
-                                  image: Svg('assets/icons/call_end.svg'),
-                                  fit: BoxFit.cover,
-                                  color: pink,
-                                  width: 60,
-                                ),
-                              ),
-                              const SizedBox(width: 16),
-                              RawMaterialButton(
-                                onPressed: () {
-                                  if (micIcon) {
-                                    setState(() {
-                                      agoraEngine.enableAudio();
+                              Row(
+                                children: [
+                                  RawMaterialButton(
+                                    onPressed: () {
+                                      if (muteAudio) {
+                                        setState(() {
+                                          agoraEngine
+                                              .adjustAudioMixingVolume(0);
+                                          agoraEngine
+                                              .adjustPlaybackSignalVolume(0);
+                                          muteAudio = false;
+                                        });
+                                      } else {
+                                        setState(() {
+                                          muteAudio = true;
+                                          agoraEngine
+                                              .adjustAudioMixingVolume(100);
+                                          agoraEngine
+                                              .adjustPlaybackSignalVolume(100);
+                                        });
+                                      }
+                                    },
+                                    shape: const CircleBorder(),
+                                    elevation: 0,
+                                    fillColor: white.withOpacity(0.2),
+                                    padding: const EdgeInsets.all(5),
+                                    child: muteAudio
+                                        ? Image(
+                                            image: const Svg(
+                                                'assets/svg/sp_mut.svg'),
+                                            fit: BoxFit.cover,
+                                            color: white.withOpacity(0.5),
+                                            width: 35,
+                                          )
+                                        : const Image(
+                                            image: Svg('assets/svg/sp.svg'),
+                                            fit: BoxFit.cover,
+                                            color: white,
+                                            width: 35,
+                                          ),
+                                  ),
+                                  const SizedBox(width: 16),
+                                  RawMaterialButton(
+                                    onPressed: () {
+                                      leave();
+                                      ref.read(callControllerProvider).endCall(
+                                            widget.call.callerId,
+                                            widget.call.receiverId,
+                                            context,
+                                          );
+                                      Navigator.pop(context);
+                                      agoraEngine.leaveChannel();
+                                    },
+                                    shape: const CircleBorder(),
+                                    elevation: 0,
+                                    fillColor: white,
+                                    padding: const EdgeInsets.all(2),
+                                    child: const Image(
+                                      image: Svg('assets/svg/end_call.svg'),
+                                      fit: BoxFit.cover,
+                                      color: pink,
+                                      width: 60,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 16),
+                                  RawMaterialButton(
+                                    onPressed: () {
+                                      if (micIcon) {
+                                        setState(() {
+                                          agoraEngine.enableAudio();
 
-                                      micIcon = false;
-                                    });
-                                  } else {
-                                    setState(() {
-                                      micIcon = true;
-                                      agoraEngine.disableAudio();
-                                    });
-                                  }
-                                },
-                                shape: const CircleBorder(),
-                                elevation: 0,
-                                fillColor: white.withOpacity(0.2),
-                                padding: const EdgeInsets.all(5),
-                                //padding: const EdgeInsets.all(0),
-                                child: micIcon
-                                    ? const Image(
-                                        image: Svg('assets/icons/mic_n.svg'),
-                                        fit: BoxFit.cover,
-                                        color: white,
-                                        width: 35,
-                                      )
-                                    : Image(
-                                        image: const Svg(
-                                            'assets/icons/mic_off.svg'),
-                                        fit: BoxFit.cover,
-                                        color: white.withOpacity(0.5),
-                                        width: 35,
-                                      ),
-                              ),
+                                          micIcon = false;
+                                        });
+                                      } else {
+                                        setState(() {
+                                          micIcon = true;
+                                          agoraEngine.disableAudio();
+                                        });
+                                      }
+                                    },
+                                    shape: const CircleBorder(),
+                                    elevation: 0,
+                                    fillColor: white.withOpacity(0.2),
+                                    padding: const EdgeInsets.all(5),
+                                    //padding: const EdgeInsets.all(0),
+                                    child: micIcon
+                                        ? Image(
+                                            image: const Svg(
+                                                'assets/icons/mic_mute.svg'),
+                                            fit: BoxFit.cover,
+                                            color: white.withOpacity(0.5),
+                                            width: 35,
+                                          )
+                                        : const Image(
+                                            image: Svg('assets/svg/mic.svg'),
+                                            fit: BoxFit.cover,
+                                            color: white,
+                                            width: 35,
+                                          ),
+                                  ),
+                                ],
+                              )
                             ],
                           ),
-                        )
-                      ],
-                    ),
-                    Expanded(child: Container()),
-                  ],
-                ),
+                          Expanded(child: Container()),
+                        ],
+                      )
+                    : Container(),
                 const SizedBox(height: 30),
               ],
             ),

@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 import 'package:rvchat/colors.dart';
 import 'package:rvchat/features/auth/controller/auth_controller.dart';
 import 'package:rvchat/features/auth/screens/login_screen.dart';
@@ -126,11 +127,11 @@ class ProfilePage extends ConsumerWidget {
                                         UserInformationEditPage.routeName,
                                         arguments: snapshot.data!.country);
                                   },
-                                  icon: Image.asset(
-                                    "assets/icons/edit.png",
+                                  icon: const Image(
+                                    image: Svg('assets/svg/edit.svg'),
                                     fit: BoxFit.cover,
                                     color: white,
-                                    scale: 8,
+                                    width: 22,
                                   ),
                                 ),
                                 const SizedBox(width: 20)
@@ -145,7 +146,7 @@ class ProfilePage extends ConsumerWidget {
                         radius: size.width * 0.21,
                         child: CircleAvatar(
                           backgroundImage: snapshot.data!.profilePic == null
-                              ? const AssetImage("assets/icons/avatar.png")
+                              ? const AssetImage("assets/images/avatar.webp")
                                   as ImageProvider
                               : NetworkImage(snapshot.data!.profilePic),
                           radius: size.width * 0.2,
@@ -163,10 +164,11 @@ class ProfilePage extends ConsumerWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Image.asset(
-                            "assets/icons/flow_icon.png",
+                          const Image(
+                            image: Svg('assets/svg/flow_icon.svg'),
                             fit: BoxFit.cover,
-                            scale: 5,
+                            color: yellow,
+                            width: 20,
                           ),
                           Padding(
                             padding: EdgeInsets.fromLTRB(2, 10, 0, 0),
@@ -181,15 +183,16 @@ class ProfilePage extends ConsumerWidget {
                           const SizedBox(
                             width: 40,
                           ),
-                          Image.asset(
-                            "assets/icons/like_icon.png",
+                          const Image(
+                            image: Svg('assets/svg/heart_b.svg'),
                             fit: BoxFit.cover,
-                            scale: 5,
+                            color: yellow,
+                            width: 22,
                           ),
                           Padding(
-                            padding: EdgeInsets.fromLTRB(5, 10, 0, 0),
+                            padding: const EdgeInsets.fromLTRB(5, 10, 0, 0),
                             child: Text(
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontFamily: "yknir",
                                     fontWeight: FontWeight.w300,
                                     fontSize: 25,

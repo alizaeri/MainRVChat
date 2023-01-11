@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 import 'package:rvchat/colors.dart';
 import 'package:rvchat/common/widgets/loader.dart';
 import 'package:rvchat/common/widgets/loaderT.dart';
@@ -45,13 +46,14 @@ class MobileChatScreen extends ConsumerWidget {
           titleSpacing: 0,
           backgroundColor: pinkL1,
           leading: IconButton(
-              onPressed: () => Navigator.pop(context),
-              icon: Image.asset(
-                "assets/icons/back_icon.png",
-                fit: BoxFit.cover,
-                color: white,
-                scale: 7,
-              )),
+            onPressed: () => Navigator.pop(context),
+            icon: Image(
+              image: Svg('assets/svg/back.svg'),
+              fit: BoxFit.cover,
+              color: whiteW1,
+              width: 18,
+            ),
+          ),
           title: StreamBuilder<UserModel>(
               stream: ref.read(authControllerProvider).userDataById(uid),
               builder: (context, snapshot) {
@@ -89,20 +91,21 @@ class MobileChatScreen extends ConsumerWidget {
           centerTitle: false,
           actions: [
             IconButton(
-                onPressed: () => makeCall(ref, context),
-                icon: Image.asset(
-                  "assets/icons/rv.png",
-                  fit: BoxFit.cover,
-                  color: white,
-                  scale: 5.5,
-                )),
-            IconButton(
-              onPressed: () {},
-              icon: Image.asset(
-                "assets/icons/call.png",
+              onPressed: () => makeCall(ref, context),
+              icon: Image(
+                image: Svg('assets/svg/rvc_icon.svg'),
                 fit: BoxFit.cover,
                 color: white,
-                scale: 8,
+                width: 24,
+              ),
+            ),
+            IconButton(
+              onPressed: () {},
+              icon: Image(
+                image: Svg('assets/svg/call_in.svg'),
+                fit: BoxFit.cover,
+                color: white,
+                width: 22,
               ),
             ),
             IconButton(

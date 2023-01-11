@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 import 'package:rvchat/colors.dart';
 import 'package:rvchat/common/widgets/loaderT.dart';
 import 'package:rvchat/features/chat/screen/mobile_chat_screen.dart';
@@ -214,12 +215,13 @@ class _MyCardState extends State<MyCard> {
                           children: [
                             CircleAvatar(
                               backgroundColor: white.withOpacity(0.3),
-                              radius: 10,
-                              child: Image.asset(
-                                "assets/icons/user_chat.png",
-                                fit: BoxFit.cover,
+                              radius: 12,
+                              child: const Image(
+                                image: Svg('assets/svg/flow_icon.svg'),
+                                //fit: BoxFit.cover,
                                 color: white,
-                                scale: 8,
+                                width: 13,
+                                height: 13,
                               ),
                             ),
                             const SizedBox(width: 2),
@@ -237,12 +239,12 @@ class _MyCardState extends State<MyCard> {
                             Expanded(child: Container()),
                             CircleAvatar(
                               backgroundColor: white.withOpacity(0.3),
-                              radius: 10,
-                              child: Image.asset(
-                                "assets/icons/like_icon2.png",
+                              radius: 12,
+                              child: const Image(
+                                image: Svg('assets/svg/heart_b.svg'),
                                 fit: BoxFit.cover,
                                 color: white,
-                                scale: 8,
+                                width: 12,
                               ),
                             ),
                             const SizedBox(width: 2),

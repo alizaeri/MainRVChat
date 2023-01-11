@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 import 'package:rvchat/colors.dart';
 import 'package:rvchat/common/enums/message_enum.dart';
 import 'package:rvchat/features/chat/widget/display_text_image_gif.dart';
@@ -79,19 +80,19 @@ class MyMessageCard extends StatelessWidget {
                     isSeen
                         ? //==> Waiting Image.asset("assets/icons/waiting.png",fit: BoxFit.cover, color: whiteW1.withOpacity(0.5),scale: 15,)
                         //==> Seen
-                        Image.asset(
-                            "assets/icons/seen.png",
-                            fit: BoxFit.cover,
+                        const Image(
+                            image: Svg('assets/svg/double_tick.svg'),
+                            //fit: BoxFit.cover,
                             color: yellow,
-                            scale: 12,
+                            width: 10,
+                            height: 10,
                           )
-                        //==>resive Image.asset("assets/icons/tick.png",fit: BoxFit.cover,color: yellow,scale: 10,)
-                        //==> send Image.asset("assets/icons/tick.png",fit: BoxFit.cover,color: whiteW1,scale: 10,)
-                        : Image.asset(
-                            "assets/icons/tick.png",
-                            fit: BoxFit.cover,
-                            color: yellow,
-                            scale: 10,
+                        : const Image(
+                            image: Svg('assets/svg/single_tick.svg'),
+                            //fit: BoxFit.cover,
+                            color: white,
+                            width: 10,
+                            height: 10,
                           )
                   ],
                 ),

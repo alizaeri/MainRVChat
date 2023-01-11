@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 import 'package:rvchat/colors.dart';
 import 'package:rvchat/common/widgets/loaderW.dart';
 import 'package:rvchat/features/auth/controller/auth_controller.dart';
@@ -139,11 +140,11 @@ class _LocalWidgetState extends ConsumerState<LocalWidget> {
                                             context,
                                           );
                                     },
-                                    icon: Image.asset(
-                                      "assets/icons/endcall.png",
+                                    icon: const Image(
+                                      image: Svg('assets/svg/end_call.svg'),
                                       fit: BoxFit.cover,
                                       color: white,
-                                      scale: 7,
+                                      width: 18,
                                     ),
                                   ),
                                 ),
@@ -167,11 +168,11 @@ class _LocalWidgetState extends ConsumerState<LocalWidget> {
                                         ),
                                       );
                                     },
-                                    icon: Image.asset(
-                                      "assets/icons/call.png",
+                                    icon: const Image(
+                                      image: Svg('assets/svg/call_in.svg'),
                                       fit: BoxFit.cover,
                                       color: white,
-                                      scale: 7,
+                                      width: 18,
                                     ),
                                   ),
                                 ),

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 import 'package:rvchat/colors.dart';
 import 'package:rvchat/common/widgets/loaderT.dart';
 import 'package:rvchat/features/auth/controller/auth_controller.dart';
@@ -222,19 +223,20 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
                                     child: Padding(
                                       padding: const EdgeInsets.only(left: 5),
                                       child: IconButton(
-                                          onPressed: () {
-                                            if (Navigator.canPop(context)) {
-                                              Navigator.pop(context);
-                                            } else {
-                                              SystemNavigator.pop();
-                                            }
-                                          },
-                                          icon: Image.asset(
-                                            "assets/icons/back_icon.png",
-                                            fit: BoxFit.cover,
-                                            color: white,
-                                            scale: 5,
-                                          )),
+                                        onPressed: () {
+                                          if (Navigator.canPop(context)) {
+                                            Navigator.pop(context);
+                                          } else {
+                                            SystemNavigator.pop();
+                                          }
+                                        },
+                                        icon: Image(
+                                          image: Svg('assets/svg/back.svg'),
+                                          fit: BoxFit.cover,
+                                          color: white,
+                                          width: 18,
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -256,16 +258,19 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
                                           addUserToFavorit();
                                         },
                                         icon: !isLiked
-                                            ? Image.asset(
-                                                "assets/icons/like_icon.png",
+                                            ? Image(
+                                                image:
+                                                    Svg('assets/svg/heart.svg'),
                                                 fit: BoxFit.cover,
                                                 color: white,
-                                                scale: 3,
+                                                width: 22,
                                               )
-                                            : Image.asset(
-                                                "assets/icons/like_icon_fill.png",
+                                            : Image(
+                                                image: Svg(
+                                                    'assets/svg/heart_b.svg'),
+                                                fit: BoxFit.cover,
                                                 color: yellow,
-                                                scale: 3,
+                                                width: 22,
                                               ),
                                       ),
                                     ),
@@ -281,7 +286,7 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
                                 backgroundImage: snapshot.data!.profilePic ==
                                         null
                                     ? const AssetImage(
-                                            "assets/icons/avatar.png")
+                                            "assets/images/avatar.webp")
                                         as ImageProvider
                                     : NetworkImage(snapshot.data!.profilePic),
                                 radius: size.width * 0.2,
@@ -299,14 +304,15 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Image.asset(
-                                  "assets/icons/flow_icon.png",
+                                const Image(
+                                  image: Svg('assets/svg/flow_icon.svg'),
                                   fit: BoxFit.cover,
-                                  scale: 5,
+                                  color: yellow,
+                                  width: 20,
                                 ),
                                 Padding(
                                   padding:
-                                      const EdgeInsets.fromLTRB(2, 10, 0, 0),
+                                      const EdgeInsets.fromLTRB(10, 10, 0, 0),
                                   child: Text(
                                       style: const TextStyle(
                                           fontFamily: "yknir",
@@ -315,24 +321,25 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
                                           color: white),
                                       snapshot.data!.following.toString()),
                                 ),
-                                const SizedBox(
-                                  width: 40,
-                                ),
+                                const SizedBox(width: 40),
                                 IconButton(
                                   onPressed: () {
                                     addUserToFavorit();
                                   },
                                   icon: !isLiked
-                                      ? Image.asset(
-                                          "assets/icons/like_icon.png",
-                                          fit: BoxFit.cover,
+                                      ? Image(
+                                          image: Svg('assets/svg/heart.svg'),
+                                          //fit: BoxFit.cover,
                                           color: white,
-                                          scale: 5,
+                                          width: 20,
+                                          height: 20,
                                         )
-                                      : Image.asset(
-                                          "assets/icons/like_icon_fill.png",
+                                      : Image(
+                                          image: Svg('assets/svg/heart_b.svg'),
+                                          //fit: BoxFit.cover,
                                           color: white,
-                                          scale: 5,
+                                          width: 20,
+                                          height: 20,
                                         ),
                                 ),
                                 Padding(
@@ -379,7 +386,9 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
                                       fontSize: size.width * 0.1,
                                       color: grayL1),
                                   snapshot.data!.name),
-                              const Divider(),
+                              Divider(
+                                color: grayL1.withOpacity(0.3),
+                              ),
                               const Text(
                                   style: TextStyle(
                                       fontFamily: "yknir",
@@ -447,10 +456,12 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
                                           ),
                                           height: 60,
                                           width: 80,
-                                          child: Image.asset(
-                                            "assets/icons/chat.png",
+                                          child: Image(
+                                            image: Svg('assets/svg/chat.svg'),
+                                            //fit: BoxFit.cover,
                                             color: white,
-                                            scale: 5,
+                                            width: 30,
+                                            height: 30,
                                           ),
                                         )
                                       ],
@@ -504,10 +515,13 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
                                           ),
                                           height: 60,
                                           width: 80,
-                                          child: Image.asset(
-                                            "assets/icons/rv.png",
+                                          child: Image(
+                                            image:
+                                                Svg('assets/svg/rvc_icon.svg'),
+                                            //fit: BoxFit.cover,
                                             color: white,
-                                            scale: 5,
+                                            width: 32,
+                                            height: 32,
                                           ),
                                         )
                                       ],

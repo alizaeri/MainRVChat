@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 import 'package:rvchat/colors.dart';
 import 'package:rvchat/common/utils/utils.dart';
 
@@ -95,7 +96,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                 radius: 75,
                                 child: CircleAvatar(
                                   backgroundImage: AssetImage(
-                                    "assets/icons/avatar.png",
+                                    "assets/images/avatar.webp",
                                   ),
                                   radius: 70,
                                 ),
@@ -180,16 +181,20 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                       ),
                                       country!.flagEmoji,
                                     )
-                                  : Image.asset(
-                                      "assets/icons/flag.png",
-                                      fit: BoxFit.cover,
-                                      scale: 8,
+                                  : const Image(
+                                      image: Svg('assets/svg/discussion.svg'),
+                                      //fit: BoxFit.cover,
+                                      color: white,
+                                      width: 20,
+                                      height: 20,
                                     ),
                             ),
-                            Image.asset(
-                              "assets/icons/dropDownIcon.png",
-                              fit: BoxFit.cover,
-                              scale: 3,
+                            const Image(
+                              image: Svg('assets/svg/drop_down_icon.svg'),
+                              //fit: BoxFit.cover,
+                              color: grayL1,
+                              width: 5,
+                              height: 5,
                             ),
                             const SizedBox(width: 5),
                             if (country != null)

@@ -68,7 +68,7 @@ class OTPScreen extends ConsumerWidget {
                                 radius: 75,
                                 child: CircleAvatar(
                                   backgroundImage: AssetImage(
-                                    "assets/icons/avatar.png",
+                                    "assets/images/avatar.webp",
                                   ),
                                   radius: 70,
                                 ),
