@@ -1,4 +1,5 @@
 import 'package:country_picker/country_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -9,6 +10,7 @@ import 'package:rvchat/common/utils/utils.dart';
 
 import 'package:rvchat/common/widgets/loader.dart';
 import 'package:rvchat/features/auth/controller/auth_controller.dart';
+import 'package:rvchat/features/auth/screens/verify_email_page%20copy.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -20,6 +22,9 @@ class LoginScreen extends ConsumerStatefulWidget {
 
 class _LoginScreenState extends ConsumerState<LoginScreen> {
   final phoneController = TextEditingController();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final navigatorKey = GlobalKey<NavigatorState>();
   Country? country;
   @override
   void dispose() {
@@ -27,11 +32,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     phoneController.dispose();
   }
 
+  bool emailVerification = true;
+
   void pickCountry() {
     showCountryPicker(
       context: context,
       showPhoneCode:
-          true, // optional. Shows phone code before the country name.
+          emailVerification, // optional. Shows phone code before the country name.
       onSelect: (Country _country) {
         setState(() {
           country = _country;
@@ -41,6 +48,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   bool fisClick = false;
+  final formKey = GlobalKey<FormState>();
 
   void sendPhoneNumber(String countryName) {
     String phoneNumber = phoneController.text.trim();
@@ -51,6 +59,32 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       showSnackBar(context: context, content: "Fill out all the feilds");
       fisClick = false;
     }
+  }
+
+  Future signUp() async {
+    // final isValid = formKey.currentState!.validate();
+    if (false) return;
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => Center(child: CircularProgressIndicator()));
+    try {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: emailController.text.trim(),
+        password: '123456789', //passwordController.text.trim(),
+      );
+      print(
+          'sigh up suxseed 44444444444444444444444444444444444444444444444444444444444444444444444444444444444444');
+    } on FirebaseAuthException catch (e) {
+      print(e);
+
+      // Utils.showSnackBar(e.message);
+    }
+    // navigatorKey.currentState!.popUntil((route) => route.isFirst);
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => VerifyEmailPage()),
+    );
   }
 
   @override
@@ -200,58 +234,104 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             if (country != null)
                               Padding(
                                 padding: const EdgeInsets.only(top: 8),
-                                child: Text(
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontFamily: "yknir",
-                                        fontWeight: FontWeight.w300,
-                                        fontSize: 25,
-                                        color: grayL1.withOpacity(0.5)),
-                                    '+${country!.phoneCode}'),
+                                child: emailVerification
+                                    ? Text(
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontFamily: "yknir",
+                                            fontWeight: FontWeight.w300,
+                                            fontSize: 25,
+                                            color: grayL1.withOpacity(0.5)),
+                                        '+${country!.phoneCode}')
+                                    : null,
                               ),
                             const SizedBox(width: 5),
                             Expanded(
                                 child: Padding(
                               padding: const EdgeInsets.only(top: 25),
-                              child: TextField(
-                                controller: phoneController,
-                                textAlign: TextAlign.left,
-                                textInputAction: TextInputAction.next,
-                                style: const TextStyle(
-                                    fontFamily: "yknir",
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 25,
-                                    letterSpacing: 2,
-                                    color: grayL1),
-                                keyboardType: TextInputType.number,
-                                inputFormatters: <TextInputFormatter>[
-                                  // for below version 2 use this
-                                  FilteringTextInputFormatter.allow(
-                                      RegExp(r'[0-9]')),
-                                  // for version 2 and greater youcan also use this
-                                  FilteringTextInputFormatter.digitsOnly,
-                                  LengthLimitingTextInputFormatter(10),
-                                ],
-                                decoration: const InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: '__________',
-                                ),
-                              ),
-                            ))
+                              child: emailVerification
+                                  ? TextField(
+                                      controller: phoneController,
+                                      textAlign: TextAlign.left,
+                                      textInputAction: TextInputAction.next,
+                                      style: const TextStyle(
+                                          fontFamily: "yknir",
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 25,
+                                          letterSpacing: 2,
+                                          color: grayL1),
+                                      keyboardType: TextInputType.number,
+                                      inputFormatters: <TextInputFormatter>[
+                                        // for below version 2 use this
+                                        FilteringTextInputFormatter.allow(
+                                            RegExp(r'[0-9]')),
+                                        // for version 2 and greater youcan also use this
+                                        FilteringTextInputFormatter.digitsOnly,
+                                        LengthLimitingTextInputFormatter(10),
+                                      ],
+                                      decoration: const InputDecoration(
+                                        border: InputBorder.none,
+                                        hintText: '__________',
+                                      ),
+                                    )
+                                  : TextField(
+                                      controller: emailController,
+                                      textAlign: TextAlign.left,
+                                      textInputAction: TextInputAction.next,
+                                      style: const TextStyle(
+                                          fontFamily: "yknir",
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 14,
+                                          letterSpacing: 2,
+                                          color: grayL1),
+                                      keyboardType: TextInputType.text,
+                                      decoration: const InputDecoration(
+                                        border: InputBorder.none,
+                                        hintText: '__________',
+                                      ),
+                                    ),
+                            )),
+                            // emailVerification
+                            //     ? TextField(
+                            //         controller: passwordController,
+                            //         textAlign: TextAlign.left,
+                            //         textInputAction: TextInputAction.next,
+                            //         style: const TextStyle(
+                            //             fontFamily: "yknir",
+                            //             fontWeight: FontWeight.w400,
+                            //             fontSize: 14,
+                            //             letterSpacing: 2,
+                            //             color: grayL1),
+                            //         keyboardType: TextInputType.text,
+                            //         decoration: const InputDecoration(
+                            //           border: InputBorder.none,
+                            //           hintText: '__________',
+                            //         ),
+                            //       )
+                            //     : Container(),
                           ],
                         ),
                       ),
                     ),
                     const SizedBox(height: 20),
                     //==> Enter phone number
-                    const Text(
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontFamily: "yknir",
-                            fontWeight: FontWeight.w300,
-                            fontSize: 18,
-                            color: grayL1),
-                        "Enter mobile number or\nConnect with a social media account"),
+                    emailVerification
+                        ? const Text(
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontFamily: "yknir",
+                                fontWeight: FontWeight.w300,
+                                fontSize: 18,
+                                color: grayL1),
+                            "Enter mobile number or\nConnect with a social media account")
+                        : const Text(
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontFamily: "yknir",
+                                fontWeight: FontWeight.w300,
+                                fontSize: 18,
+                                color: grayL1),
+                            "Enter email address or\nConnect with a social media account"),
                     const SizedBox(height: 20),
                     //==> CONTINUE Button
                     Padding(
@@ -267,10 +347,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                               //////// HERE
                               ),
                           onPressed: () {
-                            print(country!.name);
-                            sendPhoneNumber(country!.name);
+                            if (emailVerification) {
+                              sendPhoneNumber(country!.name);
+                            } else {
+                              signUp();
+                            }
+
                             setState(() {
-                              fisClick = true;
+                              // fisClick = true;
                             });
                           },
                           child: const Text(
@@ -356,7 +440,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                     minimumSize: const Size.fromHeight(60)
                                     //////// HERE
                                     ),
-                                onPressed: () {},
+                                onPressed: () {
+                                  setState(() {
+                                    emailVerification = !emailVerification;
+                                    FocusScope.of(context).unfocus();
+                                  });
+                                },
                                 child: Image.asset(
                                   "assets/images/google.png",
                                   fit: BoxFit.cover,
