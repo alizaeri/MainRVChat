@@ -253,13 +253,21 @@ class ProfilePage extends ConsumerWidget {
                                 fontSize: size.width * 0.035,
                                 color: pinkL1),
                             "Phone Number"),
-                        Text(
-                            style: TextStyle(
-                                fontFamily: "yknir",
-                                fontWeight: FontWeight.w100,
-                                fontSize: size.width * 0.08,
-                                color: grayL1),
-                            snapshot.data!.phoneNumber),
+                        snapshot.data!.phoneNumber == null
+                            ? Text(
+                                style: TextStyle(
+                                    fontFamily: "yknir",
+                                    fontWeight: FontWeight.w100,
+                                    fontSize: size.width * 0.08,
+                                    color: grayL1),
+                                '')
+                            : Text(
+                                style: TextStyle(
+                                    fontFamily: "yknir",
+                                    fontWeight: FontWeight.w100,
+                                    fontSize: size.width * 0.08,
+                                    color: grayL1),
+                                snapshot.data!.phoneNumber!),
                         Divider(color: grayL1.withOpacity(0.5)),
                         Text(
                             style: TextStyle(
@@ -268,13 +276,21 @@ class ProfilePage extends ConsumerWidget {
                                 fontSize: size.width * 0.035,
                                 color: pinkL1),
                             "Email Address"),
-                        Text(
-                            style: TextStyle(
-                                fontFamily: "yknir",
-                                fontWeight: FontWeight.w100,
-                                fontSize: size.width * 0.08,
-                                color: grayL1),
-                            "abhslhei@gmail.com"),
+                        snapshot.data!.email == null
+                            ? Text(
+                                style: TextStyle(
+                                    fontFamily: "yknir",
+                                    fontWeight: FontWeight.w100,
+                                    fontSize: size.width * 0.08,
+                                    color: grayL1),
+                                '')
+                            : Text(
+                                style: TextStyle(
+                                    fontFamily: "yknir",
+                                    fontWeight: FontWeight.w100,
+                                    fontSize: size.width * 0.08,
+                                    color: grayL1),
+                                snapshot.data!.email!),
                         const SizedBox(
                           height: 20,
                         )

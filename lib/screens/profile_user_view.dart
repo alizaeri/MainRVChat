@@ -54,6 +54,18 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
         );
   }
 
+  Stream<UserModel> isCalling() {
+    return FirebaseFirestore.instance
+        .collection("call")
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .snapshots()
+        .map(
+          (event) => UserModel.fromMap(
+            event.data()!,
+          ),
+        );
+  }
+
   void makeCall(WidgetRef ref, BuildContext context, UserModel selectUser) {
     bool isGroup = false;
     ref.read(callControllerProvider).makeCall(
@@ -182,362 +194,389 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
     final size = MediaQuery.of(context).size;
     final String uid = widget.selectUser.uid;
     return Scaffold(
-      body: StreamBuilder<UserModel>(
-          stream: ref.read(authControllerProvider).userDataById(uid),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const LoaderT();
-            }
-            return StreamBuilder<UserModel>(
-                stream: checkIfLikedOrNot(),
-                builder: (context, snapshot2) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const LoaderT();
-                  }
-                  if (snapshot2.hasData) {
-                    print(snapshot2.data!.name);
-                    isLiked = true;
-                  } else {
-                    isLiked = false;
-                  }
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      ///---------
-                      Container(
-                        decoration: const BoxDecoration(
-                          gradient: LinearGradient(
-                              //=> Background Linear Gradient
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              colors: [pinkL2, pinkL1, pinkL1]),
-                        ),
-                        child: Column(
-                          children: [
-                            const SizedBox(height: 50),
-                            Row(
+      body: //StreamBuilder<DocumentSnapshot>(
+          //    stream: ref.watch(callControllerProvider).callStream,
+          // builder: (context, snapshot) {
+          //   if (snapshot.hasData && snapshot.data!.data() != null) {
+          //     Call call =
+          //         Call.fromMap(snapshot.data!.data() as Map<String, dynamic>);
+
+          //     if (!call.hasDialled) {
+          //     }
+
+          // return
+          StreamBuilder<UserModel>(
+              stream: ref.read(authControllerProvider).userDataById(uid),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const LoaderT();
+                }
+                return StreamBuilder<UserModel>(
+                    stream: checkIfLikedOrNot(),
+                    builder: (context, snapshot2) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const LoaderT();
+                      }
+                      if (snapshot2.hasData) {
+                        print(snapshot2.data!.name);
+                        isLiked = true;
+                      } else {
+                        isLiked = false;
+                      }
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          ///---------
+                          Container(
+                            decoration: const BoxDecoration(
+                              gradient: LinearGradient(
+                                  //=> Background Linear Gradient
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                  colors: [pinkL2, pinkL1, pinkL1]),
+                            ),
+                            child: Column(
                               children: [
-                                Expanded(
-                                  child: Container(
-                                    alignment: Alignment.centerLeft,
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(left: 5),
-                                      child: IconButton(
-                                        onPressed: () {
-                                          if (Navigator.canPop(context)) {
-                                            Navigator.pop(context);
-                                          } else {
-                                            SystemNavigator.pop();
-                                          }
-                                        },
-                                        icon: Image(
-                                          image: Svg('assets/svg/back.svg'),
-                                          fit: BoxFit.cover,
-                                          color: white,
-                                          width: 18,
+                                const SizedBox(height: 50),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Container(
+                                        alignment: Alignment.centerLeft,
+                                        child: Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 5),
+                                          child: IconButton(
+                                            onPressed: () {
+                                              if (Navigator.canPop(context)) {
+                                                Navigator.pop(context);
+                                              } else {
+                                                SystemNavigator.pop();
+                                              }
+                                            },
+                                            icon: Image(
+                                              image: Svg('assets/svg/back.svg'),
+                                              fit: BoxFit.cover,
+                                              color: white,
+                                              width: 18,
+                                            ),
+                                          ),
                                         ),
                                       ),
                                     ),
+                                    const Text(
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontFamily: "yknir",
+                                            fontWeight: FontWeight.w800,
+                                            fontSize: 40,
+                                            color: white),
+                                        "Profile"),
+                                    Expanded(
+                                      child: Container(
+                                        alignment: Alignment.centerRight,
+                                        child: Padding(
+                                          padding:
+                                              const EdgeInsets.only(right: 10),
+                                          child: IconButton(
+                                            onPressed: () {
+                                              addUserToFavorit();
+                                            },
+                                            icon: !isLiked
+                                                ? Image(
+                                                    image: Svg(
+                                                        'assets/svg/heart.svg'),
+                                                    fit: BoxFit.cover,
+                                                    color: white,
+                                                    width: 22,
+                                                  )
+                                                : Image(
+                                                    image: Svg(
+                                                        'assets/svg/heart_b.svg'),
+                                                    fit: BoxFit.cover,
+                                                    color: yellow,
+                                                    width: 22,
+                                                  ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: size.height * 0.02),
+                                CircleAvatar(
+                                  backgroundColor: white,
+                                  radius: size.width * 0.21,
+                                  child: CircleAvatar(
+                                    backgroundImage:
+                                        snapshot.data!.profilePic == null
+                                            ? const AssetImage(
+                                                    "assets/images/avatar.webp")
+                                                as ImageProvider
+                                            : NetworkImage(
+                                                snapshot.data!.profilePic),
+                                    radius: size.width * 0.2,
                                   ),
                                 ),
-                                const Text(
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
+                                const SizedBox(height: 20),
+                                Text(
+                                    style: const TextStyle(
                                         fontFamily: "yknir",
-                                        fontWeight: FontWeight.w800,
+                                        fontWeight: FontWeight.w100,
                                         fontSize: 40,
                                         color: white),
-                                    "Profile"),
-                                Expanded(
-                                  child: Container(
-                                    alignment: Alignment.centerRight,
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(right: 10),
-                                      child: IconButton(
+                                    snapshot.data!.name),
+                                const SizedBox(height: 5),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Image(
+                                      image: Svg('assets/svg/flow_icon.svg'),
+                                      fit: BoxFit.cover,
+                                      color: yellow,
+                                      width: 20,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          10, 10, 0, 0),
+                                      child: Text(
+                                          style: const TextStyle(
+                                              fontFamily: "yknir",
+                                              fontWeight: FontWeight.w300,
+                                              fontSize: 25,
+                                              color: white),
+                                          snapshot.data!.following.toString()),
+                                    ),
+                                    const SizedBox(width: 40),
+                                    IconButton(
+                                      onPressed: () {
+                                        addUserToFavorit();
+                                      },
+                                      icon: !isLiked
+                                          ? Image(
+                                              image:
+                                                  Svg('assets/svg/heart.svg'),
+                                              //fit: BoxFit.cover,
+                                              color: white,
+                                              width: 20,
+                                              height: 20,
+                                            )
+                                          : Image(
+                                              image:
+                                                  Svg('assets/svg/heart_b.svg'),
+                                              //fit: BoxFit.cover,
+                                              color: white,
+                                              width: 20,
+                                              height: 20,
+                                            ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          5, 10, 0, 0),
+                                      child: Text(
+                                          style: const TextStyle(
+                                              fontFamily: "yknir",
+                                              fontWeight: FontWeight.w300,
+                                              fontSize: 25,
+                                              color: white),
+                                          snapshot.data!.followers.toString()),
+                                      // tempFollowing.toString()),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 10),
+                                Image.asset(
+                                  "assets/images/lineBg.png",
+                                  fit: BoxFit.cover,
+                                ),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(
+                                  20.0, 0.0, 20.0, 0.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Text(
+                                      style: TextStyle(
+                                          fontFamily: "yknir",
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 18,
+                                          color: pinkL1),
+                                      "Full Name"),
+                                  Text(
+                                      style: TextStyle(
+                                          fontFamily: "yknir",
+                                          fontWeight: FontWeight.w100,
+                                          fontSize: size.width * 0.1,
+                                          color: grayL1),
+                                      snapshot.data!.name),
+                                  Divider(
+                                    color: grayL1.withOpacity(0.3),
+                                  ),
+                                  const Text(
+                                      style: TextStyle(
+                                          fontFamily: "yknir",
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 18,
+                                          color: pinkL1),
+                                      "Country"),
+                                  Text(
+                                      style: TextStyle(
+                                          fontFamily: "yknir",
+                                          fontWeight: FontWeight.w100,
+                                          fontSize: size.width * 0.1,
+                                          color: grayL1),
+                                      snapshot.data!.country),
+                                  const SizedBox(height: 20),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(35, 0, 35, 0),
+                                    child: SizedBox(
+                                      child: ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: pinkL1,
+                                          elevation: 0,
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(15.0)),
+                                          minimumSize:
+                                              const Size.fromHeight(60),
+                                          padding: const EdgeInsets.all(0),
+                                          //////// HERE
+                                        ),
                                         onPressed: () {
-                                          addUserToFavorit();
+                                          Navigator.pushNamed(context,
+                                              MobileChatScreen.routeName,
+                                              arguments: {
+                                                'name': snapshot.data!.name,
+                                                'uid': snapshot.data!.uid,
+                                                'profilePic':
+                                                    snapshot.data!.profilePic,
+                                              });
                                         },
-                                        icon: !isLiked
-                                            ? Image(
-                                                image:
-                                                    Svg('assets/svg/heart.svg'),
-                                                fit: BoxFit.cover,
-                                                color: white,
-                                                width: 22,
-                                              )
-                                            : Image(
-                                                image: Svg(
-                                                    'assets/svg/heart_b.svg'),
-                                                fit: BoxFit.cover,
-                                                color: yellow,
-                                                width: 22,
+                                        child: Row(
+                                          children: [
+                                            const Expanded(
+                                              child: Padding(
+                                                padding:
+                                                    EdgeInsets.only(top: 3),
+                                                child: Text(
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                      fontFamily: "yknir",
+                                                      fontWeight:
+                                                          FontWeight.w300,
+                                                      fontSize: 25,
+                                                    ),
+                                                    "Text Chat"),
                                               ),
+                                            ),
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    const BorderRadius.only(
+                                                  bottomRight:
+                                                      Radius.circular(15.0),
+                                                  topRight:
+                                                      Radius.circular(15.0),
+                                                ),
+                                                color: white.withOpacity(0.2),
+                                              ),
+                                              height: 60,
+                                              width: 80,
+                                              child: Image(
+                                                image:
+                                                    Svg('assets/svg/chat.svg'),
+                                                //fit: BoxFit.cover,
+                                                color: white,
+                                                width: 30,
+                                                height: 30,
+                                              ),
+                                            )
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: size.height * 0.02),
-                            CircleAvatar(
-                              backgroundColor: white,
-                              radius: size.width * 0.21,
-                              child: CircleAvatar(
-                                backgroundImage: snapshot.data!.profilePic ==
-                                        null
-                                    ? const AssetImage(
-                                            "assets/images/avatar.webp")
-                                        as ImageProvider
-                                    : NetworkImage(snapshot.data!.profilePic),
-                                radius: size.width * 0.2,
-                              ),
-                            ),
-                            const SizedBox(height: 20),
-                            Text(
-                                style: const TextStyle(
-                                    fontFamily: "yknir",
-                                    fontWeight: FontWeight.w100,
-                                    fontSize: 40,
-                                    color: white),
-                                snapshot.data!.name),
-                            const SizedBox(height: 5),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Image(
-                                  image: Svg('assets/svg/flow_icon.svg'),
-                                  fit: BoxFit.cover,
-                                  color: yellow,
-                                  width: 20,
-                                ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(10, 10, 0, 0),
-                                  child: Text(
-                                      style: const TextStyle(
-                                          fontFamily: "yknir",
-                                          fontWeight: FontWeight.w300,
-                                          fontSize: 25,
-                                          color: white),
-                                      snapshot.data!.following.toString()),
-                                ),
-                                const SizedBox(width: 40),
-                                IconButton(
-                                  onPressed: () {
-                                    addUserToFavorit();
-                                  },
-                                  icon: !isLiked
-                                      ? Image(
-                                          image: Svg('assets/svg/heart.svg'),
-                                          //fit: BoxFit.cover,
-                                          color: white,
-                                          width: 20,
-                                          height: 20,
-                                        )
-                                      : Image(
-                                          image: Svg('assets/svg/heart_b.svg'),
-                                          //fit: BoxFit.cover,
-                                          color: white,
-                                          width: 20,
-                                          height: 20,
+                                  const SizedBox(height: 20),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(35, 0, 35, 0),
+                                    child: SizedBox(
+                                      child: ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: pink,
+                                          elevation: 0,
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(15.0)),
+                                          minimumSize:
+                                              const Size.fromHeight(60),
+                                          padding: const EdgeInsets.all(0),
+                                          //////// HERE
                                         ),
-                                ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(5, 10, 0, 0),
-                                  child: Text(
-                                      style: const TextStyle(
-                                          fontFamily: "yknir",
-                                          fontWeight: FontWeight.w300,
-                                          fontSize: 25,
-                                          color: white),
-                                      snapshot.data!.followers.toString()),
-                                  // tempFollowing.toString()),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 10),
-                            Image.asset(
-                              "assets/images/lineBg.png",
-                              fit: BoxFit.cover,
-                            ),
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        child: Padding(
-                          padding:
-                              const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Text(
-                                  style: TextStyle(
-                                      fontFamily: "yknir",
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 18,
-                                      color: pinkL1),
-                                  "Full Name"),
-                              Text(
-                                  style: TextStyle(
-                                      fontFamily: "yknir",
-                                      fontWeight: FontWeight.w100,
-                                      fontSize: size.width * 0.1,
-                                      color: grayL1),
-                                  snapshot.data!.name),
-                              Divider(
-                                color: grayL1.withOpacity(0.3),
-                              ),
-                              const Text(
-                                  style: TextStyle(
-                                      fontFamily: "yknir",
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 18,
-                                      color: pinkL1),
-                                  "Country"),
-                              Text(
-                                  style: TextStyle(
-                                      fontFamily: "yknir",
-                                      fontWeight: FontWeight.w100,
-                                      fontSize: size.width * 0.1,
-                                      color: grayL1),
-                                  snapshot.data!.country),
-                              const SizedBox(height: 20),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(35, 0, 35, 0),
-                                child: SizedBox(
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: pinkL1,
-                                      elevation: 0,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(15.0)),
-                                      minimumSize: const Size.fromHeight(60),
-                                      padding: const EdgeInsets.all(0),
-                                      //////// HERE
-                                    ),
-                                    onPressed: () {
-                                      Navigator.pushNamed(
-                                          context, MobileChatScreen.routeName,
-                                          arguments: {
-                                            'name': snapshot.data!.name,
-                                            'uid': snapshot.data!.uid,
-                                            'profilePic':
-                                                snapshot.data!.profilePic,
-                                          });
-                                    },
-                                    child: Row(
-                                      children: [
-                                        const Expanded(
-                                          child: Padding(
-                                            padding: EdgeInsets.only(top: 3),
-                                            child: Text(
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                  fontFamily: "yknir",
-                                                  fontWeight: FontWeight.w300,
-                                                  fontSize: 25,
-                                                ),
-                                                "Text Chat"),
-                                          ),
-                                        ),
-                                        Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                const BorderRadius.only(
-                                              bottomRight:
-                                                  Radius.circular(15.0),
-                                              topRight: Radius.circular(15.0),
+                                        onPressed: () {
+                                          makeCall(
+                                              ref, context, widget.selectUser);
+                                        },
+                                        child: Row(
+                                          children: [
+                                            const Expanded(
+                                              child: Padding(
+                                                padding:
+                                                    EdgeInsets.only(top: 3),
+                                                child: Text(
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                      fontFamily: "yknir",
+                                                      fontWeight:
+                                                          FontWeight.w300,
+                                                      fontSize: 25,
+                                                    ),
+                                                    "Video Call"),
+                                              ),
                                             ),
-                                            color: white.withOpacity(0.2),
-                                          ),
-                                          height: 60,
-                                          width: 80,
-                                          child: Image(
-                                            image: Svg('assets/svg/chat.svg'),
-                                            //fit: BoxFit.cover,
-                                            color: white,
-                                            width: 30,
-                                            height: 30,
-                                          ),
-                                        )
-                                      ],
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    const BorderRadius.only(
+                                                  bottomRight:
+                                                      Radius.circular(15.0),
+                                                  topRight:
+                                                      Radius.circular(15.0),
+                                                ),
+                                                color: white.withOpacity(0.2),
+                                              ),
+                                              height: 60,
+                                              width: 80,
+                                              child: Image(
+                                                image: Svg(
+                                                    'assets/svg/rvc_icon.svg'),
+                                                //fit: BoxFit.cover,
+                                                color: white,
+                                                width: 32,
+                                                height: 32,
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                ),
+                                  const SizedBox(height: 20),
+                                ],
                               ),
-                              const SizedBox(height: 20),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(35, 0, 35, 0),
-                                child: SizedBox(
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: pink,
-                                      elevation: 0,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(15.0)),
-                                      minimumSize: const Size.fromHeight(60),
-                                      padding: const EdgeInsets.all(0),
-                                      //////// HERE
-                                    ),
-                                    onPressed: () {
-                                      makeCall(ref, context, widget.selectUser);
-                                    },
-                                    child: Row(
-                                      children: [
-                                        const Expanded(
-                                          child: Padding(
-                                            padding: EdgeInsets.only(top: 3),
-                                            child: Text(
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                  fontFamily: "yknir",
-                                                  fontWeight: FontWeight.w300,
-                                                  fontSize: 25,
-                                                ),
-                                                "Video Call"),
-                                          ),
-                                        ),
-                                        Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                const BorderRadius.only(
-                                              bottomRight:
-                                                  Radius.circular(15.0),
-                                              topRight: Radius.circular(15.0),
-                                            ),
-                                            color: white.withOpacity(0.2),
-                                          ),
-                                          height: 60,
-                                          width: 80,
-                                          child: Image(
-                                            image:
-                                                Svg('assets/svg/rvc_icon.svg'),
-                                            //fit: BoxFit.cover,
-                                            color: white,
-                                            width: 32,
-                                            height: 32,
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 20),
-                            ],
+                            ),
                           ),
-                        ),
-                      ),
-                    ],
-                  );
-                });
-          }),
+                        ],
+                      );
+                    });
+              }),
     );
+    // }});
   }
 }

@@ -99,11 +99,11 @@ class AuthRepository {
           profilePic: photoUrl,
           isOnline: true,
           rVChat: false,
-          phoneNumber: auth.currentUser!.phoneNumber!,
+          phoneNumber: auth.currentUser!.phoneNumber,
           following: 0,
           followers: 0,
           country: country,
-          email: 'auth.currentUser!.email',
+          email: auth.currentUser!.email,
           groupId: []);
       await firestore.collection('users').doc(uid).set(user.toMap());
       Navigator.pop(context);

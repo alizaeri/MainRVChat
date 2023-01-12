@@ -4,11 +4,11 @@ class UserModel {
   final String profilePic;
   final bool isOnline;
   final bool rVChat;
-  final String phoneNumber;
+  final String? phoneNumber;
   final int following;
   final int followers;
   final String country;
-  final String email;
+  final String? email;
   final List<String> groupId;
   UserModel({
     required this.name,

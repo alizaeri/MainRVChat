@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:agora_rtc_engine/agora_rtc_engine_debug.dart';
 import 'package:agora_rtc_engine/src/binding_forward_export.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -114,6 +115,12 @@ class _CallScreenState extends ConsumerState<CallScreen> {
         },
         onUserJoined: (RtcConnection connection, int remoteUid, int elapsed) {
           showMessage("Remote user uid:$remoteUid joined the channel");
+          ref.read(callControllerProvider).endCall(
+                widget.call.callerId,
+                widget.call.receiverId,
+                context,
+              );
+
           setState(() {
             _remoteUid = remoteUid;
           });
@@ -121,6 +128,12 @@ class _CallScreenState extends ConsumerState<CallScreen> {
         onUserOffline: (RtcConnection connection, int remoteUid,
             UserOfflineReasonType reason) {
           showMessage("Remote user uid:$remoteUid left the channel");
+
+          // leave();
+
+          Navigator.pop(context);
+          agoraEngine.leaveChannel();
+
           setState(() {
             _remoteUid = null;
           });

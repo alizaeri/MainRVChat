@@ -10,7 +10,7 @@ import 'package:rvchat/common/utils/utils.dart';
 
 import 'package:rvchat/common/widgets/loader.dart';
 import 'package:rvchat/features/auth/controller/auth_controller.dart';
-import 'package:rvchat/features/auth/screens/verify_email_page%20copy.dart';
+import 'package:rvchat/features/auth/screens/verify_email_page.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -61,7 +61,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     }
   }
 
-  Future signUp() async {
+  Future signUp(String countryName) async {
     // final isValid = formKey.currentState!.validate();
     if (false) return;
     showDialog(
@@ -83,7 +83,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     // navigatorKey.currentState!.popUntil((route) => route.isFirst);
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => VerifyEmailPage()),
+      MaterialPageRoute(
+          builder: (context) => VerifyEmailPage(
+                country: countryName,
+              )),
     );
   }
 
@@ -350,7 +353,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             if (emailVerification) {
                               sendPhoneNumber(country!.name);
                             } else {
-                              signUp();
+                              signUp(country!.name);
                             }
 
                             setState(() {
