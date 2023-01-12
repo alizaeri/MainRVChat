@@ -253,13 +253,13 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                                   PopupMenuItem(
                                     value: 1,
                                     child: Row(
-                                      children: const [
+                                      children: [
                                         SizedBox(
                                           width: 7,
                                         ),
                                         Icon(
                                           Icons.circle,
-                                          color: pink,
+                                          color: pink.withOpacity(0.4),
                                           size: 15,
                                         ),
                                         SizedBox(
@@ -269,7 +269,7 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                                           "Screen Recorder",
                                           style: TextStyle(
                                             fontWeight: FontWeight.w300,
-                                            color: white,
+                                            color: white.withOpacity(0.4),
                                           ),
                                         ),
                                       ],
@@ -309,14 +309,14 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                                             ? const Image(
                                                 width: 16,
                                                 image: Svg(
-                                                    'assets/svc/camera_off.svg'),
+                                                    'assets/svg/turn_on_cam.svg'),
                                                 fit: BoxFit.cover,
                                                 color: white,
                                               )
                                             : const Image(
                                                 width: 16,
                                                 image: Svg(
-                                                    'assets/svg/turn_on_cam.svg'),
+                                                    'assets/svg/camera_off.svg'),
                                                 fit: BoxFit.cover,
                                                 color: white,
                                               ),
@@ -339,12 +339,12 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                                   PopupMenuItem(
                                     value: 4,
                                     child: Row(
-                                      children: const [
+                                      children: [
                                         Image(
-                                          width: 25,
+                                          width: 16,
                                           image: Svg('assets/svg/layout.svg'),
                                           fit: BoxFit.cover,
-                                          color: white,
+                                          color: white.withOpacity(0.4),
                                         ),
                                         SizedBox(
                                           width: 10,
@@ -353,7 +353,7 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                                           "Change Layout",
                                           style: TextStyle(
                                             fontWeight: FontWeight.w300,
-                                            color: white,
+                                            color: white.withOpacity(0.4),
                                           ),
                                         ),
                                       ],
@@ -428,15 +428,19 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                                       }
                                   }
                                 },
-                                child: const Icon(
-                                  Icons.more_vert,
-                                  color: Colors.white,
-                                  size: 26,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(15.0),
+                                  child: const Icon(
+                                    Icons.more_vert,
+                                    color: Colors.white,
+                                    size: 26,
+                                  ),
                                 ),
                               ),
                             ),
                             color: white,
                           ),
+                          const SizedBox(width: 15),
                         ],
                       ),
                     ),
@@ -451,13 +455,15 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                           Stack(
                             alignment: Alignment.center,
                             children: [
-                              // Image(
-                              //   width: 300,
-                              //   height: 87,
-                              //   image: Svg('assets/images/bg_nav.svg',
-                              //       color: grayL1.withOpacity(0.1)),
-                              //   fit: BoxFit.cover,
-                              // ),
+                              Image(
+                                width: 300,
+                                height: 87,
+                                image: Svg(
+                                  'assets/images/bg_nav.svg',
+                                ),
+                                color: grayL1.withOpacity(0.7),
+                                fit: BoxFit.cover,
+                              ),
                               Row(
                                 children: [
                                   RawMaterialButton(
@@ -483,23 +489,23 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                                     shape: const CircleBorder(),
                                     elevation: 0,
                                     fillColor: white.withOpacity(0.2),
-                                    padding: const EdgeInsets.all(5),
+                                    padding: const EdgeInsets.all(15),
                                     child: muteAudio
                                         ? Image(
                                             image: const Svg(
                                                 'assets/svg/sp_mut.svg'),
                                             fit: BoxFit.cover,
                                             color: white.withOpacity(0.5),
-                                            width: 35,
+                                            width: 20,
                                           )
                                         : const Image(
                                             image: Svg('assets/svg/sp.svg'),
                                             fit: BoxFit.cover,
                                             color: white,
-                                            width: 35,
+                                            width: 20,
                                           ),
                                   ),
-                                  const SizedBox(width: 16),
+                                  const SizedBox(width: 30),
                                   RawMaterialButton(
                                     onPressed: () {
                                       leave();
@@ -523,7 +529,7 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                                       width: 35,
                                     ),
                                   ),
-                                  const SizedBox(width: 16),
+                                  const SizedBox(width: 30),
                                   RawMaterialButton(
                                     onPressed: () {
                                       if (micIcon) {
@@ -542,7 +548,7 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                                     shape: const CircleBorder(),
                                     elevation: 0,
                                     fillColor: white.withOpacity(0.2),
-                                    padding: const EdgeInsets.all(5),
+                                    padding: const EdgeInsets.all(15),
                                     //padding: const EdgeInsets.all(0),
                                     child: micIcon
                                         ? Image(
@@ -550,13 +556,13 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                                                 'assets/svg/mic_mute.svg'),
                                             fit: BoxFit.cover,
                                             color: white.withOpacity(0.5),
-                                            width: 35,
+                                            width: 20,
                                           )
                                         : const Image(
                                             image: Svg('assets/svg/mic.svg'),
                                             fit: BoxFit.cover,
                                             color: white,
-                                            width: 35,
+                                            width: 20,
                                           ),
                                   ),
                                 ],
