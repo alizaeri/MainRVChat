@@ -510,6 +510,7 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                                           );
                                       Navigator.pop(context);
                                       agoraEngine.leaveChannel();
+                                      _value.value = false;
                                     },
                                     shape: const CircleBorder(),
                                     elevation: 0,
