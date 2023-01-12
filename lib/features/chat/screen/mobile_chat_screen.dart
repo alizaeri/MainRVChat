@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg_provider/flutter_svg_provider.dart';
@@ -33,6 +35,44 @@ class MobileChatScreen extends ConsumerWidget {
           uid,
           profilePic,
           isGroup,
+        );
+  }
+
+  Stream<UserModel> checkIfIsBlocked() {
+    return FirebaseFirestore.instance
+        .collection("users")
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection("following")
+        .doc(uid)
+        .snapshots()
+        .map(
+          (event) => UserModel.fromMap(
+            event.data()!,
+          ),
+        );
+  }
+
+  void blockUser() async {
+    var blockUser = UserModel(
+        name: name,
+        uid: uid,
+        profilePic: profilePic,
+        isOnline: false,
+        rVChat: false,
+        phoneNumber: '',
+        following: 0,
+        followers: 0,
+        country: '0',
+        email: 'email',
+        groupId: []);
+
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('block')
+        .doc(uid)
+        .set(
+          blockUser.toMap(),
         );
   }
 
@@ -109,7 +149,9 @@ class MobileChatScreen extends ConsumerWidget {
               ),
             ),
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                blockUser();
+              },
               icon: const Icon(Icons.more_vert),
             ),
           ],
@@ -139,9 +181,26 @@ class MobileChatScreen extends ConsumerWidget {
                   ),
                 ),
               ),
-              BottomChatField(
-                recieverUserId: uid,
-              ),
+              StreamBuilder<dynamic>(
+                  stream: FirebaseFirestore.instance
+                      .collection("users")
+                      .doc(uid)
+                      .collection("block")
+                      .doc(FirebaseAuth.instance.currentUser!.uid)
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      if (snapshot.data!.exists) {
+                        return Container();
+                      } else {
+                        return BottomChatField(
+                          recieverUserId: uid,
+                        );
+                      }
+                    } else {
+                      return CircularProgressIndicator();
+                    }
+                  })
             ],
           ),
         ),

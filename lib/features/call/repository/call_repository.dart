@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rvchat/common/utils/utils.dart';
@@ -8,6 +9,7 @@ import 'package:rvchat/features/auth/screens/user_information_screen.dart';
 import 'package:rvchat/features/call/screens/call_screen.dart';
 import 'package:rvchat/features/select_contacts/screens/select_contact_screen.dart';
 import 'package:rvchat/models/call.dart';
+import 'package:rvchat/screens/blocked.dart';
 import 'package:rvchat/screens/busy.dart';
 
 final callRepositoryProvider = Provider(
@@ -34,6 +36,7 @@ class CallRepository {
     Call receiverCallData,
   ) async {
     bool exist = false;
+    bool blocked = false;
     try {
       await firestore
           .collection('call')
@@ -42,12 +45,29 @@ class CallRepository {
           .then((doc) {
         exist = doc.exists;
       });
+      await firestore
+          .collection('users')
+          .doc(senderCallData.receiverId)
+          .collection('block')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .get()
+          .then((doc) {
+        blocked = doc.exists;
+      });
 
       if (exist) {
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => Busy(),
+          ),
+        );
+        return;
+      } else if (blocked) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const Blocked(),
           ),
         );
         return;
