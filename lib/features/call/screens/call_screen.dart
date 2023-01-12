@@ -115,6 +115,11 @@ class _CallScreenState extends ConsumerState<CallScreen> {
         },
         onUserJoined: (RtcConnection connection, int remoteUid, int elapsed) {
           showMessage("Remote user uid:$remoteUid joined the channel");
+          ref.read(callControllerProvider).endCall(
+                widget.call.callerId,
+                widget.call.receiverId,
+                context,
+              );
 
           setState(() {
             _remoteUid = remoteUid;
@@ -123,11 +128,6 @@ class _CallScreenState extends ConsumerState<CallScreen> {
         onUserOffline: (RtcConnection connection, int remoteUid,
             UserOfflineReasonType reason) {
           showMessage("Remote user uid:$remoteUid left the channel");
-          ref.read(callControllerProvider).endCall(
-                widget.call.callerId,
-                widget.call.receiverId,
-                context,
-              );
 
           // leave();
 
@@ -451,13 +451,13 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                           Stack(
                             alignment: Alignment.center,
                             children: [
-                              Image(
-                                width: 300,
-                                height: 87,
-                                image: Svg('assets/images/bg_nav.svg',
-                                    color: grayL1.withOpacity(0.1)),
-                                fit: BoxFit.cover,
-                              ),
+                              // Image(
+                              //   width: 300,
+                              //   height: 87,
+                              //   image: Svg('assets/images/bg_nav.svg',
+                              //       color: grayL1.withOpacity(0.1)),
+                              //   fit: BoxFit.cover,
+                              // ),
                               Row(
                                 children: [
                                   RawMaterialButton(
@@ -514,12 +514,12 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                                     shape: const CircleBorder(),
                                     elevation: 0,
                                     fillColor: white,
-                                    padding: const EdgeInsets.all(2),
+                                    padding: const EdgeInsets.all(15),
                                     child: const Image(
                                       image: Svg('assets/svg/end_call.svg'),
                                       fit: BoxFit.cover,
                                       color: pink,
-                                      width: 60,
+                                      width: 35,
                                     ),
                                   ),
                                   const SizedBox(width: 16),
@@ -546,7 +546,7 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                                     child: micIcon
                                         ? Image(
                                             image: const Svg(
-                                                'assets/icons/mic_mute.svg'),
+                                                'assets/svg/mic_mute.svg'),
                                             fit: BoxFit.cover,
                                             color: white.withOpacity(0.5),
                                             width: 35,

@@ -27,7 +27,6 @@ class _OnlineUsersScreenState extends State<OnlineUsersScreen> {
           users.add(UserModel.fromMap(document.data()));
         }
       }
-
       return users;
     });
   }
@@ -85,17 +84,13 @@ class _OnlineUsersScreenState extends State<OnlineUsersScreen> {
                         return const LoaderT();
                       }
                       // if (snapshot.hasData) {
-
                       List<UserModel> users = snapshot.data;
-
                       users.removeWhere((item) =>
                           item.uid == FirebaseAuth.instance.currentUser!.uid);
-
                       var size = MediaQuery.of(context).size;
                       final double itemHeight =
                           (size.height - kToolbarHeight - 10) / 3;
                       final double itemWidth = size.width / 2;
-
                       if (users.isNotEmpty) {
                         return GridView(
                           gridDelegate:
