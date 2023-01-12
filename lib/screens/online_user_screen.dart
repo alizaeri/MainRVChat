@@ -99,7 +99,7 @@ class _OnlineUsersScreenState extends State<OnlineUsersScreen> {
                       if (users.isNotEmpty) {
                         return GridView(
                           gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
+                              const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 3,
                             childAspectRatio: 0.7,
                             crossAxisSpacing: 8,
