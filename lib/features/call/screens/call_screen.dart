@@ -115,11 +115,6 @@ class _CallScreenState extends ConsumerState<CallScreen> {
         },
         onUserJoined: (RtcConnection connection, int remoteUid, int elapsed) {
           showMessage("Remote user uid:$remoteUid joined the channel");
-          ref.read(callControllerProvider).endCall(
-                widget.call.callerId,
-                widget.call.receiverId,
-                context,
-              );
 
           setState(() {
             _remoteUid = remoteUid;
@@ -128,6 +123,11 @@ class _CallScreenState extends ConsumerState<CallScreen> {
         onUserOffline: (RtcConnection connection, int remoteUid,
             UserOfflineReasonType reason) {
           showMessage("Remote user uid:$remoteUid left the channel");
+          ref.read(callControllerProvider).endCall(
+                widget.call.callerId,
+                widget.call.receiverId,
+                context,
+              );
 
           // leave();
 
