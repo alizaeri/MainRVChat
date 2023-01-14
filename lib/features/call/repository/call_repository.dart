@@ -21,7 +21,7 @@ final callRepositoryProvider = Provider(
   ),
 );
 
-class CallRepository {
+class CallRepository extends ChangeNotifier {
   final FirebaseFirestore firestore;
   final FirebaseAuth auth;
   CallRepository({
@@ -162,6 +162,7 @@ class CallRepository {
 
   void active(bool bool) {
     _activeButtonRVChat = bool;
+    notifyListeners();
   }
 
   // void endGroupCall(

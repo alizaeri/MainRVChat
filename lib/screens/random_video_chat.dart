@@ -375,9 +375,9 @@ class _RandomeVideoChatState extends ConsumerState<RandomeVideoChat>
                               image: Svg('assets/svg/random.svg'),
                               //fit: BoxFit.cover,
                               color: ref
-                                      .watch(callRepositoryProvider)
+                                      .read(callRepositoryProvider)
                                       .activeButtonRVChat
-                                  ? yellow
+                                  ? white.withOpacity(0.1)
                                   : white,
                               width: 30,
                               height: 30,

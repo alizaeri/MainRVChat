@@ -185,7 +185,11 @@ class _CallScreenState extends ConsumerState<CallScreen> {
     // await agoraEngine.leaveChannel();
     entry?.remove();
     entry = null;
-    await agoraEngine.release();
+    try {
+      await agoraEngine.release();
+    } catch (e) {
+      print('agora engine is released');
+    }
 
     await FirebaseFirestore.instance
         .collection('call')
@@ -491,22 +495,25 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                                 children: [
                                   RawMaterialButton(
                                     onPressed: () {
-                                      if (muteAudio) {
-                                        setState(() {
-                                          agoraEngine
-                                              .adjustAudioMixingVolume(0);
-                                          agoraEngine
-                                              .adjustPlaybackSignalVolume(0);
-                                          muteAudio = false;
-                                        });
-                                      } else {
-                                        setState(() {
-                                          muteAudio = true;
-                                          agoraEngine
-                                              .adjustAudioMixingVolume(100);
-                                          agoraEngine
-                                              .adjustPlaybackSignalVolume(100);
-                                        });
+                                      if (!isCallingWait) {
+                                        if (muteAudio) {
+                                          setState(() {
+                                            agoraEngine
+                                                .adjustAudioMixingVolume(0);
+                                            agoraEngine
+                                                .adjustPlaybackSignalVolume(0);
+                                            muteAudio = false;
+                                          });
+                                        } else {
+                                          setState(() {
+                                            muteAudio = true;
+                                            agoraEngine
+                                                .adjustAudioMixingVolume(100);
+                                            agoraEngine
+                                                .adjustPlaybackSignalVolume(
+                                                    100);
+                                          });
+                                        }
                                       }
                                     },
                                     shape: const CircleBorder(),
@@ -521,10 +528,12 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                                             color: white.withOpacity(0.5),
                                             width: 20,
                                           )
-                                        : const Image(
+                                        : Image(
                                             image: Svg('assets/svg/sp.svg'),
                                             fit: BoxFit.cover,
-                                            color: white,
+                                            color: !isCallingWait
+                                                ? white
+                                                : white.withOpacity(0.2),
                                             width: 20,
                                           ),
                                   ),
@@ -567,17 +576,19 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                                   const SizedBox(width: 30),
                                   RawMaterialButton(
                                     onPressed: () {
-                                      if (micIcon) {
-                                        setState(() {
-                                          agoraEngine.enableAudio();
+                                      if (!isCallingWait) {
+                                        if (micIcon) {
+                                          setState(() {
+                                            agoraEngine.enableAudio();
 
-                                          micIcon = false;
-                                        });
-                                      } else {
-                                        setState(() {
-                                          micIcon = true;
-                                          agoraEngine.disableAudio();
-                                        });
+                                            micIcon = false;
+                                          });
+                                        } else {
+                                          setState(() {
+                                            micIcon = true;
+                                            agoraEngine.disableAudio();
+                                          });
+                                        }
                                       }
                                     },
                                     shape: const CircleBorder(),
@@ -593,10 +604,12 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                                             color: white.withOpacity(0.5),
                                             width: 20,
                                           )
-                                        : const Image(
+                                        : Image(
                                             image: Svg('assets/svg/mic.svg'),
                                             fit: BoxFit.cover,
-                                            color: white,
+                                            color: !isCallingWait
+                                                ? white
+                                                : white.withOpacity(0.2),
                                             width: 20,
                                           ),
                                   ),
