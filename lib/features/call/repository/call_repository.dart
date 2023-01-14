@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -29,6 +31,15 @@ class CallRepository {
 
   Stream<DocumentSnapshot> get callStream =>
       firestore.collection('call').doc(auth.currentUser!.uid).snapshots();
+
+  bool _activeButtonRVChat = false;
+
+  bool get activeButtonRVChat => _activeButtonRVChat;
+
+  // set active(bool value) {
+  //   _activeButtonRVChat = value;
+
+  // }
 
   void makeCall(
     Call senderCallData,
@@ -147,6 +158,10 @@ class CallRepository {
     } catch (e) {
       showSnackBar(context: context, content: e.toString());
     }
+  }
+
+  void active(bool bool) {
+    _activeButtonRVChat = bool;
   }
 
   // void endGroupCall(

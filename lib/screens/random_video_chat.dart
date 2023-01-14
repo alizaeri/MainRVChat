@@ -6,7 +6,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg_provider/flutter_svg_provider.dart';
-import 'package:rvchat/common/widgets/loaderT.dart';
+import 'package:rvchat/features/call/repository/call_repository.dart';
+
 import 'package:rvchat/models/user_model.dart';
 import 'package:rvchat/utils/manage_camera.dart';
 import "dart:math";
@@ -86,6 +87,8 @@ class _RandomeVideoChatState extends ConsumerState<RandomeVideoChat>
   }
 
   void getAllData() async {
+    ref.read(callRepositoryProvider).active(true);
+
     var collection = FirebaseFirestore.instance.collection('users');
     var querySnapshot = await collection.get();
     var listUid = [];
@@ -100,8 +103,14 @@ class _RandomeVideoChatState extends ConsumerState<RandomeVideoChat>
 
 // generate a random index based on the list length
 // and use it to retrieve the element
-
-    selectRandomUser = listUid[random.nextInt(listUid.length)];
+    try {
+      selectRandomUser = listUid[random.nextInt(listUid.length)];
+    } catch (e) {
+      selectRandomUser = null;
+    }
+    if (selectRandomUser != null) {
+      makeCall(ref, context, selectRandomUser!);
+    }
   }
 
   void makeCall(
@@ -334,9 +343,10 @@ class _RandomeVideoChatState extends ConsumerState<RandomeVideoChat>
                         //////// HERE
                       ),
                       onPressed: () async {
-                        getAllData();
-                        if (selectRandomUser != null) {
-                          makeCall(ref, context, selectRandomUser!);
+                        if (!ref
+                            .watch(callRepositoryProvider)
+                            .activeButtonRVChat) {
+                          getAllData();
                         }
                       },
                       child: Row(
@@ -364,7 +374,11 @@ class _RandomeVideoChatState extends ConsumerState<RandomeVideoChat>
                             child: Image(
                               image: Svg('assets/svg/random.svg'),
                               //fit: BoxFit.cover,
-                              color: white,
+                              color: ref
+                                      .watch(callRepositoryProvider)
+                                      .activeButtonRVChat
+                                  ? yellow
+                                  : white,
                               width: 30,
                               height: 30,
                             ),

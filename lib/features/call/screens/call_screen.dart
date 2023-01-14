@@ -12,6 +12,7 @@ import 'package:rvchat/colors.dart';
 import 'package:rvchat/common/widgets/loademini.dart';
 import 'package:rvchat/config/agora_config.dart';
 import 'package:rvchat/features/call/controller/call_controller.dart';
+import 'package:rvchat/features/call/repository/call_repository.dart';
 import 'package:rvchat/models/call.dart';
 import 'package:wakelock/wakelock.dart';
 import 'package:flutter_svg_provider/flutter_svg_provider.dart';
@@ -46,6 +47,7 @@ class _CallScreenState extends ConsumerState<CallScreen> {
   bool micIcon = false;
   bool showButtons = false;
   bool muteAudio = false;
+  bool isCallingWait = false;
   var _value = ValueNotifier<bool>(false);
   final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
       GlobalKey<ScaffoldMessengerState>();
@@ -72,6 +74,10 @@ class _CallScreenState extends ConsumerState<CallScreen> {
   }
 
   Future<void> setupVideoSDKEngine() async {
+    ref.read(callRepositoryProvider).active(false);
+    setState(() {
+      isCallingWait = true;
+    });
     // retrieve or request camera and microphone permissions
     await [Permission.microphone, Permission.camera].request();
 
@@ -80,6 +86,11 @@ class _CallScreenState extends ConsumerState<CallScreen> {
     await agoraEngine.initialize(RtcEngineContext(
       appId: AgoraConfig.appId,
     ));
+    try {
+      setState(() {
+        isCallingWait = false;
+      });
+    } catch (e) {}
 
     await agoraEngine.enableVideo();
 
@@ -91,29 +102,28 @@ class _CallScreenState extends ConsumerState<CallScreen> {
       clientRoleType: ClientRoleType.clientRoleBroadcaster,
       channelProfile: ChannelProfileType.channelProfileCommunication,
     );
-    await getToken();
+    try {
+      await getToken();
+      await agoraEngine.joinChannel(
+        token: token,
+        channelId: widget.channelId,
+        options: options,
+        uid: uid,
+      );
 
-    await agoraEngine.joinChannel(
-      token: token,
-      channelId: widget.channelId,
-      options: options,
-      uid: uid,
-    );
-    //******************************************************************************** */
-
-    // Register the event handler
-    agoraEngine.registerEventHandler(
-      RtcEngineEventHandler(
-        onJoinChannelSuccess: (RtcConnection connection, int elapsed) {
+      agoraEngine.registerEventHandler(
+        RtcEngineEventHandler(
+            onJoinChannelSuccess: (RtcConnection connection, int elapsed) {
           showMessage(
               "Local user uid:${connection.localUid} joined the channel");
           setState(() {
             _isJoined = true;
             localUserJoined = false;
             _value.value = true;
+            ref.read(callRepositoryProvider).active(true);
           });
-        },
-        onUserJoined: (RtcConnection connection, int remoteUid, int elapsed) {
+        }, onUserJoined:
+                (RtcConnection connection, int remoteUid, int elapsed) {
           showMessage("Remote user uid:$remoteUid joined the channel");
           ref.read(callControllerProvider).endCall(
                 widget.call.callerId,
@@ -124,9 +134,8 @@ class _CallScreenState extends ConsumerState<CallScreen> {
           setState(() {
             _remoteUid = remoteUid;
           });
-        },
-        onUserOffline: (RtcConnection connection, int remoteUid,
-            UserOfflineReasonType reason) {
+        }, onUserOffline: (RtcConnection connection, int remoteUid,
+                UserOfflineReasonType reason) {
           showMessage("Remote user uid:$remoteUid left the channel");
 
           // leave();
@@ -137,9 +146,19 @@ class _CallScreenState extends ConsumerState<CallScreen> {
           setState(() {
             _remoteUid = null;
           });
-        },
-      ),
-    );
+        }, onLeaveChannel: (RtcConnection connection, RtcStats stats) {
+          ref.read(callRepositoryProvider).active(false);
+          print(
+              'leave chanel is suxssed5555555555555555555555555555555555555555555555555555555555555555');
+        }),
+      );
+    } catch (e) {
+      print('agoraEngine is destroyed');
+    }
+
+    //******************************************************************************** */
+
+    // Register the event handler
   }
 
   Future<void> getToken() async {
@@ -167,6 +186,7 @@ class _CallScreenState extends ConsumerState<CallScreen> {
     entry?.remove();
     entry = null;
     await agoraEngine.release();
+
     await FirebaseFirestore.instance
         .collection('call')
         .doc(
@@ -254,7 +274,7 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                                     value: 1,
                                     child: Row(
                                       children: [
-                                        SizedBox(
+                                        const SizedBox(
                                           width: 7,
                                         ),
                                         Icon(
@@ -262,7 +282,7 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                                           color: pink.withOpacity(0.4),
                                           size: 15,
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           width: 13,
                                         ),
                                         Text(
@@ -342,11 +362,12 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                                       children: [
                                         Image(
                                           width: 16,
-                                          image: Svg('assets/svg/layout.svg'),
+                                          image: const Svg(
+                                              'assets/svg/layout.svg'),
                                           fit: BoxFit.cover,
                                           color: white.withOpacity(0.4),
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           width: 10,
                                         ),
                                         Text(
@@ -430,9 +451,9 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                                       }
                                   }
                                 },
-                                child: Padding(
-                                  padding: const EdgeInsets.all(15.0),
-                                  child: const Icon(
+                                child: const Padding(
+                                  padding: EdgeInsets.all(15.0),
+                                  child: Icon(
                                     Icons.more_vert,
                                     color: Colors.white,
                                     size: 26,
@@ -460,7 +481,7 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                               Image(
                                 width: 300,
                                 height: 87,
-                                image: Svg(
+                                image: const Svg(
                                   'assets/images/bg_nav.svg',
                                 ),
                                 color: grayL1.withOpacity(0.7),
@@ -510,24 +531,36 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                                   const SizedBox(width: 30),
                                   RawMaterialButton(
                                     onPressed: () {
-                                      leave();
-                                      ref.read(callControllerProvider).endCall(
-                                            widget.call.callerId,
-                                            widget.call.receiverId,
-                                            context,
-                                          );
-                                      Navigator.pop(context);
-                                      agoraEngine.leaveChannel();
-                                      _value.value = false;
+                                      if (!isCallingWait) {
+                                        leave();
+                                        ref
+                                            .read(callControllerProvider)
+                                            .endCall(
+                                              widget.call.callerId,
+                                              widget.call.receiverId,
+                                              context,
+                                            );
+                                        Navigator.pop(context);
+                                        try {
+                                          agoraEngine.leaveChannel();
+                                        } catch (e) {
+                                          print('agoraEngine not initialized');
+                                        }
+
+                                        _value.value = false;
+                                      }
                                     },
                                     shape: const CircleBorder(),
                                     elevation: 0,
                                     fillColor: white,
                                     padding: const EdgeInsets.all(15),
-                                    child: const Image(
-                                      image: Svg('assets/svg/end_call.svg'),
+                                    child: Image(
+                                      image:
+                                          const Svg('assets/svg/end_call.svg'),
                                       fit: BoxFit.cover,
-                                      color: pink,
+                                      color: isCallingWait
+                                          ? pink.withOpacity(0.3)
+                                          : pink,
                                       width: 35,
                                     ),
                                   ),
@@ -706,5 +739,26 @@ class _CallScreenState extends ConsumerState<CallScreen> {
     );
     final overlay = Overlay.of(context)!;
     overlay.insert(entry!);
+  }
+}
+
+class StrategyProvider with ChangeNotifier {
+  Timer? timer;
+
+  // ... Other code...
+
+  void toggleCompanyTimer(ref, bool stopTimer) {
+    // Cancel any existing Timer before creating a new one.
+    timer?.cancel();
+    timer = null;
+
+    if (!stopTimer) {
+      timer = Timer.periodic(
+        const Duration(seconds: 50),
+        (Timer t) => {},
+      );
+    } else {
+      print("Timer Canceled!");
+    }
   }
 }
