@@ -51,6 +51,14 @@ class _RandomeVideoChatState extends ConsumerState<RandomeVideoChat>
     );
     initializeController = cameraController.initialize();
     WidgetsBinding.instance.addObserver(this);
+    deletefIsBusy();
+  }
+
+  void deletefIsBusy() async {
+    await FirebaseFirestore.instance
+        .collection('call')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .delete();
   }
 
   @override

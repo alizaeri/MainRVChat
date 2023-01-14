@@ -1,17 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rvchat/colors.dart';
 import 'package:rvchat/common/widgets/loademini.dart';
 import 'package:rvchat/common/widgets/loaderT.dart';
 import 'package:rvchat/common/widgets/loaderW.dart';
+import 'package:rvchat/features/call/repository/call_repository.dart';
 
 import '../common/widgets/loader.dart';
 
-class Busy extends StatefulWidget {
+class Busy extends ConsumerStatefulWidget {
+  const Busy({
+    Key? key,
+  }) : super(key: key);
+
   @override
-  _Busy createState() => _Busy();
+  ConsumerState<Busy> createState() => _Busy();
 }
 
-class _Busy extends State<Busy> {
+class _Busy extends ConsumerState<Busy> {
+  @override
+  void initState() {
+    ref.read(callRepositoryProvider).active(false);
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
