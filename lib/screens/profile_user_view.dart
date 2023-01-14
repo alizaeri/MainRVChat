@@ -192,9 +192,9 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
 
   void blockUser() async {
     var blockUser = UserModel(
-        name: "", //check out
-        uid: "",
-        profilePic: "",
+        name: widget.selectUser.name, //check out
+        uid: widget.selectUser.uid,
+        profilePic: widget.selectUser.profilePic,
         isOnline: false,
         rVChat: false,
         phoneNumber: '',
@@ -208,7 +208,7 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
         .collection('users')
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .collection('block')
-        .doc('')
+        .doc(widget.selectUser.uid)
         .set(
           blockUser.toMap(),
         );
