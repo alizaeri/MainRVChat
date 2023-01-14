@@ -16,6 +16,7 @@ class ProfileUserView extends ConsumerStatefulWidget {
   final UserModel selectUser;
   final int following;
   final int followers;
+
   static const String routeName = '/profile-user-view';
 
   const ProfileUserView({
@@ -33,7 +34,7 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
   // int following = 0;
   // int followers = 0;
   int tempFollowing = 0;
-
+  final bool toggleBlock = false;
   @override
   void initState() {
     super.initState();
@@ -189,6 +190,30 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
     }
   }
 
+  void blockUser() async {
+    var blockUser = UserModel(
+        name: "", //check out
+        uid: "",
+        profilePic: "",
+        isOnline: false,
+        rVChat: false,
+        phoneNumber: '',
+        following: 0,
+        followers: 0,
+        country: '0',
+        email: 'email',
+        groupId: []);
+
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('block')
+        .doc('')
+        .set(
+          blockUser.toMap(),
+        );
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -272,34 +297,115 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
                                             fontSize: 40,
                                             color: white),
                                         "Profile"),
-                                    Expanded(
-                                      child: Container(
-                                        alignment: Alignment.centerRight,
-                                        child: Padding(
-                                          padding:
-                                              const EdgeInsets.only(right: 10),
-                                          child: IconButton(
-                                            onPressed: () {
-                                              addUserToFavorit();
-                                            },
-                                            icon: !isLiked
-                                                ? Image(
-                                                    image: Svg(
-                                                        'assets/svg/heart.svg'),
-                                                    fit: BoxFit.cover,
-                                                    color: white,
-                                                    width: 22,
-                                                  )
-                                                : Image(
-                                                    image: Svg(
-                                                        'assets/svg/heart_b.svg'),
-                                                    fit: BoxFit.cover,
-                                                    color: yellow,
-                                                    width: 22,
+                                    IconButton(
+                                      onPressed: () {},
+                                      icon: GestureDetector(
+                                        child: PopupMenuButton<int>(
+                                          elevation: 2,
+                                          color: grayL1.withOpacity(0.8),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(25),
+                                          ),
+                                          itemBuilder: (context) => [
+                                            PopupMenuItem(
+                                              value: 1,
+                                              child: Row(
+                                                children: [
+                                                  !isLiked
+                                                      ? const Image(
+                                                          image: Svg(
+                                                              'assets/svg/heart.svg'),
+                                                          fit: BoxFit.cover,
+                                                          color: white,
+                                                          width: 22,
+                                                        )
+                                                      : const Image(
+                                                          image: Svg(
+                                                              'assets/svg/heart_b.svg'),
+                                                          fit: BoxFit.cover,
+                                                          color: yellow,
+                                                          width: 22,
+                                                        ),
+                                                  const SizedBox(
+                                                    width: 10,
                                                   ),
+                                                  Text(
+                                                    !isLiked
+                                                        ? "like user"
+                                                        : "Unlike user",
+                                                    style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w300,
+                                                      color: white,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            const PopupMenuDivider(),
+                                            PopupMenuItem(
+                                              value: 2,
+                                              child: Row(
+                                                children: [
+                                                  toggleBlock
+                                                      ? const Image(
+                                                          width: 16,
+                                                          image: Svg(
+                                                              'assets/svg/turn_on_cam.svg'),
+                                                          fit: BoxFit.cover,
+                                                          color: white,
+                                                        )
+                                                      : const Image(
+                                                          width: 16,
+                                                          image: Svg(
+                                                              'assets/svg/camera_off.svg'),
+                                                          fit: BoxFit.cover,
+                                                          color: white,
+                                                        ),
+                                                  const SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                  Text(
+                                                    !toggleBlock
+                                                        ? "Block user"
+                                                        : "Unblock user",
+                                                    style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w300,
+                                                      color: white,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                          initialValue: 0,
+                                          onSelected: (value) async {
+                                            switch (value) {
+                                              case 1:
+                                                {
+                                                  addUserToFavorit();
+                                                  break;
+                                                }
+                                              case 2:
+                                                {
+                                                  blockUser();
+                                                  break;
+                                                }
+                                            }
+                                          },
+                                          child: const Padding(
+                                            padding: EdgeInsets.all(15.0),
+                                            child: Icon(
+                                              Icons.more_vert,
+                                              color: Colors.white,
+                                              size: 26,
+                                            ),
                                           ),
                                         ),
                                       ),
+                                      color: white,
                                     ),
                                   ],
                                 ),

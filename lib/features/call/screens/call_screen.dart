@@ -467,7 +467,7 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                             ),
                             color: white,
                           ),
-                          const SizedBox(width: 15),
+                          SizedBox(width: 15),
                         ],
                       ),
                     ),
