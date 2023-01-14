@@ -364,9 +364,11 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                                     value: 5,
                                     child: Row(
                                       children: [
-                                        const Image(
+                                        Image(
                                           width: 18,
-                                          image: Svg('assets/svg/hide_btn.svg'),
+                                          image: Svg(!showButtons
+                                              ? 'assets/svg/hide_btn.svg'
+                                              : 'assets/svg/show_btn.svg'),
                                           fit: BoxFit.cover,
                                           color: white,
                                         ),
