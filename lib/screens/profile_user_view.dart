@@ -265,38 +265,34 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
                                 const SizedBox(height: 50),
                                 Row(
                                   children: [
-                                    Expanded(
-                                      child: Container(
-                                        alignment: Alignment.centerLeft,
-                                        child: Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 5),
-                                          child: IconButton(
-                                            onPressed: () {
-                                              if (Navigator.canPop(context)) {
-                                                Navigator.pop(context);
-                                              } else {
-                                                SystemNavigator.pop();
-                                              }
-                                            },
-                                            icon: Image(
-                                              image: Svg('assets/svg/back.svg'),
-                                              fit: BoxFit.cover,
-                                              color: white,
-                                              width: 18,
-                                            ),
-                                          ),
-                                        ),
+                                    IconButton(
+                                      onPressed: () {
+                                        if (Navigator.canPop(context)) {
+                                          Navigator.pop(context);
+                                        } else {
+                                          SystemNavigator.pop();
+                                        }
+                                      },
+                                      icon: const Image(
+                                        image: Svg('assets/svg/back.svg'),
+                                        fit: BoxFit.cover,
+                                        color: white,
+                                        width: 18,
                                       ),
                                     ),
-                                    const Text(
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            fontFamily: "yknir",
-                                            fontWeight: FontWeight.w800,
-                                            fontSize: 40,
-                                            color: white),
-                                        "Profile"),
+                                    Expanded(
+                                      child: Container(
+                                        alignment: Alignment.center,
+                                        child: const Text(
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                fontFamily: "yknir",
+                                                fontWeight: FontWeight.w800,
+                                                fontSize: 40,
+                                                color: white),
+                                            "Profile"),
+                                      ),
+                                    ),
                                     IconButton(
                                       onPressed: () {},
                                       icon: GestureDetector(
@@ -318,14 +314,14 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
                                                               'assets/svg/heart.svg'),
                                                           fit: BoxFit.cover,
                                                           color: white,
-                                                          width: 22,
+                                                          width: 16,
                                                         )
                                                       : const Image(
                                                           image: Svg(
                                                               'assets/svg/heart_b.svg'),
                                                           fit: BoxFit.cover,
                                                           color: yellow,
-                                                          width: 22,
+                                                          width: 16,
                                                         ),
                                                   const SizedBox(
                                                     width: 10,
@@ -352,14 +348,14 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
                                                       ? const Image(
                                                           width: 16,
                                                           image: Svg(
-                                                              'assets/svg/turn_on_cam.svg'),
+                                                              'assets/svg/block.svg'),
                                                           fit: BoxFit.cover,
                                                           color: white,
                                                         )
                                                       : const Image(
                                                           width: 16,
                                                           image: Svg(
-                                                              'assets/svg/camera_off.svg'),
+                                                              'assets/svg/unblock.svg'),
                                                           fit: BoxFit.cover,
                                                           color: white,
                                                         ),
@@ -396,7 +392,8 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
                                             }
                                           },
                                           child: const Padding(
-                                            padding: EdgeInsets.all(15.0),
+                                            padding: EdgeInsets.fromLTRB(
+                                                15, 0, 30, 0),
                                             child: Icon(
                                               Icons.more_vert,
                                               color: Colors.white,
@@ -407,6 +404,9 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
                                       ),
                                       color: white,
                                     ),
+                                    SizedBox(
+                                      width: 15,
+                                    )
                                   ],
                                 ),
                                 SizedBox(height: size.height * 0.02),
