@@ -13,6 +13,7 @@ import 'package:rvchat/widgets/error.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'Intro_screens/onboarding_screen.dart';
 import 'firebase_options.dart';
+import 'g.dart';
 import 'screens/mobile_layout_screen.dart';
 
 Future<void> main() async {
