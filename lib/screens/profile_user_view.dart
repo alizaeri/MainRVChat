@@ -34,7 +34,7 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
   // int following = 0;
   // int followers = 0;
   int tempFollowing = 0;
-  final bool toggleBlock = false;
+  bool toggleBlock = false;
   @override
   void initState() {
     super.initState();
@@ -46,6 +46,20 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
         .collection("users")
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .collection("following")
+        .doc(widget.selectUser.uid)
+        .snapshots()
+        .map(
+          (event) => UserModel.fromMap(
+            event.data()!,
+          ),
+        );
+  }
+
+  Stream<UserModel> checkIfIsBlockedOrNot() {
+    return FirebaseFirestore.instance
+        .collection("users")
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection("block")
         .doc(widget.selectUser.uid)
         .snapshots()
         .map(
@@ -214,6 +228,15 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
         );
   }
 
+  void unBlockUser() async {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('block')
+        .doc(widget.selectUser.uid)
+        .delete();
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -344,21 +367,39 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
                                               value: 2,
                                               child: Row(
                                                 children: [
-                                                  toggleBlock
-                                                      ? const Image(
-                                                          width: 16,
-                                                          image: Svg(
-                                                              'assets/svg/block.svg'),
-                                                          fit: BoxFit.cover,
-                                                          color: white,
-                                                        )
-                                                      : const Image(
-                                                          width: 16,
-                                                          image: Svg(
-                                                              'assets/svg/unblock.svg'),
-                                                          fit: BoxFit.cover,
-                                                          color: white,
-                                                        ),
+                                                  StreamBuilder<UserModel>(
+                                                    stream:
+                                                        checkIfIsBlockedOrNot(),
+                                                    builder:
+                                                        (context, snapshot3) {
+                                                      if (snapshot
+                                                              .connectionState ==
+                                                          ConnectionState
+                                                              .waiting) {
+                                                        return const LoaderT();
+                                                      }
+                                                      if (snapshot3.hasData) {
+                                                        toggleBlock = true;
+                                                      } else {
+                                                        toggleBlock = false;
+                                                      }
+                                                      return toggleBlock
+                                                          ? const Image(
+                                                              width: 16,
+                                                              image: Svg(
+                                                                  'assets/svg/block.svg'),
+                                                              fit: BoxFit.cover,
+                                                              color: white,
+                                                            )
+                                                          : const Image(
+                                                              width: 16,
+                                                              image: Svg(
+                                                                  'assets/svg/unblock.svg'),
+                                                              fit: BoxFit.cover,
+                                                              color: white,
+                                                            );
+                                                    },
+                                                  ),
                                                   const SizedBox(
                                                     width: 10,
                                                   ),
@@ -386,7 +427,12 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
                                                 }
                                               case 2:
                                                 {
-                                                  blockUser();
+                                                  if (!toggleBlock) {
+                                                    blockUser();
+                                                  } else {
+                                                    unBlockUser();
+                                                  }
+
                                                   break;
                                                 }
                                             }
