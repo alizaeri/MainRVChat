@@ -218,20 +218,18 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                       ),
                                       country!.flagEmoji,
                                     )
-                                  : const Image(
-                                      image: Svg('assets/svg/discussion.svg'),
-                                      //fit: BoxFit.cover,
-                                      color: white,
-                                      width: 20,
-                                      height: 20,
+                                  : Image.asset(
+                                      "assets/icons/flag.png",
+                                      fit: BoxFit.cover,
+                                      scale: 8,
                                     ),
                             ),
                             const Image(
                               image: Svg('assets/svg/drop_down_icon.svg'),
                               //fit: BoxFit.cover,
                               color: grayL1,
-                              width: 5,
-                              height: 5,
+                              width: 6,
+                              height: 6,
                             ),
                             const SizedBox(width: 5),
                             if (country != null)
@@ -261,7 +259,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                           fontFamily: "yknir",
                                           fontWeight: FontWeight.w400,
                                           fontSize: 25,
-                                          letterSpacing: 2,
+                                          letterSpacing: 5,
                                           color: grayL1),
                                       keyboardType: TextInputType.number,
                                       inputFormatters: <TextInputFormatter>[
@@ -272,9 +270,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                         FilteringTextInputFormatter.digitsOnly,
                                         LengthLimitingTextInputFormatter(10),
                                       ],
-                                      decoration: const InputDecoration(
+                                      decoration: InputDecoration(
                                         border: InputBorder.none,
-                                        hintText: '__________',
+                                        hintText: 'Your phone number]',
+                                        hintStyle: TextStyle(
+                                            color: grayL1.withOpacity(0.2)),
                                       ),
                                     )
                                   : TextField(
@@ -284,13 +284,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                       style: const TextStyle(
                                           fontFamily: "yknir",
                                           fontWeight: FontWeight.w400,
-                                          fontSize: 14,
+                                          fontSize: 25,
                                           letterSpacing: 2,
                                           color: grayL1),
                                       keyboardType: TextInputType.text,
-                                      decoration: const InputDecoration(
+                                      decoration: InputDecoration(
                                         border: InputBorder.none,
-                                        hintText: '__________',
+                                        hintText: 'Your E-mail',
+                                        hintStyle: TextStyle(
+                                            color: grayL1.withOpacity(0.2)),
                                       ),
                                     ),
                             )),
@@ -419,7 +421,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                     ),
                                 onPressed: () {},
                                 child: Image.asset(
-                                  "assets/images/towitter.png",
+                                  "assets/images/google.png",
                                   fit: BoxFit.cover,
                                   scale: 4,
                                   color: pinkL1.withOpacity(0.5),
@@ -432,7 +434,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             child: SizedBox(
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                    backgroundColor: pinkL1.withOpacity(0),
+                                    backgroundColor: pinkL1,
                                     elevation: 0,
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
@@ -449,12 +451,21 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                     FocusScope.of(context).unfocus();
                                   });
                                 },
-                                child: Image.asset(
-                                  "assets/images/google.png",
-                                  fit: BoxFit.cover,
-                                  scale: 4,
-                                  color: pinkL1.withOpacity(0.5),
-                                ),
+                                child: emailVerification
+                                    ? Image(
+                                        image: Svg('assets/svg/email_b.svg'),
+                                        //fit: BoxFit.cover,
+                                        color: whiteW1,
+                                        width: 30,
+                                        height: 30,
+                                      )
+                                    : Image(
+                                        image: Svg('assets/svg/phone.svg'),
+                                        //fit: BoxFit.cover,
+                                        color: whiteW1,
+                                        width: 35,
+                                        height: 35,
+                                      ),
                               ),
                             ),
                           ),
