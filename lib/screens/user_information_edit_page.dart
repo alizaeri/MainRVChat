@@ -115,7 +115,7 @@ class _UserInformationEditPageState
                                             SystemNavigator.pop();
                                           }
                                         },
-                                        icon: Image(
+                                        icon: const Image(
                                           image: Svg('assets/svg/back.svg'),
                                           fit: BoxFit.cover,
                                           color: white,

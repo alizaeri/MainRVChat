@@ -303,7 +303,7 @@ class _MyCardState extends State<MyCard> {
                         CircleAvatar(
                           backgroundColor: white.withOpacity(0.3),
                           radius: 10,
-                          child: Image(
+                          child: const Image(
                             image: Svg('assets/svg/flow_icon.svg'),
                             //fit: BoxFit.cover,
                             color: white,
