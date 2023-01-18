@@ -79,6 +79,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         MaterialPageRoute(
             builder: (context) => VerifyEmailPage(
                   country: countryName,
+                  email: _userEmail,
                 )),
       );
       print("email sent");
@@ -104,12 +105,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
       // Utils.showSnackBar(e.message);
     }
+    //sdfdsfsfsdfdsfdsafdsfsdfdsfsdfsdf
     // navigatorKey.currentState!.popUntil((route) => route.isFirst);
     Navigator.push(
       context,
       MaterialPageRoute(
           builder: (context) => VerifyEmailPage(
                 country: countryName,
+                email: emailController.text.trim(),
               )),
     );
   }
