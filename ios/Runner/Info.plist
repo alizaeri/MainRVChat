@@ -27,9 +27,10 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.486734565059-rlg1cpdqde741e1nnlp4u9mbu3u63sqn</string>
+				<string>com.alphadron.rvchat</string>
 			</array>
 		</dict>
+		<dict/>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>

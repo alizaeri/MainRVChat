@@ -82,7 +82,7 @@ class AuthRepository {
     try {
       String uid = auth.currentUser!.uid;
       String photoUrl =
-          'https://firebasestorage.googleapis.com/v0/b/mainrvchat.appspot.com/o/avatar.webp?alt=media&token=6ac19ca3-c79d-4d64-9ee0-53c673440cbc';
+          'https://firebasestorage.googleapis.com/v0/b/mainrvchat.appspot.com/o/avatar.webp?alt=media&token=2688ba66-d18e-4089-b695-787a965b9312';
       if (profilePic != null) {
         photoUrl = await ref
             .read(CommonFirebaseStorageRepositoryProvider)
@@ -104,6 +104,9 @@ class AuthRepository {
           followers: 0,
           country: country,
           email: auth.currentUser!.email,
+          isFake: false,
+          coin: 0,
+          lastOnlineTime: DateTime.now(),
           groupId: []);
       await firestore.collection('users').doc(uid).set(user.toMap());
       Navigator.pop(context);
@@ -133,9 +136,13 @@ class AuthRepository {
         .map((event) {
       List<UserModel> users = [];
       for (var document in event.docs) {
-        if (document['rVChat'] == true) {
-          print('online find ++++++++++++++');
+        if (document['isOnline'] == true) {
+          print(
+              'online find ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
           users.add(UserModel.fromMap(document.data()));
+        } else {
+          print(
+              'online not find +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
         }
       }
 

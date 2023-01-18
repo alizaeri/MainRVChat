@@ -62,6 +62,29 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     }
   }
 
+  Future signInWithEmailandLink(String countryName) async {
+    String _userEmail = emailController.text.trim();
+    return await FirebaseAuth.instance
+        .sendSignInLinkToEmail(
+            email: _userEmail,
+            actionCodeSettings: ActionCodeSettings(
+              url: "https://appeksgrupp.page.link/muUh",
+              handleCodeInApp: true,
+              androidPackageName: "mainrvchat.appspot.com",
+              androidMinimumVersion: "1",
+            ))
+        .then((value) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => VerifyEmailPage(
+                  country: countryName,
+                )),
+      );
+      print("email sent");
+    });
+  }
+
   Future signUp(String countryName) async {
     // final isValid = formKey.currentState!.validate();
     if (false) return;
@@ -354,7 +377,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             if (emailVerification) {
                               sendPhoneNumber(country!.name);
                             } else {
-                              signUp(country!.name);
+                              signInWithEmailandLink(country!.name);
                             }
 
                             setState(() {

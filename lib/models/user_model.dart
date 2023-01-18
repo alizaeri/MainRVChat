@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class UserModel {
   final String name;
   final String uid;
@@ -9,6 +11,9 @@ class UserModel {
   final int followers;
   final String country;
   final String? email;
+  final bool isFake;
+  final int coin;
+  final DateTime lastOnlineTime;
   final List<String> groupId;
   UserModel({
     required this.name,
@@ -21,6 +26,9 @@ class UserModel {
     required this.followers,
     required this.country,
     required this.email,
+    required this.isFake,
+    required this.coin,
+    required this.lastOnlineTime,
     required this.groupId,
   });
 
@@ -36,6 +44,9 @@ class UserModel {
       'followers': followers,
       'country': country,
       'email': email,
+      'isFake': isFake,
+      'coin': coin,
+      'lastOnlineTime': lastOnlineTime.millisecondsSinceEpoch,
       'groupId': groupId,
     };
   }
@@ -52,6 +63,10 @@ class UserModel {
       followers: map['followers'] ?? 0,
       country: map['country'] ?? '',
       email: map['email'] ?? '',
+      isFake: map['isFake'] ?? false,
+      coin: map['coin'] ?? 0,
+      lastOnlineTime:
+          DateTime.fromMillisecondsSinceEpoch(map['lastOnlineTime']),
       groupId: List<String>.from(map['groupId']),
     );
   }

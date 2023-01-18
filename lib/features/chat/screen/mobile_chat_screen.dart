@@ -64,6 +64,9 @@ class MobileChatScreen extends ConsumerWidget {
         followers: 0,
         country: '0',
         email: 'email',
+        isFake: false,
+        coin: 0,
+        lastOnlineTime: DateTime.now(),
         groupId: []);
 
     await FirebaseFirestore.instance

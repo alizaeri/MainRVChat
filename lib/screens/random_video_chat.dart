@@ -31,6 +31,7 @@ class _RandomeVideoChatState extends ConsumerState<RandomeVideoChat>
   late Future<void> initializeController;
   bool rVChat = false;
   UserModel? selectRandomUser;
+  UserModel? selectFakeRandomUser;
   int liveNumbers = 0;
   final String uid = FirebaseAuth.instance.currentUser!.uid;
 
@@ -100,11 +101,15 @@ class _RandomeVideoChatState extends ConsumerState<RandomeVideoChat>
     var collection = FirebaseFirestore.instance.collection('users');
     var querySnapshot = await collection.get();
     var listUid = [];
+    var listFakeUid = [];
     for (var doc in querySnapshot.docs) {
       Map<String, dynamic> data = doc.data();
       if (data['rVChat'] == true &&
-          data['uid'] != FirebaseAuth.instance.currentUser!.uid) {
+          data['uid'] != FirebaseAuth.instance.currentUser!.uid &&
+          data['isFake'] == false) {
         listUid.add(UserModel.fromMap(data));
+      } else if (data['isFake'] == true) {
+        // listFakeUid.add(UserModel.fromMap(data));
       }
     }
     final random = Random();
@@ -113,11 +118,15 @@ class _RandomeVideoChatState extends ConsumerState<RandomeVideoChat>
 // and use it to retrieve the element
     try {
       selectRandomUser = listUid[random.nextInt(listUid.length)];
+      // selectFakeRandomUser = listFakeUid[random.nextInt(listUid.length)];
     } catch (e) {
       selectRandomUser = null;
+      // selectFakeRandomUser = null;
     }
     if (selectRandomUser != null) {
       makeCall(ref, context, selectRandomUser!);
+    } else if (selectFakeRandomUser != null) {
+      // makeCall(ref, context, selectFakeRandomUser!);
     }
   }
 
@@ -150,8 +159,8 @@ class _RandomeVideoChatState extends ConsumerState<RandomeVideoChat>
         body: Stack(children: [
       FutureBuilder<void>(
         future: initializeController,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
+        builder: (context, snapshot1) {
+          if (snapshot1.connectionState == ConnectionState.done) {
             // If the Future is complete, display the preview.
             return Column(
               children: [
@@ -188,8 +197,9 @@ class _RandomeVideoChatState extends ConsumerState<RandomeVideoChat>
                 const SizedBox(height: 50),
                 StreamBuilder<UserModel>(
                     stream: ref.read(authControllerProvider).userDataById(uid),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
+                    builder: (context, snapshot2) {
+                      if (snapshot2.connectionState ==
+                          ConnectionState.waiting) {
                         return Column(
                           children: const [
                             CircleAvatar(
@@ -213,7 +223,7 @@ class _RandomeVideoChatState extends ConsumerState<RandomeVideoChat>
                           ],
                         );
                       }
-                      UserModel currentUser = snapshot.data!;
+                      // UserModel currentUser = snapshot.data!;
                       return Column(
                         children: [
                           CircleAvatar(
@@ -221,7 +231,7 @@ class _RandomeVideoChatState extends ConsumerState<RandomeVideoChat>
                             radius: 42,
                             child: CircleAvatar(
                               backgroundImage: NetworkImage(
-                                snapshot.data!.profilePic,
+                                snapshot2.data!.profilePic,
                               ),
                               radius: 40,
                             ),
@@ -234,7 +244,7 @@ class _RandomeVideoChatState extends ConsumerState<RandomeVideoChat>
                                   fontWeight: FontWeight.w300,
                                   fontSize: 18,
                                   color: white),
-                              snapshot.data!.name),
+                              snapshot2.data!.name),
                         ],
                       );
                     }),
@@ -262,8 +272,8 @@ class _RandomeVideoChatState extends ConsumerState<RandomeVideoChat>
                           stream:
                               ref.read(authControllerProvider).allOnlineUsers(),
                           builder:
-                              (BuildContext context, AsyncSnapshot snapshot) {
-                            if (snapshot.connectionState ==
+                              (BuildContext context, AsyncSnapshot snapshot3) {
+                            if (snapshot3.connectionState ==
                                 ConnectionState.waiting) {
                               // If the Future is complete, display the preview.
                               return const Text(
@@ -274,8 +284,8 @@ class _RandomeVideoChatState extends ConsumerState<RandomeVideoChat>
                                       fontSize: 20,
                                       color: white),
                                   '+100');
-                            } else {
-                              List<UserModel> onlineUsers = snapshot.data;
+                            } else if (snapshot3.hasData) {
+                              List<UserModel> onlineUsers = snapshot3.data;
                               return Text(
                                   textAlign: TextAlign.center,
                                   style: const TextStyle(
@@ -284,6 +294,15 @@ class _RandomeVideoChatState extends ConsumerState<RandomeVideoChat>
                                       fontSize: 20,
                                       color: white),
                                   onlineUsers.length.toString());
+                            } else {
+                              return const Text(
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontFamily: "yknir",
+                                      fontWeight: FontWeight.w300,
+                                      fontSize: 20,
+                                      color: white),
+                                  '+100');
                             }
                           },
                         ),
@@ -304,8 +323,8 @@ class _RandomeVideoChatState extends ConsumerState<RandomeVideoChat>
                           stream:
                               ref.read(authControllerProvider).allLiveUsers(),
                           builder:
-                              (BuildContext context, AsyncSnapshot snapshot2) {
-                            if (snapshot2.connectionState ==
+                              (BuildContext context, AsyncSnapshot snapshot4) {
+                            if (snapshot4.connectionState ==
                                 ConnectionState.waiting) {
                               return const Text(
                                 textAlign: TextAlign.center,
@@ -317,7 +336,7 @@ class _RandomeVideoChatState extends ConsumerState<RandomeVideoChat>
                                 '20k',
                               );
                             } else {
-                              List<UserModel> liveUsers = snapshot2.data;
+                              List<UserModel> liveUsers = snapshot4.data;
                               return Text(
                                 textAlign: TextAlign.center,
                                 style: const TextStyle(

@@ -2,6 +2,7 @@ import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 import 'package:path/path.dart';
@@ -12,6 +13,7 @@ import 'package:rvchat/common/widgets/loaderW.dart';
 import 'package:rvchat/features/auth/controller/auth_controller.dart';
 import 'package:rvchat/features/call/screens/call_pickup_screen.dart';
 import 'package:rvchat/features/landing/screens/landing_screen.dart';
+import 'package:rvchat/models/user_model.dart';
 import 'package:rvchat/screens/followers_page.dart';
 import 'package:rvchat/screens/online_user_screen.dart';
 import 'package:rvchat/screens/random_video_chat.dart';
@@ -29,14 +31,87 @@ class MobileLayoutScreen extends ConsumerStatefulWidget {
 
 class _MobileLayoutScreenState extends ConsumerState<MobileLayoutScreen>
     with WidgetsBindingObserver {
+  final DateTime currentTime = DateTime.now();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   void initState() {
     ref.read(authControllerProvider).setUserState(true);
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    checkTimeToGetCoin();
 
     //didChangeAppLifecycleState();
+  }
+
+  void checkTimeToGetCoin() async {
+    var userData = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get();
+    var user = UserModel.fromMap(userData.data()!);
+    print(user.lastOnlineTime);
+    var timeSent = DateTime.now();
+    if (user.coin != 0) {
+      var diffrenceTime = user.lastOnlineTime.add(Duration(hours: 24));
+      print(
+          '$diffrenceTime -------------------------------------------------------');
+
+      if (DateTime.now().isAfter(diffrenceTime)) {
+        var currentCoin = user.coin;
+        var newUser = UserModel(
+            name: user.name,
+            uid: user.uid,
+            profilePic: user.profilePic,
+            isOnline: user.isOnline,
+            rVChat: user.rVChat,
+            phoneNumber: user.phoneNumber,
+            following: user.following,
+            followers: user.followers,
+            country: user.country,
+            email: user.email,
+            isFake: user.isFake,
+            coin: user.coin + 2,
+            lastOnlineTime: timeSent,
+            groupId: user.groupId);
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(FirebaseAuth.instance.currentUser!.uid)
+            .set(
+              newUser.toMap(),
+            );
+      }
+    } else {
+      var newUser = UserModel(
+          name: user.name,
+          uid: user.uid,
+          profilePic: user.profilePic,
+          isOnline: user.isOnline,
+          rVChat: user.rVChat,
+          phoneNumber: user.phoneNumber,
+          following: user.following,
+          followers: user.followers,
+          country: user.country,
+          email: user.email,
+          isFake: user.isFake,
+          coin: 2,
+          lastOnlineTime: timeSent,
+          groupId: user.groupId);
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .set(
+            newUser.toMap(),
+          );
+    }
+  }
+
+  saveTimeToFireStore() async {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .set({
+      'lastOnlineTime': DateTime.now(),
+    });
   }
 
   @override

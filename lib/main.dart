@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:is_first_run/is_first_run.dart';
+import 'package:rvchat/app_loader.dart';
 import 'package:rvchat/colors.dart';
 import 'package:rvchat/common/widgets/loaderW.dart';
 import 'package:rvchat/features/auth/controller/auth_controller.dart';
@@ -25,6 +26,7 @@ Future<void> main() async {
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 
   await CameraManager.instance.init();
+  // await AppLoader.init();
 
   runApp(
     const ProviderScope(
