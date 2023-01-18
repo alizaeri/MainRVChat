@@ -25,6 +25,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final navigatorKey = GlobalKey<NavigatorState>();
+
   Country? country;
   @override
   void dispose() {

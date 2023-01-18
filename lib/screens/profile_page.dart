@@ -199,9 +199,76 @@ class ProfilePage extends ConsumerWidget {
                                     color: white),
                                 snapshot.data!.following.toString()),
                           ),
+                          const SizedBox(
+                            width: 40,
+                          ),
+                          const Image(
+                            image: Svg('assets/svg/coin.svg'),
+                            fit: BoxFit.cover,
+                            color: yellow,
+                            width: 22,
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.fromLTRB(5, 10, 0, 0),
+                            child: Text(
+                                style: TextStyle(
+                                    fontFamily: "yknir",
+                                    fontWeight: FontWeight.w300,
+                                    fontSize: 25,
+                                    color: white),
+                                "Coin"),
+                          ),
                         ],
                       ),
                       const SizedBox(height: 10),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(40, 20, 40, 0),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: yellow,
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15.0)),
+                            minimumSize: const Size.fromHeight(60),
+                            padding: const EdgeInsets.all(0),
+                            //////// HERE
+                          ),
+                          onPressed: () async {},
+                          child: Row(
+                            children: [
+                              const Expanded(
+                                child: Text(
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontFamily: "yknir",
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 25,
+                                      color: white,
+                                    ),
+                                    "Get Coin"),
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.only(
+                                    bottomRight: Radius.circular(15.0),
+                                    topRight: Radius.circular(15.0),
+                                  ),
+                                  color: pink.withOpacity(0.5),
+                                ),
+                                height: 60,
+                                width: 80,
+                                child: const Image(
+                                  image: Svg('assets/svg/coins.svg'),
+                                  //fit: BoxFit.cover,
+                                  color: white,
+                                  width: 30,
+                                  height: 30,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
                       Image.asset(
                         "assets/images/lineBg.png",
                         fit: BoxFit.cover,
