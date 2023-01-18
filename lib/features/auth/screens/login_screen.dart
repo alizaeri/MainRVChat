@@ -249,8 +249,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                               ),
                             const SizedBox(width: 5),
                             Expanded(
-                                child: Padding(
-                              padding: const EdgeInsets.only(top: 25),
+                                child: Center(
                               child: emailVerification
                                   ? TextField(
                                       controller: phoneController,
@@ -285,8 +284,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                       style: const TextStyle(
                                           fontFamily: "yknir",
                                           fontWeight: FontWeight.w400,
-                                          fontSize: 25,
-                                          letterSpacing: 2,
+                                          fontSize: 20,
                                           color: grayL1),
                                       keyboardType: TextInputType.text,
                                       decoration: InputDecoration(

@@ -140,16 +140,16 @@ class ProfilePage extends ConsumerWidget {
                           ),
                         ],
                       ),
-                      SizedBox(height: size.height * 0.02),
+                      SizedBox(height: size.height * 0.005),
                       CircleAvatar(
                         backgroundColor: white,
-                        radius: size.width * 0.21,
+                        radius: size.width * 0.19,
                         child: CircleAvatar(
                           backgroundImage: snapshot.data!.profilePic == null
                               ? const AssetImage("assets/images/avatar.webp")
                                   as ImageProvider
                               : NetworkImage(snapshot.data!.profilePic),
-                          radius: size.width * 0.2,
+                          radius: size.width * 0.18,
                         ),
                       ),
                       const SizedBox(height: 20),
@@ -294,7 +294,7 @@ class ProfilePage extends ConsumerWidget {
                             style: TextStyle(
                                 fontFamily: "yknir",
                                 fontWeight: FontWeight.w100,
-                                fontSize: size.width * 0.08,
+                                fontSize: size.width * 0.07,
                                 color: grayL1),
                             snapshot.data!.name),
                         Divider(color: grayL1.withOpacity(0.5)),
@@ -309,7 +309,7 @@ class ProfilePage extends ConsumerWidget {
                             style: TextStyle(
                                 fontFamily: "yknir",
                                 fontWeight: FontWeight.w100,
-                                fontSize: size.width * 0.08,
+                                fontSize: size.width * 0.07,
                                 color: grayL1),
                             snapshot.data!.country),
                         Divider(color: grayL1.withOpacity(0.5)),
@@ -325,14 +325,14 @@ class ProfilePage extends ConsumerWidget {
                                 style: TextStyle(
                                     fontFamily: "yknir",
                                     fontWeight: FontWeight.w100,
-                                    fontSize: size.width * 0.08,
+                                    fontSize: size.width * 0.07,
                                     color: grayL1),
                                 '')
                             : Text(
                                 style: TextStyle(
                                     fontFamily: "yknir",
                                     fontWeight: FontWeight.w100,
-                                    fontSize: size.width * 0.08,
+                                    fontSize: size.width * 0.07,
                                     color: grayL1),
                                 snapshot.data!.phoneNumber!),
                         Divider(color: grayL1.withOpacity(0.5)),
@@ -348,14 +348,14 @@ class ProfilePage extends ConsumerWidget {
                                 style: TextStyle(
                                     fontFamily: "yknir",
                                     fontWeight: FontWeight.w100,
-                                    fontSize: size.width * 0.08,
+                                    fontSize: size.width * 0.06,
                                     color: grayL1),
                                 '')
                             : Text(
                                 style: TextStyle(
                                     fontFamily: "yknir",
                                     fontWeight: FontWeight.w100,
-                                    fontSize: size.width * 0.08,
+                                    fontSize: size.width * 0.06,
                                     color: grayL1),
                                 snapshot.data!.email!),
                         const SizedBox(
