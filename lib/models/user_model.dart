@@ -14,6 +14,7 @@ class UserModel {
   final bool isFake;
   final int coin;
   final DateTime lastOnlineTime;
+  final String videoLink;
   final List<String> groupId;
   UserModel({
     required this.name,
@@ -29,6 +30,7 @@ class UserModel {
     required this.isFake,
     required this.coin,
     required this.lastOnlineTime,
+    required this.videoLink,
     required this.groupId,
   });
 
@@ -47,6 +49,7 @@ class UserModel {
       'isFake': isFake,
       'coin': coin,
       'lastOnlineTime': lastOnlineTime.millisecondsSinceEpoch,
+      'videoLink': videoLink,
       'groupId': groupId,
     };
   }
@@ -67,6 +70,7 @@ class UserModel {
       coin: map['coin'] ?? 0,
       lastOnlineTime:
           DateTime.fromMillisecondsSinceEpoch(map['lastOnlineTime']),
+      videoLink: map['videoLink'] ?? '',
       groupId: List<String>.from(map['groupId']),
     );
   }

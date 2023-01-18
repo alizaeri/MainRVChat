@@ -67,6 +67,7 @@ class MobileChatScreen extends ConsumerWidget {
         isFake: false,
         coin: 0,
         lastOnlineTime: DateTime.now(),
+        videoLink: '',
         groupId: []);
 
     await FirebaseFirestore.instance

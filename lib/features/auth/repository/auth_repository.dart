@@ -107,6 +107,7 @@ class AuthRepository {
           isFake: false,
           coin: 0,
           lastOnlineTime: DateTime.now(),
+          videoLink: '',
           groupId: []);
       await firestore.collection('users').doc(uid).set(user.toMap());
       Navigator.pop(context);

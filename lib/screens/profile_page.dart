@@ -208,7 +208,7 @@ class ProfilePage extends ConsumerWidget {
                             color: yellow,
                             width: 22,
                           ),
-                          const Padding(
+                          Padding(
                             padding: EdgeInsets.fromLTRB(5, 10, 0, 0),
                             child: Text(
                                 style: TextStyle(
@@ -216,7 +216,7 @@ class ProfilePage extends ConsumerWidget {
                                     fontWeight: FontWeight.w300,
                                     fontSize: 25,
                                     color: white),
-                                "Coin"),
+                                snapshot.data!.coin.toString()),
                           ),
                         ],
                       ),

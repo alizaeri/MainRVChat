@@ -72,6 +72,7 @@ class _MobileLayoutScreenState extends ConsumerState<MobileLayoutScreen>
             isFake: user.isFake,
             coin: user.coin + 2,
             lastOnlineTime: timeSent,
+            videoLink: user.videoLink,
             groupId: user.groupId);
         await FirebaseFirestore.instance
             .collection('users')
@@ -95,6 +96,7 @@ class _MobileLayoutScreenState extends ConsumerState<MobileLayoutScreen>
           isFake: user.isFake,
           coin: 2,
           lastOnlineTime: timeSent,
+          videoLink: user.videoLink,
           groupId: user.groupId);
       await FirebaseFirestore.instance
           .collection('users')

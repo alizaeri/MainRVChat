@@ -219,6 +219,7 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
         isFake: false,
         coin: 0,
         lastOnlineTime: DateTime.now(),
+        videoLink: '',
         groupId: []);
 
     await FirebaseFirestore.instance
