@@ -34,7 +34,7 @@ dependencies:
   path:
   convex_bottom_bar: 
   flutter_lints: ^2.0.0
-  flutter_native_splash: 
+  flutter_native_splash: ^2.2.16
  
 
   is_first_run: ^1.0.0
@@ -67,6 +67,9 @@ dependencies:
   flutter_sound: ^9.2.13
   permission_handler: ^10.2.0
   audioplayers: ^1.1.1
+  get: ^4.6.5
+  flutter_easyloading: ^3.0.5
+  firebase_dynamic_links: ^5.0.11
 
 
 dev_dependencies:

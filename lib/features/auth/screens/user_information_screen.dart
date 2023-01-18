@@ -44,7 +44,7 @@ class _UserInformationScreenState extends ConsumerState<UserInformationScreen> {
     );
     String name = nameController.text.trim();
     String defPic =
-        'https://firebasestorage.googleapis.com/v0/b/mainrvchat.appspot.com/o/avatar.webp?alt=media&token=8f42e74c-ac50-453e-9731-c51a1a4b0f4f';
+        'https://firebasestorage.googleapis.com/v0/b/mainrvchat.appspot.com/o/avatar.webp?alt=media&token=2688ba66-d18e-4089-b695-787a965b9312';
     if (name.isNotEmpty) {
       ref.read(authControllerProvider).saveUserDataToFirebase(
           context, name, image, defPic, widget.country, true);
