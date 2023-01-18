@@ -64,6 +64,10 @@ class _VerifyEmailPageState extends State<VerifyEmailPage>
 
         // You can access the new user via userCredential.user.
         final emailAddress = userCredential.user?.email;
+        setState(() {
+          isEmailVerified = true;
+        });
+        isEmailVerified = true;
 
         print('Successfully signed in with email link!');
       } catch (error) {
