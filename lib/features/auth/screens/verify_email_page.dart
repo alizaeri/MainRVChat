@@ -8,7 +8,9 @@ import 'package:rvchat/features/auth/screens/user_information_screen.dart';
 
 class VerifyEmailPage extends StatefulWidget {
   final String country;
-  const VerifyEmailPage({Key? key, required this.country}) : super(key: key);
+  final String email;
+  const VerifyEmailPage({Key? key, required this.country, required this.email})
+      : super(key: key);
   @override
   State<VerifyEmailPage> createState() => _VerifyEmailPageState();
 }
@@ -59,7 +61,7 @@ class _VerifyEmailPageState extends State<VerifyEmailPage>
       try {
         // The client SDK will parse the code from the link for you.
         final userCredential = await FirebaseAuth.instance.signInWithEmailLink(
-            email: 'zaeriali110@gmail.com',
+            email: widget.email,
             emailLink: "https://appeksgrupp.page.link/muUh");
 
         // You can access the new user via userCredential.user.
