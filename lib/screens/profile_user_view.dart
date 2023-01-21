@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg_provider/flutter_svg_provider.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:rvchat/add_helper.dart';
 import 'package:rvchat/colors.dart';
 import 'package:rvchat/common/widgets/loaderT.dart';
 import 'package:rvchat/features/auth/controller/auth_controller.dart';
@@ -30,14 +32,44 @@ class ProfileUserView extends ConsumerStatefulWidget {
 }
 
 class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
+  late final InterstitialAd interAd;
+  final String interAdUnitId = 'ca-app-pub-5708852178580221/4054487003';
   bool isLiked = false;
   // int following = 0;
   // int followers = 0;
   int tempFollowing = 0;
   bool toggleBlock = false;
+  InterstitialAd? _interstitialAd;
+
   @override
   void initState() {
     super.initState();
+    _createInterstitialAd();
+  }
+
+  void _createInterstitialAd() {
+    InterstitialAd.load(
+      adUnitId: AdMobService.interstitialAdUnitId,
+      request: const AdRequest(),
+      adLoadCallback: InterstitialAdLoadCallback(
+          onAdLoaded: (ad) => _interstitialAd = ad,
+          onAdFailedToLoad: (LoadAdError error) => _interstitialAd = null),
+    );
+  }
+
+  void _showInterstitialAd() {
+    if (_interstitialAd != null) {
+      _interstitialAd!.fullScreenContentCallback =
+          FullScreenContentCallback(onAdDismissedFullScreenContent: (ad) {
+        ad.dispose();
+        _createInterstitialAd();
+      }, onAdFailedToShowFullScreenContent: (ad, error) {
+        ad.dispose();
+        _createInterstitialAd();
+      });
+      _interstitialAd!.show();
+      _interstitialAd = null;
+    }
   }
 
   Stream<UserModel> checkIfLikedOrNot() {
@@ -295,9 +327,12 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
                                     IconButton(
                                       onPressed: () {
                                         if (Navigator.canPop(context)) {
+                                          _showInterstitialAd();
+
                                           Navigator.pop(context);
                                         } else {
                                           SystemNavigator.pop();
+                                          _showInterstitialAd();
                                         }
                                       },
                                       icon: const Image(

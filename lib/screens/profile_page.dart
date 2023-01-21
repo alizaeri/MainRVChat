@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg_provider/flutter_svg_provider.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:rvchat/add_helper.dart';
 import 'package:rvchat/colors.dart';
 import 'package:rvchat/features/auth/controller/auth_controller.dart';
 import 'package:rvchat/features/auth/screens/login_screen.dart';
@@ -14,11 +16,57 @@ import 'package:rvchat/screens/user_information_edit_page.dart';
 
 import '../common/widgets/loaderT.dart';
 
-class ProfilePage extends ConsumerWidget {
+class ProfilePage extends ConsumerStatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
+  @override
+  ConsumerState<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends ConsumerState<ProfilePage> {
+  RewardedAd? _rewardedAd;
+  int currentCoin = 2;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  void initState() {
+    super.initState();
+    _createRewardAd();
+  }
+
+  void _createRewardAd() {
+    RewardedAd.load(
+      adUnitId: AdMobService.rewardedAdUnitId,
+      request: const AdRequest(),
+      rewardedAdLoadCallback: RewardedAdLoadCallback(
+          onAdLoaded: (ad) => _rewardedAd = ad,
+          onAdFailedToLoad: (LoadAdError error) => _rewardedAd = null),
+    );
+  }
+
+  void _showRewardedAd() {
+    if (_rewardedAd != null) {
+      _rewardedAd!.fullScreenContentCallback =
+          FullScreenContentCallback(onAdDismissedFullScreenContent: (ad) {
+        ad.dispose();
+        _createRewardAd();
+      }, onAdFailedToShowFullScreenContent: (ad, error) {
+        ad.dispose();
+        _createRewardAd();
+      });
+      _rewardedAd!.show(onUserEarnedReward: (ad, reward) async {
+        currentCoin = currentCoin + 2;
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(FirebaseAuth.instance.currentUser!.uid)
+            .update({
+          'coin': currentCoin,
+        });
+      });
+      _rewardedAd = null;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final String uid = FirebaseAuth.instance.currentUser!.uid;
     return Scaffold(
@@ -28,6 +76,7 @@ class ProfilePage extends ConsumerWidget {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const LoaderT();
             }
+            currentCoin = snapshot.data!.coin;
             return Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -233,7 +282,9 @@ class ProfilePage extends ConsumerWidget {
                             padding: const EdgeInsets.all(0),
                             //////// HERE
                           ),
-                          onPressed: () async {},
+                          onPressed: () async {
+                            _showRewardedAd();
+                          },
                           child: Row(
                             children: [
                               const Expanded(

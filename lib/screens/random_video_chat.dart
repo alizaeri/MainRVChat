@@ -6,6 +6,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg_provider/flutter_svg_provider.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:rvchat/add_helper.dart';
 import 'package:rvchat/features/call/repository/call_repository.dart';
 
 import 'package:rvchat/models/user_model.dart';
@@ -34,6 +36,8 @@ class _RandomeVideoChatState extends ConsumerState<RandomeVideoChat>
   UserModel? selectFakeRandomUser;
   int liveNumbers = 0;
   final String uid = FirebaseAuth.instance.currentUser!.uid;
+  int every5Times = 1;
+  InterstitialAd? _interstitialAd;
 
   @override
   void initState() {
@@ -53,6 +57,32 @@ class _RandomeVideoChatState extends ConsumerState<RandomeVideoChat>
     initializeController = cameraController.initialize();
     WidgetsBinding.instance.addObserver(this);
     deletefIsBusy();
+    _createInterstitialAd();
+  }
+
+  void _createInterstitialAd() {
+    InterstitialAd.load(
+      adUnitId: AdMobService.interstitialAdUnitId,
+      request: const AdRequest(),
+      adLoadCallback: InterstitialAdLoadCallback(
+          onAdLoaded: (ad) => _interstitialAd = ad,
+          onAdFailedToLoad: (LoadAdError error) => _interstitialAd = null),
+    );
+  }
+
+  void _showInterstitialAd() {
+    if (_interstitialAd != null) {
+      _interstitialAd!.fullScreenContentCallback =
+          FullScreenContentCallback(onAdDismissedFullScreenContent: (ad) {
+        ad.dispose();
+        _createInterstitialAd();
+      }, onAdFailedToShowFullScreenContent: (ad, error) {
+        ad.dispose();
+        _createInterstitialAd();
+      });
+      _interstitialAd!.show();
+      _interstitialAd = null;
+    }
   }
 
   void deletefIsBusy() async {
@@ -370,6 +400,10 @@ class _RandomeVideoChatState extends ConsumerState<RandomeVideoChat>
                         //////// HERE
                       ),
                       onPressed: () async {
+                        every5Times++;
+                        if (every5Times % 5 == 0) {
+                          _showInterstitialAd();
+                        }
                         if (!ref
                             .watch(callRepositoryProvider)
                             .activeButtonRVChat) {

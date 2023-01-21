@@ -8,6 +8,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rvchat/add_helper.dart';
 import 'package:rvchat/colors.dart';
 import 'package:rvchat/common/widgets/loademini.dart';
 import 'package:rvchat/config/agora_config.dart';
@@ -16,6 +17,7 @@ import 'package:rvchat/features/call/repository/call_repository.dart';
 import 'package:rvchat/models/call.dart';
 import 'package:wakelock/wakelock.dart';
 import 'package:flutter_svg_provider/flutter_svg_provider.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class CallScreen extends ConsumerStatefulWidget {
   final String channelId;
@@ -48,6 +50,8 @@ class _CallScreenState extends ConsumerState<CallScreen> {
   bool showButtons = false;
   bool muteAudio = false;
   bool isCallingWait = false;
+  InterstitialAd? _interstitialAd;
+
   var _value = ValueNotifier<bool>(false);
   final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
       GlobalKey<ScaffoldMessengerState>();
@@ -63,7 +67,34 @@ class _CallScreenState extends ConsumerState<CallScreen> {
     super.initState();
     Wakelock.enable();
     setupVideoSDKEngine();
+    _createInterstitialAd();
+
     WidgetsBinding.instance.addPostFrameCallback((_) => showOverlay());
+  }
+
+  void _createInterstitialAd() {
+    InterstitialAd.load(
+      adUnitId: AdMobService.interstitialAdUnitId!,
+      request: const AdRequest(),
+      adLoadCallback: InterstitialAdLoadCallback(
+          onAdLoaded: (ad) => _interstitialAd = ad,
+          onAdFailedToLoad: (LoadAdError error) => _interstitialAd = null),
+    );
+  }
+
+  void _showInterstitialAd() {
+    if (_interstitialAd != null) {
+      _interstitialAd!.fullScreenContentCallback =
+          FullScreenContentCallback(onAdDismissedFullScreenContent: (ad) {
+        ad.dispose();
+        _createInterstitialAd();
+      }, onAdFailedToShowFullScreenContent: (ad, error) {
+        ad.dispose();
+        _createInterstitialAd();
+      });
+      _interstitialAd!.show();
+      _interstitialAd = null;
+    }
   }
 
   void leave() {
@@ -141,6 +172,8 @@ class _CallScreenState extends ConsumerState<CallScreen> {
           // leave();
 
           Navigator.pop(context);
+          _showInterstitialAd();
+
           agoraEngine.leaveChannel();
 
           setState(() {
@@ -541,6 +574,7 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                                   RawMaterialButton(
                                     onPressed: () {
                                       if (!isCallingWait) {
+                                        _showInterstitialAd();
                                         leave();
                                         ref
                                             .read(callControllerProvider)
@@ -549,7 +583,9 @@ class _CallScreenState extends ConsumerState<CallScreen> {
                                               widget.call.receiverId,
                                               context,
                                             );
+
                                         Navigator.pop(context);
+
                                         try {
                                           agoraEngine.leaveChannel();
                                         } catch (e) {

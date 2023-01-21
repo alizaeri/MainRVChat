@@ -52,6 +52,8 @@ class _VerifyEmailPageState extends State<VerifyEmailPage>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
       _retrieveDynamicLink();
+      print(
+          'call back call back call back call back call back call back call back call back call back call back call back call back call back ');
     }
   }
 
@@ -69,12 +71,28 @@ class _VerifyEmailPageState extends State<VerifyEmailPage>
         setState(() {
           isEmailVerified = true;
         });
-        isEmailVerified = true;
 
-        print('Successfully signed in with email link!');
+        print(
+            'Successfully signed in with email link!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
       } catch (error) {
-        print('Error signing in with email link.');
+        print(
+            'Error signing in with email link.!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
       }
+    } else {
+      FirebaseAuth.instance.authStateChanges().listen((User? user) {
+        if (user == null) {
+          print('User is currently signed out!');
+        } else {
+          setState(() {
+            isEmailVerified = true;
+          });
+
+          print('User is signed in!');
+        }
+      });
+
+      print(
+          'hmash errrooorrrr  hmash errrooorrrr  hmash errrooorrrr  hmash errrooorrrr  hmash errrooorrrr  hmash errrooorrrr  hmash errrooorrrr  ');
     }
   }
 

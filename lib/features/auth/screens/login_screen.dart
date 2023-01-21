@@ -68,11 +68,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         .sendSignInLinkToEmail(
             email: _userEmail,
             actionCodeSettings: ActionCodeSettings(
-              url: "https://appeksgrupp.page.link/muUh",
+              iOSBundleId: 'com.alphadron.rvchat',
+              url: "https://appeksgrupp.page.link/muUh?email=$_userEmail",
               handleCodeInApp: true,
               androidPackageName: "mainrvchat.appspot.com",
-              androidMinimumVersion: "1",
+              androidMinimumVersion: "12",
             ))
+        .catchError(
+            (onError) => print('Error sending email verification $onError'))
         .then((value) {
       Navigator.push(
         context,
@@ -84,37 +87,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       );
       print("email sent");
     });
-  }
-
-  Future signUp(String countryName) async {
-    // final isValid = formKey.currentState!.validate();
-    if (false) return;
-    showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) => Center(child: CircularProgressIndicator()));
-    try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: emailController.text.trim(),
-        password: '123456789', //passwordController.text.trim(),
-      );
-      print(
-          'sigh up suxseed 44444444444444444444444444444444444444444444444444444444444444444444444444444444444444');
-    } on FirebaseAuthException catch (e) {
-      print(e);
-
-      // Utils.showSnackBar(e.message);
-    }
-    //sdfdsfsfsdfdsfdsafdsfsdfdsfsdfsdf
-    // navigatorKey.currentState!.popUntil((route) => route.isFirst);
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => VerifyEmailPage(
-                country: countryName,
-                email: emailController.text.trim(),
-              )),
-    );
   }
 
   @override
@@ -380,6 +352,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             if (emailVerification) {
                               sendPhoneNumber(country!.name);
                             } else {
+                              print("email sent");
+                              // Navigator.push(
+                              //   context,
+                              //   MaterialPageRoute(
+                              //       builder: (context) => VerifyEmailPage(
+                              //             country: 'Iran',
+                              //             email: emailController.text.trim(),
+                              //           )),
+                              // );
                               signInWithEmailandLink(country!.name);
                             }
 
