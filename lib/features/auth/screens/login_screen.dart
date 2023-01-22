@@ -456,12 +456,19 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                     //////// HERE
                                     ),
                                 onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            GoogleSignInScreen()),
-                                  );
+                                  // Navigator.push(
+                                  //   context,
+                                  //   MaterialPageRoute(
+                                  //       builder: (context) =>
+                                  //           GoogleSignInScreen()),
+                                  // );
+                                  if (country != null) {
+                                    ref
+                                        .read(GoogleSignInProvider)
+                                        .googleLogin(context, country!.name);
+                                  } else {
+                                    print('please select the country');
+                                  }
 
                                   print('google sing in runnnnnnnnnnnnn');
                                   // final Provider =
