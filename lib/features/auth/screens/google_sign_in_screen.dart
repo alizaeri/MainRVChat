@@ -1,42 +1,35 @@
+import 'dart:typed_data';
+
 import 'package:country_picker/country_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
+import 'package:flutter/src/widgets/container.dart';
+import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 import 'package:rvchat/colors.dart';
-import 'package:rvchat/common/utils/utils.dart';
-
 import 'package:rvchat/common/widgets/loader.dart';
-import 'package:rvchat/features/auth/controller/auth_controller.dart';
 import 'package:rvchat/features/auth/screens/google_sign_in.dart';
-import 'package:rvchat/features/auth/screens/google_sign_in_screen.dart';
 import 'package:rvchat/features/auth/screens/user_information_screen.dart';
-import 'package:rvchat/features/auth/screens/verify_email_page.dart';
 
-class LoginScreen extends ConsumerStatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
-  static const routeName = '/login-screen';
+class GoogleSignInScreen extends ConsumerStatefulWidget {
+  const GoogleSignInScreen({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<LoginScreen> createState() => _LoginScreenState();
+  ConsumerState<GoogleSignInScreen> createState() => _GoogleSignInScreenState();
 }
 
-class _LoginScreenState extends ConsumerState<LoginScreen> {
+class _GoogleSignInScreenState extends ConsumerState<GoogleSignInScreen> {
   final phoneController = TextEditingController();
   final emailController = TextEditingController();
-  final passwordController = TextEditingController();
-  final navigatorKey = GlobalKey<NavigatorState>();
+  bool countryIsSelected = false;
 
-  Country? country;
-  @override
-  void dispose() {
-    super.dispose();
-    phoneController.dispose();
-  }
-
+  bool fisClick = false;
+  final formKey = GlobalKey<FormState>();
   bool emailVerification = true;
+  Country? country;
 
   void pickCountry() {
     showCountryPicker(
@@ -49,47 +42,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         });
       },
     );
-  }
-
-  bool fisClick = false;
-  final formKey = GlobalKey<FormState>();
-
-  void sendPhoneNumber(String countryName) {
-    String phoneNumber = phoneController.text.trim();
-    if (phoneNumber.isNotEmpty && country != null) {
-      ref.read(authControllerProvider).singInWithPhone(
-          context, '+${country!.phoneCode}$phoneNumber', countryName);
-    } else {
-      showSnackBar(context: context, content: "Fill out all the feilds");
-      fisClick = false;
-    }
-  }
-
-  Future signInWithEmailandLink(String countryName) async {
-    String _userEmail = emailController.text.trim();
-    return await FirebaseAuth.instance
-        .sendSignInLinkToEmail(
-            email: _userEmail,
-            actionCodeSettings: ActionCodeSettings(
-              iOSBundleId: 'com.alphadron.rvchat',
-              url: "https://appeksgrupp.page.link/muUh?email=$_userEmail",
-              handleCodeInApp: true,
-              androidPackageName: "mainrvchat.appspot.com",
-              androidMinimumVersion: "12",
-            ))
-        .catchError(
-            (onError) => print('Error sending email verification $onError'))
-        .then((value) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => VerifyEmailPage(
-                  country: countryName,
-                  email: _userEmail,
-                )),
-      );
-      print("email sent");
-    });
   }
 
   @override
@@ -128,7 +80,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                   fontWeight: FontWeight.w800,
                                   fontSize: 40,
                                   color: white),
-                              "Login"),
+                              "Login with google"),
                           const Expanded(
                             child: Center(
                               child: CircleAvatar(
@@ -353,24 +305,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                               //////// HERE
                               ),
                           onPressed: () {
-                            if (emailVerification) {
-                              sendPhoneNumber(country!.name);
+                            if (country != null) {
+                              ref
+                                  .read(GoogleSignInProvider)
+                                  .googleLogin(context, country!.name);
                             } else {
-                              print("email sent");
-                              // Navigator.push(
-                              //   context,
-                              //   MaterialPageRoute(
-                              //       builder: (context) => VerifyEmailPage(
-                              //             country: 'Iran',
-                              //             email: emailController.text.trim(),
-                              //           )),
-                              // );
-                              signInWithEmailandLink(country!.name);
+                              print('please select the country');
                             }
-
-                            setState(() {
-                              // fisClick = true;
-                            });
                           },
                           child: const Text(
                               textAlign: TextAlign.center,
@@ -386,119 +327,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     const SizedBox(height: 20),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(35, 0, 35, 20),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: SizedBox(
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor: pinkL1.withOpacity(0),
-                                    elevation: 0,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(40.0),
-                                        side: BorderSide(
-                                            color: pinkL1.withOpacity(0.5),
-                                            width: 2)),
-                                    minimumSize: const Size.fromHeight(60)
-                                    //////// HERE
-                                    ),
-                                onPressed: () {},
-                                child: Image.asset(
-                                  "assets/images/facebook.png",
-                                  fit: BoxFit.cover,
-                                  scale: 4,
-                                  color: pinkL1.withOpacity(0.5),
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: SizedBox(
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor: pinkL1.withOpacity(0),
-                                    elevation: 0,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(40.0),
-                                        side: BorderSide(
-                                            color: pinkL1.withOpacity(0.5),
-                                            width: 2)),
-                                    minimumSize: const Size.fromHeight(60)
-                                    //////// HERE
-                                    ),
-                                onPressed: () {},
-                                child: Image.asset(
-                                  "assets/images/google.png",
-                                  fit: BoxFit.cover,
-                                  scale: 4,
-                                  color: pinkL1.withOpacity(0.5),
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: SizedBox(
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor: pinkL1,
-                                    elevation: 0,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(40.0),
-                                        side: BorderSide(
-                                            color: pinkL1.withOpacity(0.5),
-                                            width: 2)),
-                                    minimumSize: const Size.fromHeight(60)
-                                    //////// HERE
-                                    ),
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            GoogleSignInScreen()),
-                                  );
-
-                                  print('google sing in runnnnnnnnnnnnn');
-                                  // final Provider =
-                                  //                                       Provider((ref) {
-                                  //                                         final Provider = ref.watch(AuthRepositoryProvider);
-                                  //                                     return ref.watch(GoogleSignInProvider).g;
-                                  //                                   });
-                                  //                                   final authControllerProvider = Provider((ref) {
-                                  //   final authRepository = ref.watch(AuthRepositoryProvider);
-                                  //   return AuthController(authRepository: authRepository, ref: ref);
-                                  // });
-
-                                  // setState(() {
-                                  //   emailVerification = !emailVerification;
-                                  //   FocusScope.of(context).unfocus();
-                                  // });
-                                },
-                                child: emailVerification
-                                    ? Image(
-                                        image: Svg('assets/svg/email_b.svg'),
-                                        //fit: BoxFit.cover,
-                                        color: whiteW1,
-                                        width: 30,
-                                        height: 30,
-                                      )
-                                    : Image(
-                                        image: Svg('assets/svg/phone.svg'),
-                                        //fit: BoxFit.cover,
-                                        color: whiteW1,
-                                        width: 35,
-                                        height: 35,
-                                      ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
                     )
                   ]),
                 ],
@@ -509,6 +337,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         ],
       ),
     );
+
     //height: size.height * 0.6,
   }
 }

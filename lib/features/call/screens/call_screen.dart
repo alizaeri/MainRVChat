@@ -74,7 +74,7 @@ class _CallScreenState extends ConsumerState<CallScreen> {
 
   void _createInterstitialAd() {
     InterstitialAd.load(
-      adUnitId: AdMobService.interstitialAdUnitId!,
+      adUnitId: AdMobService.interstitialAdUnitId,
       request: const AdRequest(),
       adLoadCallback: InterstitialAdLoadCallback(
           onAdLoaded: (ad) => _interstitialAd = ad,
