@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg_provider/flutter_svg_provider.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:rvchat/add_helper.dart';
 import 'package:rvchat/colors.dart';
 import 'package:rvchat/common/widgets/loaderT.dart';
 import 'package:rvchat/features/chat/screen/mobile_chat_screen.dart';
@@ -16,6 +18,7 @@ class OnlineUsersScreen extends StatefulWidget {
 }
 
 class _OnlineUsersScreenState extends State<OnlineUsersScreen> {
+  BannerAd? _banner;
   Stream<List<UserModel>> getUsersStream() {
     return FirebaseFirestore.instance
         .collection('users')
@@ -29,6 +32,21 @@ class _OnlineUsersScreenState extends State<OnlineUsersScreen> {
       }
       return users;
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _createBannerAd();
+  }
+
+  void _createBannerAd() {
+    _banner = BannerAd(
+      size: AdSize.fullBanner,
+      adUnitId: AdMobService.bannerAdUnitId,
+      listener: AdMobService.bannerListner,
+      request: const AdRequest(),
+    )..load();
   }
 
   @override
@@ -73,6 +91,16 @@ class _OnlineUsersScreenState extends State<OnlineUsersScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            _banner == null
+                ? Container()
+                : Padding(
+                    padding: const EdgeInsets.only(top: 15),
+                    child: Container(
+                      margin: const EdgeInsets.only(top: 12),
+                      height: 50,
+                      child: AdWidget(ad: _banner!),
+                    ),
+                  ),
             const SizedBox(height: 10),
             Expanded(
               child: Padding(

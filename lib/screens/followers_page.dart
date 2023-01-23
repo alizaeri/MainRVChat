@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_svg_provider/flutter_svg_provider.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:rvchat/add_helper.dart';
 import 'package:rvchat/colors.dart';
 import 'package:rvchat/common/widgets/loaderT.dart';
 import 'package:rvchat/models/user_model.dart';
@@ -20,12 +22,23 @@ class _FollowPageState extends State<FollowPage> {
   List<UserModel> onlineList = [];
   List<UserModel> man = [];
   bool online_null = false;
+  BannerAd? _banner;
 
   @override
   void initState() {
     getfollowingUser();
 
     super.initState();
+    _createBannerAd();
+  }
+
+  void _createBannerAd() {
+    _banner = BannerAd(
+      size: AdSize.fullBanner,
+      adUnitId: AdMobService.bannerAdUnitId,
+      listener: AdMobService.bannerListner,
+      request: const AdRequest(),
+    )..load();
   }
 
   Stream<List<UserModel>> getUsersStream() {
@@ -174,24 +187,39 @@ class _FollowPageState extends State<FollowPage> {
                         color: whiteW1),
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(10, 15, 10, 0),
-                      child: GridView(
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3,
-                          childAspectRatio: ((itemWidth / 2) / itemHeight),
-                          crossAxisSpacing: 8,
-                          mainAxisSpacing: 8,
-                        ),
-                        primary: false,
-                        shrinkWrap: true,
-                        children: List<Widget>.generate(
-                            users.length, // same length as the data
-                            (index) {
-                          return MyCard(
-                            user: users[index],
-                          );
+                      child: Column(
+                        children: [
+                          _banner == null
+                              ? Container()
+                              : Padding(
+                                  padding: const EdgeInsets.only(top: 15),
+                                  child: Container(
+                                    margin: const EdgeInsets.only(top: 12),
+                                    height: 50,
+                                    child: AdWidget(ad: _banner!),
+                                  ),
+                                ),
+                          GridView(
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 3,
+                              childAspectRatio: ((itemWidth / 2) / itemHeight),
+                              crossAxisSpacing: 8,
+                              mainAxisSpacing: 8,
+                            ),
+                            primary: false,
+                            shrinkWrap: true,
+                            children: List<Widget>.generate(
+                                users.length, // same length as the data
+                                (index) {
+                              return MyCard(
+                                user: users[index],
+                              );
 
-                          //gridViewTile(recipesList, index);
-                        }),
+                              //gridViewTile(recipesList, index);
+                            }),
+                          ),
+                        ],
                       ),
                     ),
                   ),

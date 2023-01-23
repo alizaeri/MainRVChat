@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:intl/intl.dart';
+import 'package:rvchat/add_helper.dart';
 import 'package:rvchat/colors.dart';
 import 'package:rvchat/common/widgets/loader.dart';
 import 'package:rvchat/common/widgets/loaderT.dart';
@@ -13,12 +15,33 @@ import 'package:rvchat/features/chat/screen/mobile_chat_screen.dart';
 import 'package:rvchat/models/chat_contact.dart';
 import 'package:rvchat/models/user_model.dart';
 
-class ContactsList extends ConsumerWidget {
+class ContactsList extends ConsumerStatefulWidget {
   final String searchContact;
   const ContactsList(this.searchContact, {Key? key}) : super(key: key);
+  @override
+  ConsumerState<ContactsList> createState() => _ContactsListChatState();
+}
+
+class _ContactsListChatState extends ConsumerState<ContactsList>
+    with WidgetsBindingObserver {
+  BannerAd? _banner;
+  @override
+  void initState() {
+    super.initState();
+    _createBannerAd();
+  }
+
+  void _createBannerAd() {
+    _banner = BannerAd(
+      size: AdSize.fullBanner,
+      adUnitId: AdMobService.bannerAdUnitId,
+      listener: AdMobService.bannerListner,
+      request: const AdRequest(),
+    )..load();
+  }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return StreamBuilder<List<ChatContact>>(
         stream: ref.watch(chatControllerProvider).chatContacts(),
         builder: (context, snapshot) {
@@ -27,13 +50,20 @@ class ContactsList extends ConsumerWidget {
           }
           return Column(
             children: [
+              _banner == null
+                  ? Container()
+                  : Container(
+                      margin: const EdgeInsets.only(top: 5),
+                      height: 52,
+                      child: AdWidget(ad: _banner!),
+                    ),
               ListView.builder(
                 shrinkWrap: true,
                 padding: null,
                 itemCount: snapshot.data!.length,
                 itemBuilder: (context, index) {
                   late ChatContact chatContactData;
-                  if (searchContact.isEmpty) {
+                  if (widget.searchContact.isEmpty) {
                     chatContactData = snapshot.data![index];
                     return StreamBuilder<UserModel>(
                         stream: ref
@@ -127,7 +157,7 @@ class ContactsList extends ConsumerWidget {
                         });
                   } else if (snapshot.data![index].name
                       .toLowerCase()
-                      .contains(searchContact.toLowerCase())) {
+                      .contains(widget.searchContact.toLowerCase())) {
                     chatContactData = snapshot.data![index];
                     return StreamBuilder<UserModel>(
                         stream: ref
