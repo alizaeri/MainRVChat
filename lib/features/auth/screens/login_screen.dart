@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg_provider/flutter_svg_provider.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:rvchat/colors.dart';
 import 'package:rvchat/common/utils/utils.dart';
 
@@ -353,24 +354,22 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                               //////// HERE
                               ),
                           onPressed: () {
-                            if (emailVerification) {
+                            if (country != null &&
+                                phoneController.text.trim().isNotEmpty) {
                               sendPhoneNumber(country!.name);
+                              setState(() {
+                                fisClick = true;
+                              });
                             } else {
-                              print("email sent");
-                              // Navigator.push(
-                              //   context,
-                              //   MaterialPageRoute(
-                              //       builder: (context) => VerifyEmailPage(
-                              //             country: 'Iran',
-                              //             email: emailController.text.trim(),
-                              //           )),
-                              // );
-                              signInWithEmailandLink(country!.name);
+                              Fluttertoast.showToast(
+                                  msg:
+                                      "Please select a country and enter your phone number",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM,
+                                  timeInSecForIosWeb: 1,
+                                  textColor: Colors.white,
+                                  fontSize: 16.0);
                             }
-
-                            setState(() {
-                              // fisClick = true;
-                            });
                           },
                           child: const Text(
                               textAlign: TextAlign.center,
@@ -418,32 +417,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             child: SizedBox(
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                    backgroundColor: pinkL1.withOpacity(0),
-                                    elevation: 0,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(40.0),
-                                        side: BorderSide(
-                                            color: pinkL1.withOpacity(0.5),
-                                            width: 2)),
-                                    minimumSize: const Size.fromHeight(60)
-                                    //////// HERE
-                                    ),
-                                onPressed: () {},
-                                child: Image.asset(
-                                  "assets/images/google.png",
-                                  fit: BoxFit.cover,
-                                  scale: 4,
-                                  color: pinkL1.withOpacity(0.5),
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: SizedBox(
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
                                     backgroundColor: pinkL1,
                                     elevation: 0,
                                     shape: RoundedRectangleBorder(
@@ -456,52 +429,53 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                     //////// HERE
                                     ),
                                 onPressed: () {
-                                  // Navigator.push(
-                                  //   context,
-                                  //   MaterialPageRoute(
-                                  //       builder: (context) =>
-                                  //           GoogleSignInScreen()),
-                                  // );
                                   if (country != null) {
                                     ref
                                         .read(GoogleSignInProvider)
                                         .googleLogin(context, country!.name);
                                   } else {
-                                    print('please select the country');
+                                    Fluttertoast.showToast(
+                                        msg: "Please select a country first",
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.BOTTOM,
+                                        timeInSecForIosWeb: 1,
+                                        textColor: Colors.white,
+                                        fontSize: 16.0);
                                   }
-
-                                  print('google sing in runnnnnnnnnnnnn');
-                                  // final Provider =
-                                  //                                       Provider((ref) {
-                                  //                                         final Provider = ref.watch(AuthRepositoryProvider);
-                                  //                                     return ref.watch(GoogleSignInProvider).g;
-                                  //                                   });
-                                  //                                   final authControllerProvider = Provider((ref) {
-                                  //   final authRepository = ref.watch(AuthRepositoryProvider);
-                                  //   return AuthController(authRepository: authRepository, ref: ref);
-                                  // });
-
-                                  // setState(() {
-                                  //   emailVerification = !emailVerification;
-                                  //   FocusScope.of(context).unfocus();
-                                  // });
                                 },
-                                child: emailVerification
-                                    ? Image(
-                                        image: Svg('assets/svg/email_b.svg'),
-                                        //fit: BoxFit.cover,
-                                        color: whiteW1,
-                                        width: 30,
-                                        height: 30,
-                                      )
-                                    : Image(
-                                        image: Svg('assets/svg/phone.svg'),
-                                        //fit: BoxFit.cover,
-                                        color: whiteW1,
-                                        width: 35,
-                                        height: 35,
-                                      ),
+                                child: Image.asset(
+                                  "assets/images/google.png",
+                                  fit: BoxFit.cover,
+                                  scale: 4,
+                                  color: whiteW1,
+                                ),
                               ),
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: SizedBox(
+                              child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor: pinkL1.withOpacity(0),
+                                      elevation: 0,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(40.0),
+                                          side: BorderSide(
+                                              color: pinkL1.withOpacity(0.5),
+                                              width: 2)),
+                                      minimumSize: const Size.fromHeight(60)
+                                      //////// HERE
+                                      ),
+                                  onPressed: () {},
+                                  child: Image(
+                                    image: Svg('assets/svg/email_b.svg'),
+                                    //fit: BoxFit.cover,
+                                    color: pinkL1.withOpacity(0.5),
+                                    width: 30,
+                                    height: 30,
+                                  )),
                             ),
                           ),
                         ],

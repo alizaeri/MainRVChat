@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg_provider/flutter_svg_provider.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:rvchat/colors.dart';
 import 'package:rvchat/common/utils/utils.dart';
 import 'package:rvchat/common/widgets/loader.dart';
@@ -193,7 +194,7 @@ class _UserInformationScreenState extends ConsumerState<UserInformationScreen> {
                                   fontWeight: FontWeight.w400,
                                   fontSize: 18,
                                   color: white),
-                              "If you get Verification con from\n RVChat please inter and verify you cod"),
+                              "Your name will be shown in our community"),
                           Image.asset(
                             "assets/images/lineBg.png",
                             fit: BoxFit.cover,
@@ -219,10 +220,20 @@ class _UserInformationScreenState extends ConsumerState<UserInformationScreen> {
                               //////// HERE
                               ),
                           onPressed: () {
-                            storeUserData();
-                            setState(() {
-                              fisClick = true;
-                            });
+                            if (nameController.text.trim().isNotEmpty) {
+                              storeUserData();
+                              setState(() {
+                                fisClick = true;
+                              });
+                            } else {
+                              Fluttertoast.showToast(
+                                  msg: "Please enter your name",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM,
+                                  timeInSecForIosWeb: 1,
+                                  textColor: Colors.white,
+                                  fontSize: 16.0);
+                            }
                           },
                           child: const Padding(
                             padding: EdgeInsets.only(top: 6),
@@ -247,7 +258,7 @@ class _UserInformationScreenState extends ConsumerState<UserInformationScreen> {
                             fontWeight: FontWeight.w300,
                             fontSize: 18,
                             color: grayL1),
-                        "If you get Verification con from\n RVChat please inter and verify you cod"),
+                        "‌By pressing Apply, you will be displayed in the list of online users"),
                     const SizedBox(height: 25),
                     //==> CONTINUE Button
                   ]),

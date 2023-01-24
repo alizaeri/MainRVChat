@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/route_manager.dart';
 import 'package:rvchat/common/repositories/common_firebase_storage_repository.dart';
 import 'package:rvchat/common/utils/utils.dart';
 import 'package:rvchat/features/auth/screens/otp_screen.dart';
@@ -27,9 +29,24 @@ class AuthRepository {
             await auth.signInWithCredential(credential);
           },
           verificationFailed: (e) {
-            throw Exception(e.message);
+            Fluttertoast.showToast(
+                msg: "${e.message}",
+                toastLength: Toast.LENGTH_LONG,
+                gravity: ToastGravity.BOTTOM,
+                timeInSecForIosWeb: 1,
+                textColor: Colors.white,
+                fontSize: 16.0);
+
+            // throw Exception(e.message);
           },
           codeSent: ((String verificationId, int? respondToken) async {
+            Fluttertoast.showToast(
+                msg: "verification code has been sent",
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.BOTTOM,
+                timeInSecForIosWeb: 1,
+                textColor: Colors.white,
+                fontSize: 16.0);
             Navigator.pushNamed(context, OTPScreen.routeName, arguments: {
               'verificationId': verificationId,
               'country': country,
@@ -37,6 +54,13 @@ class AuthRepository {
           }),
           codeAutoRetrievalTimeout: (String verificationId) {});
     } on FirebaseAuthException catch (e) {
+      Fluttertoast.showToast(
+          msg: "Check your connection",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          textColor: Colors.white,
+          fontSize: 16.0);
       showSnackBar(context: context, content: e.message!);
     }
   }

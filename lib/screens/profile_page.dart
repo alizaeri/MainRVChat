@@ -123,7 +123,6 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                                       ],
                                       initialValue: 0,
                                       onSelected: (value) async {
-                                        print("clik shod");
                                         switch (value) {
                                           case 1:
                                             {
@@ -364,51 +363,43 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                                 color: grayL1),
                             snapshot.data!.country),
                         Divider(color: grayL1.withOpacity(0.5)),
-                        Text(
-                            style: TextStyle(
-                                fontFamily: "yknir",
-                                fontWeight: FontWeight.w400,
-                                fontSize: size.width * 0.035,
-                                color: pinkL1),
-                            "Phone Number"),
-                        snapshot.data!.phoneNumber == null
-                            ? Text(
-                                style: TextStyle(
-                                    fontFamily: "yknir",
-                                    fontWeight: FontWeight.w100,
-                                    fontSize: size.width * 0.07,
-                                    color: grayL1),
-                                '')
-                            : Text(
-                                style: TextStyle(
-                                    fontFamily: "yknir",
-                                    fontWeight: FontWeight.w100,
-                                    fontSize: size.width * 0.07,
-                                    color: grayL1),
-                                snapshot.data!.phoneNumber!),
-                        Divider(color: grayL1.withOpacity(0.5)),
-                        Text(
-                            style: TextStyle(
-                                fontFamily: "yknir",
-                                fontWeight: FontWeight.w400,
-                                fontSize: size.width * 0.035,
-                                color: pinkL1),
-                            "Email Address"),
-                        snapshot.data!.email == null
-                            ? Text(
-                                style: TextStyle(
-                                    fontFamily: "yknir",
-                                    fontWeight: FontWeight.w100,
-                                    fontSize: size.width * 0.06,
-                                    color: grayL1),
-                                '')
-                            : Text(
-                                style: TextStyle(
-                                    fontFamily: "yknir",
-                                    fontWeight: FontWeight.w100,
-                                    fontSize: size.width * 0.06,
-                                    color: grayL1),
-                                snapshot.data!.email!),
+                        snapshot.data!.phoneNumber != ""
+                            ? Column(
+                                children: [
+                                  Text(
+                                      style: TextStyle(
+                                          fontFamily: "yknir",
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: size.width * 0.035,
+                                          color: pinkL1),
+                                      "Phone Number"),
+                                  Text(
+                                      style: TextStyle(
+                                          fontFamily: "yknir",
+                                          fontWeight: FontWeight.w100,
+                                          fontSize: size.width * 0.07,
+                                          color: grayL1),
+                                      snapshot.data!.phoneNumber!),
+                                ],
+                              )
+                            : Column(
+                                children: [
+                                  Text(
+                                      style: TextStyle(
+                                          fontFamily: "yknir",
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: size.width * 0.035,
+                                          color: pinkL1),
+                                      "Email Address"),
+                                  Text(
+                                      style: TextStyle(
+                                          fontFamily: "yknir",
+                                          fontWeight: FontWeight.w100,
+                                          fontSize: size.width * 0.07,
+                                          color: grayL1),
+                                      snapshot.data!.email!),
+                                ],
+                              ),
                         const SizedBox(
                           height: 20,
                         )
