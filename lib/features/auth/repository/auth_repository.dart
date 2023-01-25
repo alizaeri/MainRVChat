@@ -105,6 +105,7 @@ class AuthRepository {
       required firstEditPage}) async {
     try {
       String uid = auth.currentUser!.uid;
+      bool exist = false;
       String photoUrl =
           'https://firebasestorage.googleapis.com/v0/b/mainrvchat.appspot.com/o/avatar.webp?alt=media&token=2688ba66-d18e-4089-b695-787a965b9312';
       if (profilePic != null) {
@@ -117,6 +118,10 @@ class AuthRepository {
       } else {
         photoUrl = defPic;
       }
+      await firestore.collection('users').doc(uid).get().then((doc) {
+        exist = doc.exists;
+      });
+
       var user = UserModel(
           name: name,
           uid: uid,
@@ -133,7 +138,16 @@ class AuthRepository {
           lastOnlineTime: DateTime.now(),
           videoLink: '',
           groupId: []);
-      await firestore.collection('users').doc(uid).set(user.toMap());
+      if (!exist) {
+        await firestore.collection('users').doc(uid).set(user.toMap());
+      } else {
+        firestore.collection('users').doc(uid).update({
+          'name': name,
+          'profilePic': photoUrl,
+          'country': country,
+        });
+      }
+
       Navigator.pop(context);
       if (firstEditPage == true) {
         Navigator.pushAndRemoveUntil(
