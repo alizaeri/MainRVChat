@@ -103,7 +103,9 @@ class LandingScreen extends StatelessWidget {
                         minimumSize: const Size.fromHeight(60)
                         //////// HERE
                         ),
-                    onPressed: () => navigationToLoginScreen(context),
+                    onPressed: () {
+                      navigationToLoginScreen(context);
+                    },
                   ),
                 ),
               ),

@@ -9,6 +9,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:rvchat/add_helper.dart';
 import 'package:rvchat/colors.dart';
 import 'package:rvchat/features/auth/controller/auth_controller.dart';
+import 'package:rvchat/features/auth/screens/google_sign_in.dart';
 import 'package:rvchat/features/auth/screens/login_screen.dart';
 import 'package:rvchat/features/call/screens/call_screen.dart';
 import 'package:rvchat/models/user_model.dart';
@@ -134,6 +135,13 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                                                 'isOnline': false,
                                               });
                                               FirebaseAuth.instance.signOut();
+                                              try {
+                                                ref
+                                                    .read(GoogleSignInProvider)
+                                                    .googleLogOut(context);
+                                              } catch (e) {
+                                                print(e);
+                                              }
 
                                               Navigator.pushAndRemoveUntil(
                                                   context,

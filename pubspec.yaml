@@ -71,7 +71,7 @@ dependencies:
   flutter_easyloading: ^3.0.5
   firebase_dynamic_links: ^5.0.11
   google_mobile_ads: ^2.3.0
-  google_sign_in: 
+  google_sign_in: ^5.4.3 
   font_awesome_flutter:
   provider: 
   fluttertoast: ^8.1.2

@@ -428,9 +428,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                     minimumSize: const Size.fromHeight(60)
                                     //////// HERE
                                     ),
-                                onPressed: () {
+                                onPressed: () async {
                                   if (country != null) {
-                                    ref
+                                    // await ref
+                                    //     .read(GoogleSignInProvider)
+                                    //     .googleLogOut(context);
+                                    await ref
                                         .read(GoogleSignInProvider)
                                         .googleLogin(context, country!.name);
                                   } else {
