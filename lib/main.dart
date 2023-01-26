@@ -7,6 +7,7 @@ import 'package:rvchat/app_loader.dart';
 import 'package:rvchat/colors.dart';
 import 'package:rvchat/common/widgets/loaderW.dart';
 import 'package:rvchat/features/auth/controller/auth_controller.dart';
+import 'package:rvchat/features/auth/screens/google_sign_in.dart';
 import 'package:rvchat/features/landing/screens/landing_screen.dart';
 import 'package:rvchat/router.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -77,6 +78,11 @@ class _MyApp extends ConsumerState<MyApp> {
           : ref.watch(userDataAuthProvider).when(
               data: (user) {
                 if (user == null) {
+                  try {
+                    ref.read(GoogleSignInProvider).googleLogOut(context);
+                  } catch (e) {
+                    print(e);
+                  }
                   return const LandingScreen();
                 }
                 return const MobileLayoutScreen();
