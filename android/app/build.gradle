@@ -1,7 +1,5 @@
 def localProperties = new Properties()
-//dfdsfdsfsffsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfdsfsdfsdfsdfsdfsdsdfsdfsdfsdfsdfs
-def localProperties1 = new Properties()
-//dfdsfdsfsffsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfdsfsdfsdfsdfsdfsdsdfsdfsdfsdfsdfs
+
 
 def localPropertiesFile = rootProject.file('local.properties')
 if (localPropertiesFile.exists()) {
@@ -12,22 +10,9 @@ if (localPropertiesFile.exists()) {
 
 def flutterRoot = localProperties.getProperty('flutter.sdk')
 if (flutterRoot == null) {
-    throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
+    throw  GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
 }
-//dfdsfdsfsffsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfdsfsdfsdfsdfsdfsdsdfsdfsdfsdfsdfs
 
-// def localPropertiesFile1 = rootProject.file('rvchat.properties')
-// if (localPropertiesFile1.exists()) {
-//     localPropertiesFile1.withReader('UTF-8') { reader ->
-//         localProperties.load(reader)
-//     }
-// }
-
-// def appId = localProperties1.getProperty('appId')
-// if (appId == null) {
-//     throw new GradleException("appId not found. Define location with appId in the rvchat.properties file.")
-// }
-//dfdsfdsfsffsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfdsfsdfsdfsdfsdfsdsdfsdfsdfsdfsdfs
 
 
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
@@ -40,17 +25,6 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
-def localPropertiesFile1 = rootProject.file('rvchat.properties')
-if (localPropertiesFile1.exists()) {
-    localPropertiesFile1.withReader('UTF-8') { reader ->
-        localProperties1.load(reader)
-    }
-}
-
-def appId = localProperties1.getProperty('appId')
-if (appId == null) {
-    throw new GradleException("appId not found. Define location with appId in the rvchat.properties file.")
-}
 
 apply plugin: 'com.android.application'
 // START: FlutterFire Configuration
@@ -83,7 +57,7 @@ android {
         targetSdkVersion 30
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
-        manifestPlaceholders += [appIdd:appId]
+        
     }
 
      buildTypes {
