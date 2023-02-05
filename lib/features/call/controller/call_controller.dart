@@ -28,8 +28,14 @@ class CallController {
 
   Stream<DocumentSnapshot> get callStream => callRepository.callStream;
 
-  void makeCall(BuildContext context, String receiverName, String receiverUid,
-      String receiverProfilePic, bool isGroupChat) {
+  void makeCall(
+      BuildContext context,
+      String receiverName,
+      String receiverUid,
+      String receiverProfilePic,
+      bool receiverIsFake,
+      String receiverVideoLink,
+      bool isGroupChat) {
     ref.read(userDataAuthProvider).whenData((value) {
       String callId = const Uuid().v1();
       Call senderCallData = Call(
@@ -56,7 +62,8 @@ class CallController {
       // if (isGroupChat) {
       //   callRepository.makeGroupCall(senderCallData, context, recieverCallData);
       // } else {
-      callRepository.makeCall(senderCallData, context, recieverCallData);
+      callRepository.makeCall(senderCallData, context, recieverCallData,
+          receiverIsFake, receiverVideoLink);
       //}
     });
   }

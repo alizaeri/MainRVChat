@@ -34,6 +34,8 @@ class MobileChatScreen extends ConsumerWidget {
           name,
           uid,
           profilePic,
+          false,
+          '',
           isGroup,
         );
   }

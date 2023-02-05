@@ -45,6 +45,8 @@ class CallRepository extends ChangeNotifier {
     Call senderCallData,
     BuildContext context,
     Call receiverCallData,
+    bool receiverIsFake,
+    String receiverVideoLink,
   ) async {
     bool exist = false;
     bool blocked = false;
@@ -98,6 +100,8 @@ class CallRepository extends ChangeNotifier {
             builder: (Context) => CallScreen(
               channelId: senderCallData.callId,
               call: senderCallData,
+              receiverIsFake: receiverIsFake,
+              receiverVideoLink: receiverVideoLink,
               isGroupChat: false,
             ),
           ),

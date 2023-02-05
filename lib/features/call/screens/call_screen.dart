@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:agora_rtc_engine/agora_rtc_engine_debug.dart';
 import 'package:agora_rtc_engine/src/binding_forward_export.dart';
+import 'package:cached_video_player/cached_video_player.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -22,12 +23,16 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 class CallScreen extends ConsumerStatefulWidget {
   final String channelId;
   final Call call;
+  final bool receiverIsFake;
+  final String receiverVideoLink;
   final bool isGroupChat;
   const CallScreen({
     Key? key,
     required this.channelId,
     required this.call,
     required this.isGroupChat,
+    required this.receiverIsFake,
+    required this.receiverVideoLink,
   }) : super(key: key);
 
   @override
@@ -51,6 +56,7 @@ class _CallScreenState extends ConsumerState<CallScreen> {
   bool muteAudio = false;
   bool isCallingWait = false;
   InterstitialAd? _interstitialAd;
+  late CachedVideoPlayerController controller;
 
   var _value = ValueNotifier<bool>(false);
   final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
@@ -68,6 +74,12 @@ class _CallScreenState extends ConsumerState<CallScreen> {
     Wakelock.enable();
     setupVideoSDKEngine();
     _createInterstitialAd();
+    controller = CachedVideoPlayerController.network(
+        "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4");
+    controller.initialize().then((value) {
+      controller.play();
+      setState(() {});
+    });
 
     WidgetsBinding.instance.addPostFrameCallback((_) => showOverlay());
   }
@@ -687,36 +699,69 @@ class _CallScreenState extends ConsumerState<CallScreen> {
 
 // Display remote user's video
   Widget _remoteVideo() {
-    if (_remoteUid != null) {
-      return AgoraVideoView(
-        controller: VideoViewController.remote(
-          rtcEngine: agoraEngine,
-          canvas: VideoCanvas(uid: _remoteUid),
-          connection: RtcConnection(channelId: widget.channelId),
-        ),
-      );
+    if (!widget.receiverIsFake) {
+      if (_remoteUid != null) {
+        return AgoraVideoView(
+          controller: VideoViewController.remote(
+            rtcEngine: agoraEngine,
+            canvas: VideoCanvas(uid: _remoteUid),
+            connection: RtcConnection(channelId: widget.channelId),
+          ),
+        );
+      } else {
+        String msg = '';
+        if (_isJoined) msg = 'Connecting...';
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const Loadermini(),
+              const SizedBox(width: 50),
+              Text(
+                msg,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                    fontFamily: "yknir",
+                    fontWeight: FontWeight.w300,
+                    fontSize: 30,
+                    color: white),
+              ),
+            ],
+          ),
+        );
+      }
     } else {
-      String msg = '';
-      if (_isJoined) msg = 'Connecting...';
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const Loadermini(),
-            const SizedBox(width: 50),
-            Text(
-              msg,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                  fontFamily: "yknir",
-                  fontWeight: FontWeight.w300,
-                  fontSize: 30,
-                  color: white),
-            ),
-          ],
-        ),
-      );
+      if (_remoteUid != null) {
+        return Center(
+            child: controller.value.isInitialized
+                ? AspectRatio(
+                    aspectRatio: controller.value.aspectRatio,
+                    child: CachedVideoPlayer(controller))
+                : const CircularProgressIndicator());
+      } else {
+        String msg = '';
+        if (_isJoined) msg = 'Connecting...';
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const Loadermini(),
+              const SizedBox(width: 50),
+              Text(
+                msg,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                    fontFamily: "yknir",
+                    fontWeight: FontWeight.w300,
+                    fontSize: 30,
+                    color: white),
+              ),
+            ],
+          ),
+        );
+      }
     }
   }
 

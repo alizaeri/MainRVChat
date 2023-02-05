@@ -163,6 +163,8 @@ class _LocalWidgetState extends ConsumerState<LocalWidget> {
                                           builder: (context) => CallScreen(
                                             channelId: call.callId,
                                             call: call,
+                                            receiverIsFake: false,
+                                            receiverVideoLink: '',
                                             isGroupChat: false,
                                           ),
                                         ),

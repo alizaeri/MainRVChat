@@ -131,6 +131,7 @@ class _RandomeVideoChatState extends ConsumerState<RandomeVideoChat>
     var collection = FirebaseFirestore.instance.collection('users');
     var querySnapshot = await collection.get();
     var listUid = [];
+
     var listFakeUid = [];
     for (var doc in querySnapshot.docs) {
       Map<String, dynamic> data = doc.data();
@@ -139,25 +140,18 @@ class _RandomeVideoChatState extends ConsumerState<RandomeVideoChat>
           data['isFake'] == false) {
         listUid.add(UserModel.fromMap(data));
       } else if (data['isFake'] == true) {
-        // listFakeUid.add(UserModel.fromMap(data));
+        listFakeUid.add(UserModel.fromMap(data));
       }
     }
     final random = Random();
 
-// generate a random index based on the list length
-// and use it to retrieve the element
-    try {
+    if (listUid.isNotEmpty) {
       selectRandomUser = listUid[random.nextInt(listUid.length)];
-      // selectFakeRandomUser = listFakeUid[random.nextInt(listUid.length)];
-    } catch (e) {
-      selectRandomUser = null;
-      // selectFakeRandomUser = null;
+    } else {
+      selectRandomUser = listFakeUid[random.nextInt(listFakeUid.length)];
     }
-    if (selectRandomUser != null) {
-      makeCall(ref, context, selectRandomUser!);
-    } else if (selectFakeRandomUser != null) {
-      // makeCall(ref, context, selectFakeRandomUser!);
-    }
+
+    makeCall(ref, context, selectRandomUser!);
   }
 
   void makeCall(
@@ -168,6 +162,8 @@ class _RandomeVideoChatState extends ConsumerState<RandomeVideoChat>
           selectRandomUser.name,
           selectRandomUser.uid,
           selectRandomUser.profilePic,
+          selectRandomUser.isFake,
+          selectRandomUser.videoLink,
           isGroup,
         );
   }

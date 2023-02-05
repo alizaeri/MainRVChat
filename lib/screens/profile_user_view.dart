@@ -120,6 +120,8 @@ class _ProfileUserViewState extends ConsumerState<ProfileUserView> {
           selectUser.name,
           selectUser.uid,
           selectUser.profilePic,
+          selectUser.isFake,
+          selectUser.videoLink,
           isGroup,
         );
   }
