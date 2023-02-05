@@ -45,6 +45,7 @@ class _CallScreenState extends ConsumerState<CallScreen> {
       'https://flutter-twitch-server-production-f453.up.railway.app/';
 
   bool localUserJoined = false;
+  bool isReadyVideoFake = false;
 
   int uid = 0;
   bool _isJoined = false;
@@ -75,10 +76,12 @@ class _CallScreenState extends ConsumerState<CallScreen> {
     setupVideoSDKEngine();
     _createInterstitialAd();
     controller = CachedVideoPlayerController.network(
-        "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4");
+        "https://firebasestorage.googleapis.com/v0/b/mainrvchat.appspot.com/o/chat%2Fvideo%2Fhhdn5XYIgUhKPwSfon5Fu1gdRFz1%2FhkrYhKJnpncnl6yknlgbXlWPVaf1%7D%2F88a50130-a5a7-11ed-b495-094da1b92e49?alt=media&token=ae263e56-58da-4d6a-90d0-0126386bceef");
     controller.initialize().then((value) {
       controller.play();
-      setState(() {});
+      setState(() {
+        isReadyVideoFake = true;
+      });
     });
 
     WidgetsBinding.instance.addPostFrameCallback((_) => showOverlay());
@@ -732,7 +735,7 @@ class _CallScreenState extends ConsumerState<CallScreen> {
         );
       }
     } else {
-      if (_remoteUid != null) {
+      if (isReadyVideoFake == true && _value.value) {
         return Center(
             child: controller.value.isInitialized
                 ? AspectRatio(
