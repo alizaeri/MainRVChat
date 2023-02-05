@@ -77,12 +77,6 @@ class _CallScreenState extends ConsumerState<CallScreen> {
     _createInterstitialAd();
     controller = CachedVideoPlayerController.network(
         "https://firebasestorage.googleapis.com/v0/b/mainrvchat.appspot.com/o/chat%2Fvideo%2Fhhdn5XYIgUhKPwSfon5Fu1gdRFz1%2FhkrYhKJnpncnl6yknlgbXlWPVaf1%7D%2F88a50130-a5a7-11ed-b495-094da1b92e49?alt=media&token=ae263e56-58da-4d6a-90d0-0126386bceef");
-    controller.initialize().then((value) {
-      controller.play();
-      setState(() {
-        isReadyVideoFake = true;
-      });
-    });
 
     WidgetsBinding.instance.addPostFrameCallback((_) => showOverlay());
   }
@@ -166,6 +160,13 @@ class _CallScreenState extends ConsumerState<CallScreen> {
             _isJoined = true;
             localUserJoined = false;
             _value.value = true;
+            controller.initialize().then((value) {
+              controller.play();
+              setState(() {
+                isReadyVideoFake = true;
+              });
+            });
+
             ref.read(callRepositoryProvider).active(true);
           });
         }, onUserJoined:
@@ -249,6 +250,7 @@ class _CallScreenState extends ConsumerState<CallScreen> {
         .collection('call')
         .doc(widget.call.receiverId)
         .delete();
+    controller.dispose();
 
     // client!.engine.release();
   }
